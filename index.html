@@ -6,6 +6,8 @@
     <title>白子俊 | 浙江音乐学院附中钢琴专业</title>
     <!-- 使用国内CDN资源 -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入阿里巴巴普惠体 -->
+    <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #3A5F7D;  /* 深蓝灰主色 */
@@ -19,7 +21,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            font-family: "AlibabaPuHuiTi", "Microsoft YaHei", "PingFang SC", sans-serif;
         }
         
         body {
@@ -183,11 +185,17 @@
             border-radius: 5px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            height: 0;
+            padding-bottom: 133%; /* 3:4比例 */
+            position: relative;
         }
         
         .about-image img {
+            position: absolute;
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
         
@@ -283,76 +291,96 @@
         }
         
         /* 时间线 */
+        .timeline-section {
+            padding: 70px 20px;
+            background-color: var(--light);
+        }
+        
         .timeline {
             position: relative;
             max-width: 900px;
-            margin: 40px auto;
+            margin: 0 auto;
             padding: 0 20px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: var(--secondary);
+            top: 0;
+            left: 0;
         }
         
         .timeline::after {
             content: '';
             position: absolute;
-            width: 2px;
+            width: 100%;
+            height: 2px;
             background-color: var(--secondary);
-            top: 0;
             bottom: 0;
-            left: 50%;
-            margin-left: -1px;
-        }
-        
-        .timeline-item {
-            padding: 10px 30px;
-            position: relative;
-            width: 50%;
-            box-sizing: border-box;
-        }
-        
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background-color: white;
-            border: 2px solid var(--primary);
-            border-radius: 50%;
-            top: 15px;
-            z-index: 1;
-        }
-        
-        .left {
             left: 0;
         }
         
-        .right {
-            left: 50%;
-        }
-        
-        .left::after {
-            right: -8px;
-        }
-        
-        .right::after {
-            left: -8px;
-        }
-        
-        .timeline-content {
-            padding: 15px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        .timeline-item {
+            padding: 30px 0;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
         }
         
         .timeline-year {
+            width: 120px;
             color: var(--primary);
             font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 0.9em;
+            font-size: 1.1em;
+            text-align: right;
+            padding-right: 30px;
+            position: relative;
+        }
+        
+        .timeline-year::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            right: -6px;
+            top: 8px;
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            padding: 15px 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid white;
+            left: -10px;
+            top: 15px;
         }
         
         .timeline-text {
-            font-size: 0.9em;
+            font-size: 0.95em;
             color: #666;
+            line-height: 1.7;
         }
         
         /* 页脚 */
@@ -415,26 +443,27 @@
                 gap: 30px;
             }
             
-            .timeline::after {
-                left: 31px;
-            }
-            
             .timeline-item {
+                flex-direction: column;
+            }
+            
+            .timeline-year {
                 width: 100%;
-                padding-left: 70px;
-                padding-right: 25px;
+                text-align: left;
+                padding-bottom: 10px;
+                padding-right: 0;
             }
             
-            .timeline-item::after {
-                left: 20px;
+            .timeline-year::after {
+                display: none;
             }
             
-            .left::after, .right::after {
-                left: 20px;
+            .timeline-content {
+                margin-left: 0;
             }
             
-            .right {
-                left: 0%;
+            .timeline-content::before {
+                display: none;
             }
         }
     </style>
@@ -472,7 +501,7 @@
                 <p>作为第十届施坦威全国青少年钢琴比赛总决赛的获奖选手，应邀在施坦威霍洛维茨音乐厅举办了"施坦威获奖选手导赏音乐会"。入学以来参加了近40场学院和附中组织的社会实践活动演出，2021年获得浙江音乐学院暑期社会实践先进个人称号，2023年度浙江音乐学院优秀团员。</p>
             </div>
             <div class="about-image">
-                <img src="../library/personal%20photo.jpg" alt="白子俊">
+                <img src="../library/PersonalPhoto.JPG" alt="白子俊">
             </div>
         </div>
     </section>
@@ -533,66 +562,70 @@
                 <p>浙江音乐学院</p>
             </div>
             <div class="teacher-card">
-                <div class="teacher-photo" style="background-color: #eee; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-user" style="font-size: 40px; color: #999;"></i>
-                </div>
+                <img src="../library/wx.jpeg" alt="吴晓副教授" class="teacher-photo">
                 <h3>前任导师</h3>
                 <p>吴晓 副教授</p>
                 <p>浙江音乐学院</p>
             </div>
             <div class="teacher-card">
-                <div class="teacher-photo" style="background-color: #eee; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-user" style="font-size: 40px; color: #999;"></i>
-                </div>
+                <img src="../library/ym.jpg" alt="姚镁老师" class="teacher-photo">
                 <h3>启蒙导师</h3>
                 <p>姚镁 老师</p>
             </div>
         </div>
     </section>
 
-    <section class="timeline" id="timeline">
+    <section class="timeline-section" id="timeline">
         <h2 class="section-title">艺术历程</h2>
         <div class="timeline">
-            <div class="timeline-item left">
+            <div class="timeline-item">
+                <div class="timeline-year">2025年</div>
                 <div class="timeline-content">
-                    <div class="timeline-year">2025年</div>
                     <p class="timeline-text">考入中央音乐学院钢琴系</p>
                 </div>
             </div>
-            <div class="timeline-item right">
+            <div class="timeline-item">
+                <div class="timeline-year">2024年</div>
                 <div class="timeline-content">
-                    <div class="timeline-year">2024年</div>
                     <p class="timeline-text">入围中国音乐小金钟全国展演</p>
                     <p class="timeline-text">举办第三场个人独奏音乐会</p>
                 </div>
             </div>
-            <div class="timeline-item left">
+            <div class="timeline-item">
+                <div class="timeline-year">2023年</div>
                 <div class="timeline-content">
-                    <div class="timeline-year">2023年</div>
                     <p class="timeline-text">第十二届鼓浪屿青少年钢琴比赛少年组第一名</p>
                     <p class="timeline-text">获得浙江音乐学院优秀团员称号</p>
                 </div>
             </div>
-            <div class="timeline-item right">
+            <div class="timeline-item">
+                <div class="timeline-year">2022年</div>
                 <div class="timeline-content">
-                    <div class="timeline-year">2022年</div>
                     <p class="timeline-text">第十届施坦威全国青少年钢琴比赛华东一区专业B组第一名和全国总决赛第三名</p>
                     <p class="timeline-text">在施坦威霍洛维茨音乐厅举办"施坦威获奖选手导赏音乐会"</p>
                     <p class="timeline-text">以专业和文化课第一的成绩升入高中部</p>
                 </div>
             </div>
-            <div class="timeline-item left">
+            <div class="timeline-item">
+                <div class="timeline-year">2021年</div>
                 <div class="timeline-content">
-                    <div class="timeline-year">2021年</div>
                     <p class="timeline-text">入选浙江音乐学院李叔同学院"拔尖人才培养计划"</p>
                     <p class="timeline-text">浙江音乐学院钢琴系"尽善奖"中国作品钢琴比赛附中组第一名</p>
                     <p class="timeline-text">获得浙江音乐学院暑期社会实践先进个人称号</p>
                 </div>
             </div>
-            <div class="timeline-item right">
+            <div class="timeline-item">
+                <div class="timeline-year">2020年</div>
                 <div class="timeline-content">
-                    <div class="timeline-year">2020年</div>
                     <p class="timeline-text">浙江音乐学院"贝多芬钢琴协奏曲"比赛第二名</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2019年</div>
+                <div class="timeline-content">
+                    <p class="timeline-text">考入浙江音乐学院附属音乐学校初中部</p>
+                    <p class="timeline-text">第九届施坦威全国青少年钢琴比赛华东一区专业A组第一名</p>
+                    <p class="timeline-text">获得雅马哈亚洲音乐奖学金</p>
                 </div>
             </div>
         </div>
