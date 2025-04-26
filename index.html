@@ -70,32 +70,57 @@
         /* 首页区域 */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
-                        url('https://img.zcool.cn/community/01a3fc5d156b3fa8012187f7c3d8f7.jpg@1280w_1l_2o_100sh.jpg');
-            background-size: cover;
-            background-position: center;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             padding: 0 20px;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('../library/cover.jpg') no-repeat center center;
+            background-size: cover;
+            filter: blur(5px);
+            z-index: -2;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
         }
         
         .hero-content {
             max-width: 800px;
             margin-top: 60px;
+            position: relative;
+            z-index: 1;
+            color: white;
         }
         
         .hero-content h1 {
             font-size: 2.8em;
             margin-bottom: 15px;
-            color: var(--dark);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
         
         .hero-content p {
             font-size: 1.1em;
             margin-bottom: 25px;
-            color: #555;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
         .cta-button {
@@ -229,21 +254,29 @@
             gap: 30px;
         }
         
-        .teacher-item {
+        .teacher-card {
             flex: 1;
             min-width: 200px;
             padding: 20px;
-            background: var(--light);
-            border-radius: 5px;
         }
         
-        .teacher-item h3 {
+        .teacher-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .teacher-card h3 {
             color: var(--primary);
             margin: 15px 0 5px;
             font-size: 1.1em;
         }
         
-        .teacher-item p {
+        .teacher-card p {
             color: #666;
             font-size: 0.9em;
             line-height: 1.5;
@@ -424,7 +457,7 @@
             <h1>白子俊</h1>
             <p>浙江音乐学院附中高三钢琴专业学生</p>
             <button class="cta-button">观看演奏视频</button>
-            <button class="cta-button" style="background-color: transparent; border: 1px solid var(--primary); color: var(--primary);">了解更多</button>
+            <button class="cta-button" style="background-color: transparent; border: 1px solid white; color: white;">了解更多</button>
         </div>
     </section>
 
@@ -439,8 +472,7 @@
                 <p>作为第十届施坦威全国青少年钢琴比赛总决赛的获奖选手，应邀在施坦威霍洛维茨音乐厅举办了"施坦威获奖选手导赏音乐会"。入学以来参加了近40场学院和附中组织的社会实践活动演出，2021年获得浙江音乐学院暑期社会实践先进个人称号，2023年度浙江音乐学院优秀团员。</p>
             </div>
             <div class="about-image">
-                <!-- 实际使用时请替换为本地图片 -->
-                <img src="https://img.zcool.cn/community/01e3a75d156b3fa801213f26e3a0f7.jpg@1280w_1l_2o_100sh.jpg" alt="白子俊">
+                <img src="../library/personal%20photo.jpg" alt="白子俊">
             </div>
         </div>
     </section>
@@ -494,17 +526,24 @@
     <section class="teachers" id="teachers">
         <h2 class="section-title">学习经历</h2>
         <div class="teachers-container">
-            <div class="teacher-item">
+            <div class="teacher-card">
+                <img src="../library/cxy.jpg" alt="陈小雨博士" class="teacher-photo">
                 <h3>现任导师</h3>
                 <p>陈小雨 博士</p>
                 <p>浙江音乐学院</p>
             </div>
-            <div class="teacher-item">
+            <div class="teacher-card">
+                <div class="teacher-photo" style="background-color: #eee; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user" style="font-size: 40px; color: #999;"></i>
+                </div>
                 <h3>前任导师</h3>
                 <p>吴晓 副教授</p>
                 <p>浙江音乐学院</p>
             </div>
-            <div class="teacher-item">
+            <div class="teacher-card">
+                <div class="teacher-photo" style="background-color: #eee; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user" style="font-size: 40px; color: #999;"></i>
+                </div>
                 <h3>启蒙导师</h3>
                 <p>姚镁 老师</p>
             </div>
