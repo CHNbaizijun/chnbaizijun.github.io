@@ -6,6 +6,7 @@
     <title>白子俊 | 浙江音乐学院附中钢琴专业</title>
     <!-- 使用国内CDN资源 -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
     <!-- 引入阿里巴巴普惠体 -->
     <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
     <style>
@@ -383,6 +384,41 @@
             line-height: 1.7;
         }
         
+        /* 视频弹窗样式 */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .video-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 800px;
+        }
+        
+        .video-modal-content video {
+            width: 100%;
+            outline: none;
+        }
+        
+        .close-video {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
         /* 页脚 */
         footer {
             background-color: var(--dark);
@@ -392,8 +428,9 @@
             font-size: 0.9em;
         }
         
-        .social-icons {
+        .contact-info {
             margin: 15px 0;
+            line-height: 1.8;
         }
         
         .social-icons a {
@@ -465,6 +502,10 @@
             .timeline-content::before {
                 display: none;
             }
+            
+            .video-modal-content {
+                width: 95%;
+            }
         }
     </style>
 </head>
@@ -485,7 +526,7 @@
         <div class="hero-content">
             <h1>白子俊</h1>
             <p>浙江音乐学院附中高三钢琴专业学生</p>
-            <button class="cta-button">观看演奏视频</button>
+            <button class="cta-button" id="watch-performance">观看演奏视频</button>
             <button class="cta-button" style="background-color: transparent; border: 1px solid white; color: white;">了解更多</button>
         </div>
     </section>
@@ -501,7 +542,7 @@
                 <p>作为第十届施坦威全国青少年钢琴比赛总决赛的获奖选手，应邀在施坦威霍洛维茨音乐厅举办了"施坦威获奖选手导赏音乐会"。入学以来参加了近40场学院和附中组织的社会实践活动演出，2021年获得浙江音乐学院暑期社会实践先进个人称号，2023年度浙江音乐学院优秀团员。</p>
             </div>
             <div class="about-image">
-                <img src="../library/PersonalPhoto.JPG" alt="白子俊">
+                <img src="../library/personalphoto.jpg" alt="白子俊">
             </div>
         </div>
     </section>
@@ -545,7 +586,7 @@
                 <p>2019年和2021年分别获得雅马哈亚洲音乐奖学金</p>
             </div>
             <div class="achievement-card">
-                <span class="year-badge">2018年</span>
+                <span class="year-badge">2013年</span>
                 <h3>嘉德威杯国际青少年钢琴大赛</h3>
                 <p>第三届嘉德威杯国际青少年钢琴大赛总决赛第一名</p>
             </div>
@@ -634,16 +675,31 @@
     <footer id="contact">
         <img src="https://ts1.cn.mm.bing.net/th/id/R-C.8e6d2a1a7e4d1a8e3e4a1f7e4d1a8e3e?rik=8e6d2a1a7e4d1a8&pid=ImgRaw&r=0" alt="中央音乐学院" class="school-logo">
         <p>2025级中央音乐学院钢琴系</p>
+        <div class="contact-info">
+            <p>WeChat: FreedomOfSpace</p>
+            <p>电子邮件: CHNbaizijun@163.com</p>
+        </div>
         <div class="social-icons">
             <a href="#"><i class="fab fa-weixin"></i></a>
             <a href="#"><i class="fab fa-weibo"></i></a>
             <a href="#"><i class="fab fa-qq"></i></a>
-            <a href="mailto:example@example.com"><i class="fas fa-envelope"></i></a>
+            <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
         </div>
         <div class="beian">
             <a href="https://beian.miit.gov.cn">京ICP备XXXXXXXX号</a>
         </div>
     </footer>
+
+    <!-- 视频弹窗 -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-modal-content">
+            <span class="close-video">&times;</span>
+            <video controls>
+                <source src="../library/performance.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
+        </div>
+    </div>
 
     <!-- 使用国内CDN的jQuery -->
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -661,6 +717,29 @@
                     });
                 }
             });
+
+            // 视频弹窗控制
+            var modal = document.getElementById("videoModal");
+            var btn = document.getElementById("watch-performance");
+            var span = document.getElementsByClassName("close-video")[0];
+            var video = document.querySelector("#videoModal video");
+
+            btn.onclick = function() {
+                modal.style.display = "block";
+                video.play();
+            }
+
+            span.onclick = function() {
+                modal.style.display = "none";
+                video.pause();
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    video.pause();
+                }
+            }
         });
     </script>
 </body>
