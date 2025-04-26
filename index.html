@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>白子俊 | 钢琴家 | 中央音乐学院2025级</title>
+    <title>白子俊 | 浙江音乐学院附中钢琴专业</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8B0000;
-            --secondary: #D4AF37;
-            --dark: #222;
-            --light: #f9f9f9;
+            --primary: #4a6b8a;
+            --secondary: #a6b8c8;
+            --dark: #333;
+            --light: #f8f9fa;
         }
         
         * {
@@ -28,56 +28,54 @@
         }
         
         h1, h2, h3 {
-            font-weight: 700;
+            font-weight: 500;
         }
         
         /* 导航栏 */
         .navbar {
             position: fixed;
             width: 100%;
-            padding: 20px 50px;
-            background-color: var(--dark);
+            padding: 15px 30px;
+            background-color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
         }
         
         .logo {
-            color: var(--secondary);
-            font-size: 24px;
-            font-weight: bold;
+            color: var(--primary);
+            font-size: 20px;
         }
         
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 25px;
         }
         
         .nav-links a {
-            color: white;
+            color: var(--dark);
             text-decoration: none;
+            font-size: 15px;
             transition: color 0.3s;
-            font-size: 16px;
         }
         
         .nav-links a:hover {
-            color: var(--secondary);
+            color: var(--primary);
         }
         
-        /* 英雄区域 */
+        /* 首页区域 */
         .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://source.unsplash.com/random/1920x1080/?concert-piano');
+            height: 90vh;
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
+                        url('https://source.unsplash.com/random/1920x1080/?piano,keyboard');
             background-size: cover;
             background-position: center;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            color: white;
             padding: 0 20px;
         }
         
@@ -86,44 +84,43 @@
         }
         
         .hero-content h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            color: var(--dark);
         }
         
         .hero-content p {
-            font-size: 1.2em;
-            margin-bottom: 30px;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            color: #555;
         }
         
         .cta-button {
-            padding: 15px 40px;
-            background-color: var(--secondary);
-            color: var(--dark);
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: white;
             border: none;
-            border-radius: 30px;
-            font-size: 1.1em;
+            border-radius: 4px;
+            font-size: 1em;
             cursor: pointer;
             transition: all 0.3s;
-            font-weight: 600;
-            margin: 10px;
+            margin: 8px;
         }
         
         .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background-color: #3a5a78;
         }
         
         /* 关于部分 */
         .about {
-            padding: 100px 50px;
+            padding: 80px 30px;
             background-color: white;
         }
         
         .section-title {
             text-align: center;
-            margin-bottom: 50px;
-            font-size: 2.5em;
+            margin-bottom: 40px;
+            font-size: 2em;
             color: var(--primary);
             position: relative;
         }
@@ -131,10 +128,10 @@
         .section-title:after {
             content: "";
             display: block;
-            width: 80px;
-            height: 4px;
+            width: 60px;
+            height: 2px;
             background: var(--secondary);
-            margin: 20px auto;
+            margin: 15px auto;
         }
         
         .about-content {
@@ -142,19 +139,20 @@
             margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 50px;
+            gap: 40px;
             align-items: center;
         }
         
         .about-text p {
-            margin-bottom: 20px;
-            font-size: 1.1em;
+            margin-bottom: 15px;
+            font-size: 1em;
+            color: #555;
         }
         
         .about-image {
-            border-radius: 10px;
+            border-radius: 5px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         
         .about-image img {
@@ -163,107 +161,102 @@
             display: block;
         }
         
-        /* 成就部分 */
+        /* 获奖部分 */
         .achievements {
-            padding: 100px 50px;
+            padding: 80px 30px;
             background-color: var(--light);
         }
         
         .achievements-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
             margin: 0 auto;
         }
         
         .achievement-card {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
             transition: transform 0.3s;
+            border-left: 3px solid var(--secondary);
         }
         
         .achievement-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-5px);
         }
         
         .achievement-card h3 {
             color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.3em;
+            margin-bottom: 12px;
+            font-size: 1.1em;
         }
         
         .achievement-card p {
-            color: #555;
+            color: #666;
+            font-size: 0.9em;
         }
         
         .year-badge {
-            background: var(--secondary);
-            color: var(--dark);
-            padding: 5px 10px;
-            border-radius: 20px;
+            color: var(--primary);
             font-size: 0.8em;
             font-weight: bold;
             display: inline-block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         /* 导师部分 */
         .teachers {
-            padding: 80px 50px;
+            padding: 70px 30px;
             background-color: white;
-        }
-        
-        .teachers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .teacher-card {
             text-align: center;
         }
         
-        .teacher-card img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 20px;
-            border: 5px solid var(--light);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .teachers-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
         }
         
-        .teacher-card h3 {
+        .teacher-item {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .teacher-item h3 {
             color: var(--primary);
-            margin-bottom: 5px;
+            margin: 15px 0 5px;
+            font-size: 1.1em;
         }
         
-        .teacher-card p {
-            color: #777;
-            font-style: italic;
+        .teacher-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
         }
         
         /* 页脚 */
         footer {
             background-color: var(--dark);
             color: white;
-            padding: 50px;
+            padding: 40px 20px;
             text-align: center;
+            font-size: 0.9em;
         }
         
         .social-icons {
-            margin: 20px 0;
+            margin: 15px 0;
         }
         
         .social-icons a {
             color: white;
-            margin: 0 15px;
-            font-size: 24px;
+            margin: 0 10px;
+            font-size: 18px;
             transition: color 0.3s;
         }
         
@@ -272,9 +265,10 @@
         }
         
         .school-logo {
-            width: 150px;
-            margin: 20px auto;
+            width: 120px;
+            margin: 15px auto;
             display: block;
+            opacity: 0.8;
         }
         
         @media (max-width: 768px) {
@@ -287,46 +281,36 @@
             }
             
             .hero-content h1 {
-                font-size: 2.5em;
+                font-size: 2em;
             }
-        }
-        
-        /* 钢琴键装饰 */
-        .piano-keys {
-            height: 60px;
-            background: linear-gradient(to right, 
-                #000 7%, #fff 7%, #fff 14%, 
-                #000 14%, #000 21%, #fff 21%, #fff 28%,
-                #000 28%, #000 35%, #fff 35%, #fff 42%,
-                #000 42%, #000 49%, #fff 49%, #fff 56%,
-                #000 56%, #000 63%, #fff 63%, #fff 70%,
-                #000 70%, #000 77%, #fff 77%, #fff 84%,
-                #000 84%, #000 91%, #fff 91%, #fff 98%,
-                #000 98%);
-            margin: 40px 0;
+            
+            .teachers-container {
+                flex-direction: column;
+                gap: 30px;
+            }
         }
         
         /* 时间线 */
         .timeline {
             position: relative;
-            max-width: 1000px;
-            margin: 50px auto;
+            max-width: 900px;
+            margin: 40px auto;
             padding: 0 20px;
         }
         
         .timeline::after {
             content: '';
             position: absolute;
-            width: 3px;
+            width: 2px;
             background-color: var(--secondary);
             top: 0;
             bottom: 0;
             left: 50%;
-            margin-left: -1.5px;
+            margin-left: -1px;
         }
         
         .timeline-item {
-            padding: 10px 40px;
+            padding: 10px 30px;
             position: relative;
             width: 50%;
             box-sizing: border-box;
@@ -335,10 +319,10 @@
         .timeline-item::after {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             background-color: white;
-            border: 4px solid var(--primary);
+            border: 2px solid var(--primary);
             border-radius: 50%;
             top: 15px;
             z-index: 1;
@@ -353,24 +337,30 @@
         }
         
         .left::after {
-            right: -12px;
+            right: -8px;
         }
         
         .right::after {
-            left: -12px;
+            left: -8px;
         }
         
         .timeline-content {
-            padding: 20px;
+            padding: 15px;
             background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }
         
         .timeline-year {
             color: var(--primary);
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .timeline-text {
+            font-size: 0.9em;
+            color: #666;
         }
     </style>
 </head>
@@ -379,170 +369,119 @@
         <div class="logo">白子俊</div>
         <div class="nav-links">
             <a href="#home">首页</a>
-            <a href="#about">关于</a>
-            <a href="#achievements">获奖</a>
-            <a href="#teachers">导师</a>
-            <a href="#timeline">历程</a>
-            <a href="#contact">联系</a>
+            <a href="#about">个人简介</a>
+            <a href="#achievements">获奖情况</a>
+            <a href="#teachers">学习经历</a>
+            <a href="#timeline">艺术历程</a>
+            <a href="#contact">联系方式</a>
         </div>
     </nav>
 
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>白子俊</h1>
-            <p>钢琴家 | 中央音乐学院2025级 | 浙江音乐学院附中</p>
-            <div class="piano-keys"></div>
-            <button class="cta-button">观看演出视频</button>
-            <button class="cta-button">联系演出事宜</button>
+            <p>浙江音乐学院附中高三钢琴专业学生</p>
+            <button class="cta-button">观看演奏视频</button>
+            <button class="cta-button" style="background-color: transparent; border: 1px solid var(--primary); color: var(--primary);">了解更多</button>
         </div>
     </section>
 
     <section class="about" id="about">
-        <h2 class="section-title">关于我</h2>
+        <h2 class="section-title">个人简介</h2>
         <div class="about-content">
             <div class="about-text">
-                <p>白子俊，2007年出生，4岁开始学习钢琴，现为浙江音乐学院附中高三钢琴专业学生，2025年以优异成绩考入中央音乐学院钢琴系。</p>
-                <p>自幼师从姚镁老师，后师从浙江音乐学院吴晓副教授，现师从浙江音乐学院陈小雨博士。2021年入选浙江音乐学院李叔同学院"拔尖人才培养计划"。</p>
+                <p>白子俊，2007年出生，4岁开始学习钢琴，现为浙江音乐学院附中高三钢琴专业学生，2025年考入中央音乐学院钢琴系。</p>
                 <p>2022年以专业和文化课第一的成绩升入高中部，连续五年评为校级三好学生并获得奖学金，现任浙音附中学生会主席。</p>
+                <p>2021年入选浙江音乐学院李叔同学院"拔尖人才培养计划"。</p>
                 <p>曾与浙江交响乐团、台北国际联合青年交响乐团合作演出，指挥家孙舒彦、韦丹文等合作演出钢琴协奏曲。成功举办了三场个人独奏音乐会。</p>
             </div>
             <div class="about-image">
-                <img src="https://source.unsplash.com/random/600x800/?pianist,young" alt="白子俊钢琴演奏">
+                <img src="https://source.unsplash.com/random/600x800/?student,piano" alt="白子俊">
             </div>
         </div>
     </section>
 
     <section class="achievements" id="achievements">
-        <h2 class="section-title">获奖经历</h2>
+        <h2 class="section-title">获奖情况</h2>
         <div class="achievements-grid">
             <div class="achievement-card">
-                <span class="year-badge">2024</span>
+                <span class="year-badge">2024年</span>
                 <h3>中国音乐小金钟全国展演</h3>
                 <p>入围中国音乐家协会"中国音乐小金钟"全国展演</p>
             </div>
             <div class="achievement-card">
-                <span class="year-badge">2023</span>
+                <span class="year-badge">2023年</span>
                 <h3>鼓浪屿青少年钢琴比赛</h3>
                 <p>第十二届鼓浪屿青少年钢琴比赛少年组第一名</p>
             </div>
             <div class="achievement-card">
-                <span class="year-badge">2022</span>
+                <span class="year-badge">2022年</span>
                 <h3>施坦威全国青少年钢琴比赛</h3>
                 <p>第十届施坦威全国青少年钢琴比赛华东一区专业B组第一名和全国总决赛第三名</p>
             </div>
             <div class="achievement-card">
-                <span class="year-badge">2021</span>
+                <span class="year-badge">2021年</span>
                 <h3>浙江音乐学院"尽善奖"</h3>
                 <p>钢琴系中国作品钢琴比赛附中组第一名</p>
             </div>
             <div class="achievement-card">
-                <span class="year-badge">2020</span>
+                <span class="year-badge">2020年</span>
                 <h3>浙江音乐学院比赛</h3>
                 <p>"贝多芬钢琴协奏曲"比赛第二名</p>
             </div>
             <div class="achievement-card">
-                <span class="year-badge">2019</span>
+                <span class="year-badge">2019年</span>
                 <h3>施坦威全国青少年钢琴比赛</h3>
                 <p>第九届施坦威全国青少年钢琴比赛华东一区专业A组第一名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2019</span>
-                <h3>雅马哈亚洲音乐奖学金</h3>
-                <p>2019年和2021年分别获得雅马哈亚洲音乐奖学金</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2018</span>
-                <h3>嘉德威杯国际青少年钢琴大赛</h3>
-                <p>第三届嘉德威杯国际青少年钢琴大赛总决赛第一名</p>
             </div>
         </div>
     </section>
 
     <section class="teachers" id="teachers">
-        <h2 class="section-title">师从</h2>
-        <div class="teachers-grid">
-            <div class="teacher-card">
-                <img src="https://source.unsplash.com/random/300x300/?professor,woman" alt="陈小雨博士">
-                <h3>陈小雨 博士</h3>
+        <h2 class="section-title">学习经历</h2>
+        <div class="teachers-container">
+            <div class="teacher-item">
+                <h3>现任导师</h3>
+                <p>陈小雨 博士</p>
                 <p>浙江音乐学院</p>
-                <p>现任导师</p>
             </div>
-            <div class="teacher-card">
-                <img src="https://source.unsplash.com/random/300x300/?professor,man" alt="吴晓副教授">
-                <h3>吴晓 副教授</h3>
+            <div class="teacher-item">
+                <h3>前任导师</h3>
+                <p>吴晓 副教授</p>
                 <p>浙江音乐学院</p>
-                <p>前任导师</p>
             </div>
-            <div class="teacher-card">
-                <img src="https://source.unsplash.com/random/300x300/?piano,teacher" alt="姚镁老师">
-                <h3>姚镁 老师</h3>
-                <p>启蒙导师</p>
+            <div class="teacher-item">
+                <h3>启蒙导师</h3>
+                <p>姚镁 老师</p>
             </div>
         </div>
     </section>
 
-    <section class="timeline-section" id="timeline">
+    <section class="timeline" id="timeline">
         <h2 class="section-title">艺术历程</h2>
         <div class="timeline">
             <div class="timeline-item left">
                 <div class="timeline-content">
-                    <div class="timeline-year">2025</div>
-                    <p>考入中央音乐学院钢琴系</p>
+                    <div class="timeline-year">2025年</div>
+                    <p class="timeline-text">考入中央音乐学院钢琴系</p>
                 </div>
             </div>
             <div class="timeline-item right">
                 <div class="timeline-content">
-                    <div class="timeline-year">2024</div>
-                    <p>入围中国音乐小金钟全国展演</p>
-                    <p>举办第三场个人独奏音乐会</p>
+                    <div class="timeline-year">2024年</div>
+                    <p class="timeline-text">入围中国音乐小金钟全国展演</p>
                 </div>
             </div>
             <div class="timeline-item left">
                 <div class="timeline-content">
-                    <div class="timeline-year">2023</div>
-                    <p>第十二届鼓浪屿青少年钢琴比赛少年组第一名</p>
-                    <p>获得浙江音乐学院优秀团员称号</p>
+                    <div class="timeline-year">2023年</div>
+                    <p class="timeline-text">第十二届鼓浪屿青少年钢琴比赛少年组第一名</p>
                 </div>
             </div>
             <div class="timeline-item right">
                 <div class="timeline-content">
-                    <div class="timeline-year">2022</div>
-                    <p>第十届施坦威全国青少年钢琴比赛华东一区专业B组第一名和全国总决赛第三名</p>
-                    <p>在施坦威霍洛维茨音乐厅举办"施坦威获奖选手导赏音乐会"</p>
-                    <p>以专业和文化课第一的成绩升入高中部</p>
-                </div>
-            </div>
-            <div class="timeline-item left">
-                <div class="timeline-content">
-                    <div class="timeline-year">2021</div>
-                    <p>入选浙江音乐学院李叔同学院"拔尖人才培养计划"</p>
-                    <p>浙江音乐学院钢琴系"尽善奖"中国作品钢琴比赛附中组第一名</p>
-                    <p>获得浙江音乐学院暑期社会实践先进个人称号</p>
-                </div>
-            </div>
-            <div class="timeline-item right">
-                <div class="timeline-content">
-                    <div class="timeline-year">2020</div>
-                    <p>浙江音乐学院"贝多芬钢琴协奏曲"比赛第二名</p>
-                </div>
-            </div>
-            <div class="timeline-item left">
-                <div class="timeline-content">
-                    <div class="timeline-year">2019</div>
-                    <p>第九届施坦威全国青少年钢琴比赛华东一区专业A组第一名</p>
-                    <p>获得雅马哈亚洲音乐奖学金</p>
-                </div>
-            </div>
-            <div class="timeline-item right">
-                <div class="timeline-content">
-                    <div class="timeline-year">2018</div>
-                    <p>第三届嘉德威杯国际青少年钢琴大赛总决赛第一名</p>
-                </div>
-            </div>
-            <div class="timeline-item left">
-                <div class="timeline-content">
-                    <div class="timeline-year">2011</div>
-                    <p>4岁开始学习钢琴，师从姚镁老师</p>
+                    <div class="timeline-year">2022年</div>
+                    <p class="timeline-text">第十届施坦威全国青少年钢琴比赛华东一区专业B组第一名和全国总决赛第三名</p>
                 </div>
             </div>
         </div>
@@ -552,13 +491,10 @@
         <img src="https://upload.wikimedia.org/wikipedia/zh/9/9f/Central_Conservatory_of_Music_logo.png" alt="中央音乐学院" class="school-logo">
         <p>2025级中央音乐学院钢琴系</p>
         <div class="social-icons">
+            <a href="#"><i class="fas fa-envelope"></i></a>
             <a href="#"><i class="fab fa-weixin"></i></a>
-            <a href="#"><i class="fab fa-weibo"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="mailto:example@example.com"><i class="fas fa-envelope"></i></a>
         </div>
-        <p>© 2024 白子俊 版权所有</p>
+        <p>© 2024 白子俊</p>
     </footer>
 </body>
 </html>
