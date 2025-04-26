@@ -6,7 +6,6 @@
     <title>白子俊 | 浙江音乐学院附中钢琴专业</title>
     <!-- 使用国内CDN资源 -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
     <!-- 引入阿里巴巴普惠体 -->
     <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
     <style>
@@ -16,6 +15,7 @@
             --light: #F0F3F5;  /* 浅灰背景 */
             --dark: #2C3E50;  /* 深灰文字 */
             --border: #D9E1E8;  /* 边框色 */
+            --gold: #D4AF37;  /* 金色 */
         }
         
         * {
@@ -188,7 +188,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             width: 100%;
             height: 0;
-            padding-bottom: 133%; /* 3:4比例 */
+            padding-bottom: 100%; /* 调整为1:1比例 */
             position: relative;
         }
         
@@ -258,14 +258,31 @@
             max-width: 800px;
             margin: 0 auto;
             display: flex;
-            justify-content: space-around;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .current-teacher {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .current-teacher h3 {
+            color: var(--gold);
+            margin: 15px 0 5px;
+            font-size: 1.3em;
+        }
+        
+        .other-teachers {
+            display: flex;
+            justify-content: center;
             flex-wrap: wrap;
             gap: 30px;
+            width: 100%;
         }
         
         .teacher-card {
-            flex: 1;
-            min-width: 200px;
             padding: 20px;
         }
         
@@ -279,10 +296,10 @@
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
         
-        .teacher-card h3 {
-            color: var(--primary);
-            margin: 15px 0 5px;
-            font-size: 1.1em;
+        .current-photo {
+            width: 180px;
+            height: 180px;
+            border: 4px solid var(--gold);
         }
         
         .teacher-card p {
@@ -446,9 +463,10 @@
         
         .school-logo {
             width: 120px;
+            height: 120px;
             margin: 15px auto;
             display: block;
-            opacity: 0.8;
+            object-fit: contain;
         }
         
         .beian {
@@ -596,22 +614,24 @@
     <section class="teachers" id="teachers">
         <h2 class="section-title">学习经历</h2>
         <div class="teachers-container">
-            <div class="teacher-card">
-                <img src="../library/cxy.jpg" alt="陈小雨博士" class="teacher-photo">
+            <div class="current-teacher">
+                <img src="../library/cxy.jpg" alt="陈小雨博士" class="teacher-photo current-photo">
                 <h3>现任导师</h3>
                 <p>陈小雨 博士</p>
                 <p>浙江音乐学院</p>
             </div>
-            <div class="teacher-card">
-                <img src="../library/wx.jpeg" alt="吴晓副教授" class="teacher-photo">
-                <h3>前任导师</h3>
-                <p>吴晓 副教授</p>
-                <p>浙江音乐学院</p>
-            </div>
-            <div class="teacher-card">
-                <img src="../library/ym.jpg" alt="姚镁老师" class="teacher-photo">
-                <h3>启蒙导师</h3>
-                <p>姚镁 老师</p>
+            <div class="other-teachers">
+                <div class="teacher-card">
+                    <img src="../library/wx.jpeg" alt="吴晓副教授" class="teacher-photo">
+                    <h3>前任导师</h3>
+                    <p>吴晓 副教授</p>
+                    <p>浙江音乐学院</p>
+                </div>
+                <div class="teacher-card">
+                    <img src="../library/ym.jpg" alt="姚镁老师" class="teacher-photo">
+                    <h3>启蒙导师</h3>
+                    <p>姚镁 老师</p>
+                </div>
             </div>
         </div>
     </section>
@@ -673,7 +693,7 @@
     </section>
 
     <footer id="contact">
-        <img src="https://ts1.cn.mm.bing.net/th/id/R-C.8e6d2a1a7e4d1a8e3e4a1f7e4d1a8e3e?rik=8e6d2a1a7e4d1a8&pid=ImgRaw&r=0" alt="中央音乐学院" class="school-logo">
+        <img src="https://p1.ssl.qhimg.com/t0125b8c25bfab864a2.jpg" alt="中央音乐学院" class="school-logo">
         <p>2025级中央音乐学院钢琴系</p>
         <div class="contact-info">
             <p>WeChat: FreedomOfSpace</p>
@@ -694,7 +714,7 @@
     <div id="videoModal" class="video-modal">
         <div class="video-modal-content">
             <span class="close-video">&times;</span>
-            <video controls>
+            <video controls autoplay>
                 <source src="../library/performance.mp4" type="video/mp4">
                 您的浏览器不支持视频播放
             </video>
@@ -727,6 +747,7 @@
             btn.onclick = function() {
                 modal.style.display = "block";
                 video.play();
+                return false;
             }
 
             span.onclick = function() {
