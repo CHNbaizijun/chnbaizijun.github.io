@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Li Wei - Piano Scholar | CCOM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            padding: 20px 50px;
+            background-color: #2A1A5E;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: #FDB827;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FDB827;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(42,26,94,0.7), rgba(42,26,94,0.7)), 
+                        url('https://source.unsplash.com/random/1920x1080/?grand-piano');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            padding: 15px 40px;
+            background-color: #FDB827;
+            color: #2A1A5E;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            font-weight: 600;
+        }
+
+        /* Repertoire Section */
+        .repertoire {
+            padding: 100px 50px;
+            background-color: #fff;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5em;
+            color: #2A1A5E;
+        }
+
+        .repertoire-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .piece-card {
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .piece-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .composer {
+            color: #FDB827;
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 100px 50px;
+            background-color: #2A1A5E;
+            color: white;
+            text-align: center;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 30px auto;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #FDB827;
+            border-radius: 8px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        /* Performance Timeline */
+        .timeline {
+            padding: 50px 20px;
+            background-color: #fff;
+        }
+
+        .timeline-item {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            border-left: 3px solid #FDB827;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2A1A5E;
+            color: white;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .social-icons {
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 15px;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #FDB827;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+
+            .repertoire {
+                padding: 50px 20px;
+            }
+        }
+
+        .ccom-badge {
+            width: 100px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .piano-keys {
+            height: 60px;
+            background: linear-gradient(to right, #000 5%, #fff 5%, #fff 10%, #000 10%);
+            background-size: 20% 100%;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">PianoHarmony</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#repertoire">Repertoire</a>
+            <a href="#recordings">Recordings</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Classical Piano Virtuosity</h1>
+            <p>Beijing Central Conservatory of Music | Graduate Performance Diploma</p>
+            <div class="piano-keys"></div>
+            <button class="cta-button">View Performances</button>
+        </div>
+    </section>
+
+    <section class="repertoire" id="repertoire">
+        <h2 class="section-title">Performance Repertoire</h2>
+        <div class="repertoire-grid">
+            <div class="piece-card">
+                <i class="fas fa-music" style="color: #FDB827; font-size: 2em;"></i>
+                <h3 class="composer">J.S. Bach</h3>
+                <p>Goldberg Variations, BWV 988</p>
+                <p>Well-Tempered Clavier, Book II</p>
+            </div>
+            <div class="piece-card">
+                <i class="fas fa-music" style="color: #FDB827; font-size: 2em;"></i>
+                <h3 class="composer">L. van Beethoven</h3>
+                <p>Piano Sonata No. 29 "Hammerklavier"</p>
+                <p>Diabelli Variations, Op. 120</p>
+            </div>
+            <div class="piece-card">
+                <i class="fas fa-music" style="color: #FDB827; font-size: 2em;"></i>
+                <h3 class="composer">F. Chopin</h3>
+                <p>Études Op. 10 & 25</p>
+                <p>Ballade No. 4 in F minor</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2 class="section-title" style="color: #FDB827;">Contact</h2>
+        <form class="contact-form">
+            <input type="text" class="form-input" placeholder="Name">
+            <input type="email" class="form-input" placeholder="Email">
+            <textarea class="form-input" rows="5" placeholder="Message"></textarea>
+            <button type="submit" class="cta-button" style="margin-top: 20px;">Send Message</button>
+        </form>
+    </section>
+
+    <footer>
+        <img src="https://upload.wikimedia.org/wikipedia/en/9/9d/CCOM_logo.png" alt="CCOM" class="ccom-badge">
+        <p>Central Conservatory of Music Beijing<br>
+        No. 43 Baojia Street, Xicheng District, Beijing</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-soundcloud"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fas fa-envelope"></i></a>
+        </div>
+    </footer>
+</body>
+</html>
