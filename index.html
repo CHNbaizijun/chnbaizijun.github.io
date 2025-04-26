@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>白子俊 | 浙江音乐学院附中钢琴专业</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- 使用国内CDN资源 -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4a6b8a;
-            --secondary: #a6b8c8;
-            --dark: #333;
-            --light: #f8f9fa;
+            --primary: #3A5F7D;  /* 深蓝灰主色 */
+            --secondary: #6D8BA3;  /* 浅蓝灰辅色 */
+            --light: #F0F3F5;  /* 浅灰背景 */
+            --dark: #2C3E50;  /* 深灰文字 */
+            --border: #D9E1E8;  /* 边框色 */
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Noto Serif SC', serif;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
         }
         
         body {
@@ -41,12 +42,13 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 10px rgba(0,0,0,0.08);
         }
         
         .logo {
             color: var(--primary);
-            font-size: 20px;
+            font-size: 22px;
+            font-weight: 600;
         }
         
         .nav-links {
@@ -67,9 +69,9 @@
         
         /* 首页区域 */
         .hero {
-            height: 90vh;
+            height: 100vh;
             background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
-                        url('https://source.unsplash.com/random/1920x1080/?piano,keyboard');
+                        url('https://img.zcool.cn/community/01a3fc5d156b3fa8012187f7c3d8f7.jpg@1280w_1l_2o_100sh.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -81,6 +83,7 @@
         
         .hero-content {
             max-width: 800px;
+            margin-top: 60px;
         }
         
         .hero-content h1 {
@@ -108,7 +111,7 @@
         }
         
         .cta-button:hover {
-            background-color: #3a5a78;
+            background-color: #2d4b63;
         }
         
         /* 关于部分 */
@@ -147,6 +150,8 @@
             margin-bottom: 15px;
             font-size: 1em;
             color: #555;
+            text-align: justify;
+            line-height: 1.8;
         }
         
         .about-image {
@@ -197,6 +202,7 @@
         .achievement-card p {
             color: #666;
             font-size: 0.9em;
+            line-height: 1.6;
         }
         
         .year-badge {
@@ -226,6 +232,9 @@
         .teacher-item {
             flex: 1;
             min-width: 200px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 5px;
         }
         
         .teacher-item h3 {
@@ -238,56 +247,6 @@
             color: #666;
             font-size: 0.9em;
             line-height: 1.5;
-        }
-        
-        /* 页脚 */
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            font-size: 0.9em;
-        }
-        
-        .social-icons {
-            margin: 15px 0;
-        }
-        
-        .social-icons a {
-            color: white;
-            margin: 0 10px;
-            font-size: 18px;
-            transition: color 0.3s;
-        }
-        
-        .social-icons a:hover {
-            color: var(--secondary);
-        }
-        
-        .school-logo {
-            width: 120px;
-            margin: 15px auto;
-            display: block;
-            opacity: 0.8;
-        }
-        
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero-content h1 {
-                font-size: 2em;
-            }
-            
-            .teachers-container {
-                flex-direction: column;
-                gap: 30px;
-            }
         }
         
         /* 时间线 */
@@ -362,6 +321,89 @@
             font-size: 0.9em;
             color: #666;
         }
+        
+        /* 页脚 */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .social-icons {
+            margin: 15px 0;
+        }
+        
+        .social-icons a {
+            color: white;
+            margin: 0 10px;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: var(--secondary);
+        }
+        
+        .school-logo {
+            width: 120px;
+            margin: 15px auto;
+            display: block;
+            opacity: 0.8;
+        }
+        
+        .beian {
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .beian a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-content h1 {
+                font-size: 2em;
+            }
+            
+            .teachers-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 20px;
+            }
+            
+            .left::after, .right::after {
+                left: 20px;
+            }
+            
+            .right {
+                left: 0%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -394,9 +436,11 @@
                 <p>2022年以专业和文化课第一的成绩升入高中部，连续五年评为校级三好学生并获得奖学金，现任浙音附中学生会主席。</p>
                 <p>2021年入选浙江音乐学院李叔同学院"拔尖人才培养计划"。</p>
                 <p>曾与浙江交响乐团、台北国际联合青年交响乐团合作演出，指挥家孙舒彦、韦丹文等合作演出钢琴协奏曲。成功举办了三场个人独奏音乐会。</p>
+                <p>作为第十届施坦威全国青少年钢琴比赛总决赛的获奖选手，应邀在施坦威霍洛维茨音乐厅举办了"施坦威获奖选手导赏音乐会"。入学以来参加了近40场学院和附中组织的社会实践活动演出，2021年获得浙江音乐学院暑期社会实践先进个人称号，2023年度浙江音乐学院优秀团员。</p>
             </div>
             <div class="about-image">
-                <img src="https://source.unsplash.com/random/600x800/?student,piano" alt="白子俊">
+                <!-- 实际使用时请替换为本地图片 -->
+                <img src="https://img.zcool.cn/community/01e3a75d156b3fa801213f26e3a0f7.jpg@1280w_1l_2o_100sh.jpg" alt="白子俊">
             </div>
         </div>
     </section>
@@ -434,6 +478,16 @@
                 <h3>施坦威全国青少年钢琴比赛</h3>
                 <p>第九届施坦威全国青少年钢琴比赛华东一区专业A组第一名</p>
             </div>
+            <div class="achievement-card">
+                <span class="year-badge">2019年</span>
+                <h3>雅马哈亚洲音乐奖学金</h3>
+                <p>2019年和2021年分别获得雅马哈亚洲音乐奖学金</p>
+            </div>
+            <div class="achievement-card">
+                <span class="year-badge">2018年</span>
+                <h3>嘉德威杯国际青少年钢琴大赛</h3>
+                <p>第三届嘉德威杯国际青少年钢琴大赛总决赛第一名</p>
+            </div>
         </div>
     </section>
 
@@ -470,31 +524,72 @@
                 <div class="timeline-content">
                     <div class="timeline-year">2024年</div>
                     <p class="timeline-text">入围中国音乐小金钟全国展演</p>
+                    <p class="timeline-text">举办第三场个人独奏音乐会</p>
                 </div>
             </div>
             <div class="timeline-item left">
                 <div class="timeline-content">
                     <div class="timeline-year">2023年</div>
                     <p class="timeline-text">第十二届鼓浪屿青少年钢琴比赛少年组第一名</p>
+                    <p class="timeline-text">获得浙江音乐学院优秀团员称号</p>
                 </div>
             </div>
             <div class="timeline-item right">
                 <div class="timeline-content">
                     <div class="timeline-year">2022年</div>
                     <p class="timeline-text">第十届施坦威全国青少年钢琴比赛华东一区专业B组第一名和全国总决赛第三名</p>
+                    <p class="timeline-text">在施坦威霍洛维茨音乐厅举办"施坦威获奖选手导赏音乐会"</p>
+                    <p class="timeline-text">以专业和文化课第一的成绩升入高中部</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <div class="timeline-year">2021年</div>
+                    <p class="timeline-text">入选浙江音乐学院李叔同学院"拔尖人才培养计划"</p>
+                    <p class="timeline-text">浙江音乐学院钢琴系"尽善奖"中国作品钢琴比赛附中组第一名</p>
+                    <p class="timeline-text">获得浙江音乐学院暑期社会实践先进个人称号</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <div class="timeline-year">2020年</div>
+                    <p class="timeline-text">浙江音乐学院"贝多芬钢琴协奏曲"比赛第二名</p>
                 </div>
             </div>
         </div>
     </section>
 
     <footer id="contact">
-        <img src="https://upload.wikimedia.org/wikipedia/zh/9/9f/Central_Conservatory_of_Music_logo.png" alt="中央音乐学院" class="school-logo">
+        <img src="https://ts1.cn.mm.bing.net/th/id/R-C.8e6d2a1a7e4d1a8e3e4a1f7e4d1a8e3e?rik=8e6d2a1a7e4d1a8&pid=ImgRaw&r=0" alt="中央音乐学院" class="school-logo">
         <p>2025级中央音乐学院钢琴系</p>
         <div class="social-icons">
-            <a href="#"><i class="fas fa-envelope"></i></a>
             <a href="#"><i class="fab fa-weixin"></i></a>
+            <a href="#"><i class="fab fa-weibo"></i></a>
+            <a href="#"><i class="fab fa-qq"></i></a>
+            <a href="mailto:example@example.com"><i class="fas fa-envelope"></i></a>
         </div>
-        <p>© 2024 白子俊</p>
+        <div class="beian">
+            <a href="https://beian.miit.gov.cn">京ICP备XXXXXXXX号</a>
+        </div>
     </footer>
+
+    <!-- 使用国内CDN的jQuery -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // 平滑滚动
+        $(document).ready(function(){
+            $("a").on('click', function(event) {
+                if (this.hash !== "") {
+                    event.preventDefault();
+                    var hash = this.hash;
+                    $('html, body').animate({
+                        scrollTop: $(hash).offset().top - 70
+                    }, 800, function(){
+                        window.location.hash = hash;
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
