@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更多 | 白子俊</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #4A6B8A;
+            --accent: #D4AF37;
+            --light: #F5F7FA;
+            --white: #FFFFFF;
+            --dark: #1A1A1A;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "AlibabaPuHuiTi", "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .back-button i {
+            margin-right: 8px;
+        }
+        
+        .back-button:hover {
+            color: var(--accent);
+        }
+        
+        .page-title {
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .page-title::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .section-box {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-content {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .enter-button {
+            padding: 12px 25px;
+            background-color: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: block;
+            margin: 0 auto;
+            text-decoration: none;
+            text-align: center;
+            width: fit-content;
+        }
+        
+        .enter-button:hover {
+            background-color: #c19b2e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2em;
+            }
+            
+            .section-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://chnbaizijun.github.io" class="back-button">
+            <i class="fas fa-arrow-left"></i>返回主页
+        </a>
+        
+        <h1 class="page-title">更多</h1>
+        
+        <div class="section-box">
+            <h2 class="section-title">文章中心</h2>
+            <p class="section-content">这里收录了我的所有文章和随笔，点击下方按钮查看完整列表。</p>
+            <a href="https://chnbaizijun.github.io/article.html" class="enter-button">进入</a>
+        </div>
+    </div>
+</body>
+</html>

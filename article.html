@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章中心 | 白子俊</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #4A6B8A;
+            --accent: #D4AF37;
+            --light: #F5F7FA;
+            --white: #FFFFFF;
+            --dark: #1A1A1A;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "AlibabaPuHuiTi", "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .back-button i {
+            margin-right: 8px;
+        }
+        
+        .back-button:hover {
+            color: var(--accent);
+        }
+        
+        .page-title {
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .page-title::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .article-list {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .article-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .article-item:last-child {
+            border-bottom: none;
+        }
+        
+        .article-title {
+            color: var(--primary);
+            font-size: 1.1em;
+        }
+        
+        .read-button {
+            padding: 8px 15px;
+            background-color: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .read-button:hover {
+            background-color: #c19b2e;
+        }
+        
+        .article-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .modal-title {
+            font-size: 1.5em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-text {
+            white-space: pre-line;
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5em;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2em;
+            }
+            
+            .article-list {
+                padding: 20px;
+            }
+            
+            .article-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .read-button {
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://chnbaizijun.github.io/more.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>返回
+        </a>
+        
+        <h1 class="page-title">文章中心</h1>
+        
+        <div class="article-list" id="articleList">
+            <!-- 文章列表将通过JavaScript动态加载 -->
+            <div class="loading">加载中...</div>
+        </div>
+    </div>
+    
+    <div class="article-modal" id="articleModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 class="modal-title" id="modalTitle">文章标题</h2>
+            <div class="modal-text" id="modalText">文章内容加载中...</div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 模拟从服务器获取文章列表
+            // 实际使用时需要替换为真实的API调用
+            const articles = [
+                { id: 1, title: "钢琴演奏技巧心得", file: "article/technique.txt" },
+                { id: 2, title: "音乐学习之路", file: "article/journey.txt" },
+                { id: 3, title: "贝多芬作品分析", file: "article/beethoven.txt" },
+                { id: 4, title: "我的音乐梦想", file: "article/dream.txt" }
+            ];
+            
+            // 渲染文章列表
+            const $articleList = $('#articleList');
+            $articleList.empty();
+            
+            if (articles.length === 0) {
+                $articleList.append('<div class="no-articles">暂无文章</div>');
+            } else {
+                articles.forEach(article => {
+                    $articleList.append(`
+                        <div class="article-item" data-id="${article.id}">
+                            <div class="article-title">${article.title}</div>
+                            <a href="#" class="read-button" data-file="${article.file}">阅读</a>
+                        </div>
+                    `);
+                });
+            }
+            
+            // 文章点击事件
+            $(document).on('click', '.read-button', function(e) {
+                e.preventDefault();
+                const filePath = $(this).data('file');
+                const articleTitle = $(this).siblings('.article-title').text();
+                
+                $('#modalTitle').text(articleTitle);
+                $('#articleModal').fadeIn();
+                
+                // 模拟加载文章内容
+                // 实际使用时需要替换为真实的AJAX请求
+                $.ajax({
+                    url: filePath,
+                    dataType: 'text',
+                    success: function(data) {
+                        $('#modalText').text(data);
+                    },
+                    error: function() {
+                        $('#modalText').text('加载文章失败，请稍后再试。');
+                    }
+                });
+            });
+            
+            // 关闭模态框
+            $('#closeModal').click(function() {
+                $('#articleModal').fadeOut();
+            });
+            
+            $(window).click(function(e) {
+                if (e.target === $('#articleModal')[0]) {
+                    $('#articleModal').fadeOut();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
