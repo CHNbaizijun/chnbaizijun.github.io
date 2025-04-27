@@ -226,18 +226,46 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            // ============= 配置信息 =============
-            const GITHUB_USER = 'chnbaizijun';      // GitHub用户名
-            const REPO_NAME = 'chnbaizijun.github.io';  // 仓库名称
-            const ARTICLE_PATH = 'article';         // 文章存放目录
-            // ====================================
+            // ============= 增强配置 =============
+            const CONFIG = {
+                github: {
+                    user: 'chnbaizijun',
+                    repo: 'chnbaizijun.github.io',
+                    path: 'article',
+                    token: '' // 可选：填写你的GitHub token
+                },
+                fallback: {
+                    use: true, // 启用备用方案
+                    jsonPath: 'articles.json' // 备用JSON文件路径
+                },
+                corsProxy: 'https://corsproxy.io/?' // CORS代理服务
+            };
 
-            // 获取文章列表
+            // ============= 核心功能 =============
             function loadArticles() {
-                const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/${ARTICLE_PATH}`;
+                showLoading();
                 
-                $.ajax({
-                    url: apiUrl,
+                // 尝试GitHub API方案
+                fetchFromGitHub().fail(function() {
+                    if (CONFIG.fallback.use) {
+                        // GitHub API失败时尝试备用方案
+                        fetchFromFallback();
+                    } else {
+                        showError("无法加载文章列表");
+                    }
+                });
+            }
+
+            function fetchFromGitHub() {
+                let apiUrl = `https://api.github.com/repos/${CONFIG.github.user}/${CONFIG.github.repo}/contents/${CONFIG.github.path}`;
+                
+                // 添加token（如果有）
+                if (CONFIG.github.token) {
+                    apiUrl += `?access_token=${CONFIG.github.token}`;
+                }
+
+                return $.ajax({
+                    url: CONFIG.corsProxy + encodeURIComponent(apiUrl),
                     dataType: 'json',
                     success: function(files) {
                         const txtFiles = files.filter(file => 
@@ -247,16 +275,30 @@
                         if (txtFiles.length > 0) {
                             renderArticleList(txtFiles);
                         } else {
-                            $('#articleList').html('<div class="error">暂无文章</div>');
+                            showError("没有找到文章");
                         }
                     },
-                    error: function() {
-                        $('#articleList').html('<div class="error">加载文章列表失败，请稍后重试</div>');
+                    error: function(xhr) {
+                        console.error("GitHub API错误:", xhr.status, xhr.statusText);
+                        return $.Deferred().reject();
                     }
                 });
             }
 
-            // 渲染文章列表
+            function fetchFromFallback() {
+                $.get(CONFIG.fallback.jsonPath)
+                    .done(function(articles) {
+                        if (articles && articles.length > 0) {
+                            renderFallbackList(articles);
+                        } else {
+                            showError("备用方案加载失败");
+                        }
+                    })
+                    .fail(function() {
+                        showError("无法加载任何文章数据");
+                    });
+            }
+
             function renderArticleList(files) {
                 const $articleList = $('#articleList');
                 $articleList.empty();
@@ -267,40 +309,96 @@
                         <div class="article-item">
                             <div class="article-title">${title}</div>
                             <button class="read-button" 
-                                    data-url="${file.download_url}">阅读全文</button>
+                                    data-url="${file.download_url}"
+                                    data-name="${file.name}">阅读全文</button>
                         </div>
                     `);
                 });
             }
 
-            // 加载文章内容
-            function loadArticleContent(url) {
-                $('#modalText').text('正在加载文章内容...');
-                $('#articleModal').fadeIn();
+            function renderFallbackList(articles) {
+                const $articleList = $('#articleList');
+                $articleList.empty();
 
+                articles.forEach(article => {
+                    $articleList.append(`
+                        <div class="article-item">
+                            <div class="article-title">${article.title || article.filename.replace('.txt', '')}</div>
+                            <button class="read-button" 
+                                    data-url="${article.path}"
+                                    data-name="${article.filename}">阅读全文</button>
+                        </div>
+                    `);
+                });
+            }
+
+            function loadArticleContent(url, filename) {
+                showModal('正在加载文章...');
+                
+                // 尝试直接访问（GitHub raw内容）
                 $.ajax({
-                    url: url,
+                    url: CONFIG.corsProxy + encodeURIComponent(url),
                     dataType: 'text',
                     success: function(content) {
-                        $('#modalTitle').text(url.split('/').pop().replace('.txt', ''));
-                        $('#modalText').text(content);
+                        showContent(filename.replace('.txt', ''), content);
                     },
                     error: function() {
-                        $('#modalText').text('无法加载文章内容，请检查网络连接');
+                        // 直接访问失败时尝试备用方案
+                        tryFallbackContent(url, filename);
                     }
                 });
             }
 
-            // 事件绑定
+            function tryFallbackContent(url, filename) {
+                // 尝试通过GitHub Pages路径访问
+                const fallbackUrl = url.replace('https://raw.githubusercontent.com', '');
+                $.get(fallbackUrl)
+                    .done(function(content) {
+                        showContent(filename.replace('.txt', ''), content);
+                    })
+                    .fail(function() {
+                        showContent(filename.replace('.txt', ''), 
+                            "⚠️ 无法加载文章内容\n\n可能原因：\n1. 文件路径不正确\n2. CORS限制\n3. 文件编码问题\n\n请检查控制台获取详细信息");
+                        console.error("加载失败的文件:", url);
+                    });
+            }
+
+            // ============= UI操作 =============
+            function showLoading() {
+                $('#articleList').html('<div class="loading">正在加载文章列表...</div>');
+            }
+
+            function showError(msg) {
+                $('#articleList').html(`<div class="error">${msg}</div>`);
+            }
+
+            function showModal(msg) {
+                $('#modalTitle').text('');
+                $('#modalText').text(msg);
+                $('#articleModal').fadeIn();
+            }
+
+            function showContent(title, content) {
+                $('#modalTitle').text(title);
+                $('#modalText').html(content.replace(/\n/g, '<br>'));
+            }
+
+            // ============= 事件绑定 =============
             $(document).on('click', '.read-button', function() {
                 const fileUrl = $(this).data('url');
-                loadArticleContent(fileUrl);
+                const fileName = $(this).data('name');
+                loadArticleContent(fileUrl, fileName);
             });
 
             $('#closeModal, #articleModal').click(function(e) {
                 if (e.target === this || e.target.id === 'closeModal') {
                     $('#articleModal').fadeOut();
                 }
+            });
+
+            // 阻止模态框内容点击时关闭
+            $('.modal-content').click(function(e) {
+                e.stopPropagation();
             });
 
             // 初始化加载
