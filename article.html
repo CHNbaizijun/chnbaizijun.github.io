@@ -14,28 +14,28 @@
             --light: #F5F7FA;
             --white: #FFFFFF;
             --dark: #1A1A1A;
-            --gray: #E1E5EA;
+            --error: #e74c3c;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: "AlibabaPuHuiTi", "Microsoft YaHei", "PingFang SC", sans-serif;
         }
-        
+
         body {
             background-color: var(--light);
             color: var(--dark);
             line-height: 1.6;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
         }
-        
+
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -45,15 +45,15 @@
             font-size: 16px;
             transition: all 0.3s;
         }
-        
+
         .back-button i {
             margin-right: 8px;
         }
-        
+
         .back-button:hover {
             color: var(--accent);
         }
-        
+
         .page-title {
             font-size: 2.5em;
             color: var(--primary);
@@ -62,7 +62,7 @@
             position: relative;
             padding-bottom: 15px;
         }
-        
+
         .page-title::after {
             content: "";
             display: block;
@@ -72,85 +72,37 @@
             margin: 15px auto;
             border-radius: 2px;
         }
-        
-        .article-controls {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .search-box {
-            padding: 10px 15px;
-            border: 1px solid var(--gray);
-            border-radius: 4px;
-            width: 300px;
-            max-width: 100%;
-            transition: all 0.3s;
-        }
-        
-        .search-box:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
-        }
-        
-        .filter-controls {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-select {
-            padding: 10px;
-            border: 1px solid var(--gray);
-            border-radius: 4px;
-            background: var(--white);
-            transition: all 0.3s;
-        }
-        
-        .filter-select:focus {
-            border-color: var(--accent);
-            outline: none;
-        }
-        
+
         .article-list {
             background: var(--white);
             border-radius: 8px;
             padding: 30px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        
+
         .article-item {
-            padding: 20px 0;
-            border-bottom: 1px solid var(--gray);
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
             align-items: center;
             transition: all 0.3s;
         }
-        
+
         .article-item:hover {
             background-color: rgba(212, 175, 55, 0.05);
         }
-        
+
         .article-item:last-child {
             border-bottom: none;
         }
-        
+
         .article-title {
             color: var(--primary);
             font-size: 1.1em;
-            font-weight: 500;
-            margin-bottom: 5px;
+            max-width: 70%;
         }
-        
-        .article-meta {
-            color: #666;
-            font-size: 0.9em;
-        }
-        
+
         .read-button {
             padding: 8px 15px;
             background-color: var(--accent);
@@ -161,41 +113,25 @@
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
-            white-space: nowrap;
         }
-        
+
         .read-button:hover {
             background-color: #c19b2e;
             transform: translateY(-2px);
         }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-            gap: 10px;
-            flex-wrap: wrap;
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
         }
-        
-        .page-button {
-            padding: 8px 15px;
-            border: 1px solid var(--gray);
-            background: var(--white);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
+
+        .error {
+            color: var(--error);
+            padding: 20px;
+            text-align: center;
         }
-        
-        .page-button.active {
-            background: var(--accent);
-            color: var(--white);
-            border-color: var(--accent);
-        }
-        
-        .page-button:hover:not(.active) {
-            background: #f0f0f0;
-        }
-        
+
         .article-modal {
             display: none;
             position: fixed;
@@ -207,78 +143,51 @@
             z-index: 1000;
             overflow-y: auto;
         }
-        
+
         .modal-content {
             background-color: var(--white);
             margin: 50px auto;
-            padding: 40px;
+            padding: 30px;
             border-radius: 8px;
             max-width: 800px;
             width: 90%;
             box-shadow: 0 5px 25px rgba(0,0,0,0.2);
             position: relative;
         }
-        
+
         .modal-title {
-            font-size: 1.8em;
+            font-size: 1.5em;
             color: var(--primary);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--gray);
-        }
-        
-        .modal-meta {
-            color: #666;
             margin-bottom: 20px;
-            font-size: 0.95em;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
         }
-        
+
         .modal-text {
+            white-space: pre-line;
             line-height: 1.8;
             color: #555;
-            white-space: pre-line;
+            max-height: 60vh;
+            overflow-y: auto;
         }
-        
+
         .close-modal {
             position: absolute;
             top: 15px;
             right: 15px;
-            font-size: 1.8em;
+            font-size: 1.5em;
             color: #999;
             cursor: pointer;
             transition: all 0.3s;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
         }
-        
+
         .close-modal:hover {
             color: var(--primary);
-            background-color: rgba(0,0,0,0.05);
         }
-        
+
         @media (max-width: 768px) {
             .page-title {
                 font-size: 2em;
-            }
-            
-            .article-controls {
-                flex-direction: column;
-            }
-            
-            .search-box {
-                width: 100%;
-            }
-            
-            .filter-controls {
-                width: 100%;
-            }
-            
-            .filter-select {
-                flex-grow: 1;
             }
             
             .article-item {
@@ -289,10 +198,6 @@
             
             .read-button {
                 align-self: flex-end;
-            }
-            
-            .modal-content {
-                padding: 30px 20px;
             }
         }
     </style>
@@ -305,265 +210,101 @@
         
         <h1 class="page-title">文章中心</h1>
         
-        <div class="article-controls">
-            <input type="text" class="search-box" placeholder="搜索文章..." id="searchInput">
-            <div class="filter-controls">
-                <select class="filter-select" id="categoryFilter">
-                    <option value="">所有分类</option>
-                    <option value="心得">心得</option>
-                    <option value="教程">教程</option>
-                    <option value="随笔">随笔</option>
-                    <option value="演出">演出</option>
-                </select>
-                <select class="filter-select" id="sortFilter">
-                    <option value="newest">最新优先</option>
-                    <option value="oldest">最早优先</option>
-                    <option value="title">按标题排序</option>
-                </select>
-            </div>
-        </div>
-        
         <div class="article-list" id="articleList">
-            <div class="loading">加载中...</div>
+            <div class="loading">正在加载文章列表...</div>
         </div>
-        
-        <div class="pagination" id="pagination"></div>
     </div>
-    
+
     <div class="article-modal" id="articleModal">
         <div class="modal-content">
             <span class="close-modal" id="closeModal">&times;</span>
-            <h2 class="modal-title" id="modalTitle">文章标题</h2>
-            <div class="modal-meta" id="modalMeta"></div>
-            <div class="modal-text" id="modalText">文章内容加载中...</div>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <div class="modal-text" id="modalText"></div>
         </div>
     </div>
-    
+
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            // 模拟文章数据
-            const articles = [
-                {
-                    id: 1,
-                    title: "钢琴演奏技巧心得",
-                    file: "article/technique.txt",
-                    category: "心得",
-                    date: "2023-05-15",
-                    content: "在多年的钢琴学习中，我总结出几个关键技巧...\n\n1. 手指独立性训练\n每天进行哈农练习，特别注意4、5指的强化...\n\n2. 踏板控制\n根据作品风格调整踏板深度..."
-                },
-                {
-                    id: 2,
-                    title: "我的音乐学习之路",
-                    file: "article/journey.txt",
-                    category: "随笔",
-                    date: "2023-03-22",
-                    content: "从6岁第一次接触钢琴到现在...\n\n2015年 获得少儿钢琴比赛一等奖\n2019年 考入浙江音乐学院附中\n2022年 与浙江交响乐团合作演出..."
-                },
-                {
-                    id: 3,
-                    title: "贝多芬奏鸣曲解析",
-                    file: "article/beethoven.txt",
-                    category: "教程",
-                    date: "2023-07-10",
-                    content: "《月光奏鸣曲》第一乐章分析...\n\n1. 和声结构\n持续的三连音伴奏营造月光效果...\n\n2. 情感表达\n注意力度从pp到ff的戏剧性对比..."
-                },
-                {
-                    id: 4,
-                    title: "舞台表演心得",
-                    file: "article/performance.txt",
-                    category: "心得",
-                    date: "2023-06-18",
-                    content: "如何克服舞台紧张...\n\n1. 演出前准备\n提前熟悉场地和钢琴...\n\n2. 心理调节\n把注意力集中在音乐表达而非技术上..."
-                },
-                {
-                    id: 5,
-                    title: "肖邦练习曲Op.10 No.1教学",
-                    file: "article/chopin.txt",
-                    category: "教程",
-                    date: "2023-04-05",
-                    content: "这首练习曲的技术要点...\n\n1. 右手琶音\n保持手腕放松，用大臂带动...\n\n2. 左手和弦\n突出低音线条..."
-                },
-                {
-                    id: 6,
-                    title: "2023夏季巡演回顾",
-                    file: "article/tour.txt",
-                    category: "演出",
-                    date: "2023-08-20",
-                    content: "今年夏季在5个城市的演出经历...\n\n杭州站：观众反应热烈\n上海站：与当地音乐学院的交流\n北京站：在国家大剧院的难忘体验..."
-                }
-            ];
-            
-            let currentPage = 1;
-            const itemsPerPage = 4;
-            let filteredArticles = [...articles];
-            
-            // 初始化
-            renderArticles();
-            
-            // 渲染文章列表
-            function renderArticles() {
-                const start = (currentPage - 1) * itemsPerPage;
-                const end = start + itemsPerPage;
-                const paginatedArticles = filteredArticles.slice(start, end);
+            // ============= 配置信息 =============
+            const GITHUB_USER = 'chnbaizijun';      // GitHub用户名
+            const REPO_NAME = 'chnbaizijun.github.io';  // 仓库名称
+            const ARTICLE_PATH = 'article';         // 文章存放目录
+            // ====================================
+
+            // 获取文章列表
+            function loadArticles() {
+                const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/${ARTICLE_PATH}`;
                 
+                $.ajax({
+                    url: apiUrl,
+                    dataType: 'json',
+                    success: function(files) {
+                        const txtFiles = files.filter(file => 
+                            file.name.endsWith('.txt') && file.type === 'file'
+                        );
+                        
+                        if (txtFiles.length > 0) {
+                            renderArticleList(txtFiles);
+                        } else {
+                            $('#articleList').html('<div class="error">暂无文章</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#articleList').html('<div class="error">加载文章列表失败，请稍后重试</div>');
+                    }
+                });
+            }
+
+            // 渲染文章列表
+            function renderArticleList(files) {
                 const $articleList = $('#articleList');
                 $articleList.empty();
-                
-                if (filteredArticles.length === 0) {
-                    $articleList.append('<div class="no-articles">没有找到符合条件的文章</div>');
-                } else {
-                    paginatedArticles.forEach(article => {
-                        $articleList.append(`
-                            <div class="article-item" data-id="${article.id}">
-                                <div>
-                                    <div class="article-title">${article.title}</div>
-                                    <div class="article-meta">${article.category} • ${formatDate(article.date)}</div>
-                                </div>
-                                <a href="#" class="read-button" data-id="${article.id}">阅读全文</a>
-                            </div>
-                        `);
-                    });
-                }
-                
-                renderPagination();
-            }
-            
-            // 渲染分页
-            function renderPagination() {
-                const totalPages = Math.ceil(filteredArticles.length / itemsPerPage);
-                const $pagination = $('#pagination');
-                $pagination.empty();
-                
-                if (totalPages > 1) {
-                    // 上一页按钮
-                    if (currentPage > 1) {
-                        $pagination.append(`
-                            <button class="page-button" data-page="${currentPage - 1}">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                        `);
-                    }
-                    
-                    // 页码按钮
-                    const maxVisiblePages = 5;
-                    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-                    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-                    
-                    if (endPage - startPage + 1 < maxVisiblePages) {
-                        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-                    }
-                    
-                    for (let i = startPage; i <= endPage; i++) {
-                        $pagination.append(`
-                            <button class="page-button ${i === currentPage ? 'active' : ''}" data-page="${i}">
-                                ${i}
-                            </button>
-                        `);
-                    }
-                    
-                    // 下一页按钮
-                    if (currentPage < totalPages) {
-                        $pagination.append(`
-                            <button class="page-button" data-page="${currentPage + 1}">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        `);
-                    }
-                }
-            }
-            
-            // 格式化日期
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-            }
-            
-            // 搜索功能
-            $('#searchInput').on('input', function() {
-                currentPage = 1;
-                filterArticles();
-            });
-            
-            // 分类筛选
-            $('#categoryFilter').change(function() {
-                currentPage = 1;
-                filterArticles();
-            });
-            
-            // 排序
-            $('#sortFilter').change(function() {
-                filterArticles();
-            });
-            
-            // 综合筛选函数
-            function filterArticles() {
-                const searchTerm = $('#searchInput').val().toLowerCase();
-                const category = $('#categoryFilter').val();
-                const sortBy = $('#sortFilter').val();
-                
-                filteredArticles = articles.filter(article => {
-                    const matchesSearch = article.title.toLowerCase().includes(searchTerm) || 
-                                        article.content.toLowerCase().includes(searchTerm);
-                    const matchesCategory = !category || article.category === category;
-                    return matchesSearch && matchesCategory;
-                });
-                
-                // 排序
-                switch(sortBy) {
-                    case 'newest':
-                        filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
-                        break;
-                    case 'oldest':
-                        filteredArticles.sort((a, b) => new Date(a.date) - new Date(b.date));
-                        break;
-                    case 'title':
-                        filteredArticles.sort((a, b) => a.title.localeCompare(b.title));
-                        break;
-                }
-                
-                renderArticles();
-            }
-            
-            // 分页点击
-            $(document).on('click', '.page-button', function() {
-                currentPage = parseInt($(this).data('page'));
-                renderArticles();
-                $('html, body').animate({
-                    scrollTop: $('.article-list').offset().top - 100
-                }, 300);
-            });
-            
-            // 文章点击事件
-            $(document).on('click', '.read-button', function(e) {
-                e.preventDefault();
-                const articleId = parseInt($(this).data('id'));
-                const article = articles.find(a => a.id === articleId);
-                
-                if (article) {
-                    $('#modalTitle').text(article.title);
-                    $('#modalMeta').html(`
-                        <span>分类：${article.category}</span> | 
-                        <span>日期：${formatDate(article.date)}</span>
+
+                files.forEach(file => {
+                    const title = file.name.replace('.txt', '');
+                    $articleList.append(`
+                        <div class="article-item">
+                            <div class="article-title">${title}</div>
+                            <button class="read-button" 
+                                    data-url="${file.download_url}">阅读全文</button>
+                        </div>
                     `);
-                    $('#modalText').text(article.content);
-                    $('#articleModal').fadeIn();
-                    $('body').css('overflow', 'hidden');
-                }
+                });
+            }
+
+            // 加载文章内容
+            function loadArticleContent(url) {
+                $('#modalText').text('正在加载文章内容...');
+                $('#articleModal').fadeIn();
+
+                $.ajax({
+                    url: url,
+                    dataType: 'text',
+                    success: function(content) {
+                        $('#modalTitle').text(url.split('/').pop().replace('.txt', ''));
+                        $('#modalText').text(content);
+                    },
+                    error: function() {
+                        $('#modalText').text('无法加载文章内容，请检查网络连接');
+                    }
+                });
+            }
+
+            // 事件绑定
+            $(document).on('click', '.read-button', function() {
+                const fileUrl = $(this).data('url');
+                loadArticleContent(fileUrl);
             });
-            
-            // 关闭模态框
+
             $('#closeModal, #articleModal').click(function(e) {
                 if (e.target === this || e.target.id === 'closeModal') {
                     $('#articleModal').fadeOut();
-                    $('body').css('overflow', 'auto');
                 }
             });
-            
-            // 阻止模态框内容点击时关闭
-            $('.modal-content').click(function(e) {
-                e.stopPropagation();
-            });
+
+            // 初始化加载
+            loadArticles();
         });
     </script>
 </body>
