@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地址查询 | 白子俊</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #4A6B8A;
+            --accent: #D4AF37;
+            --light: #F5F7FA;
+            --white: #FFFFFF;
+            --dark: #1A1A1A;
+            --error: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "AlibabaPuHuiTi", "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .back-button i {
+            margin-right: 8px;
+        }
+        
+        .back-button:hover {
+            color: var(--accent);
+        }
+        
+        .page-title {
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .page-title::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .password-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 40px;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .password-title {
+            font-size: 1.3em;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .password-input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+        }
+        
+        .submit-button {
+            padding: 12px 30px;
+            background-color: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .submit-button:hover {
+            background-color: #c19b2e;
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            color: var(--error);
+            margin-top: 15px;
+            display: none;
+            font-size: 0.9em;
+        }
+        
+        .address-content {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            text-align: left;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .address-title {
+            font-size: 1.2em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .address-text {
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .address-text p {
+            margin-bottom: 10px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .password-container {
+                padding: 30px 20px;
+            }
+            
+            .page-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="more.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>返回
+        </a>
+        
+        <h1 class="page-title">地址查询</h1>
+        
+        <div class="password-container">
+            <h3 class="password-title">请输入查询密码</h3>
+            <input type="password" class="password-input" placeholder="输入密码" id="passwordInput">
+            <button class="submit-button" id="submitButton">提交</button>
+            <div class="error-message" id="errorMessage">密码错误，请重试</div>
+            
+            <div class="address-content" id="addressContent">
+                <h4 class="address-title">我的联系地址</h4>
+                <div class="address-text" id="addressText"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 加密的二进制地址数据
+            const encryptedAddress = [
+                "111001101011010110011001",
+                "111001101011000110011111",
+                "111001111001110010000001",
+                "111001101001110110101101",
+                "111001011011011110011110",
+                "111001011011100010000010",
+                "111010001010010110111111",
+                "111001101011100110010110",
+                "111001011000110010111010",
+                "111001101011100110010110",
+                "111001111001010110010100",
+                "111010001000101010110001",
+                "111001011001101110101101",
+                "111010011010001110001110",
+                "111010001000110110110111",
+                "111010011001100110100010",
+                "00110001",
+                "00110100",
+                "111001011011100110100010",
+                "00110010",
+                "111001011000110110010101",
+                "111001011000010110000011",
+                "00110011",
+                "00110000",
+                "00110010",
+                "111001011010111010100100"
+            ];
+
+            // 提交按钮点击事件
+            $('#submitButton').click(function() {
+                checkPassword();
+            });
+            
+            // 输入框回车事件
+            $('#passwordInput').keypress(function(e) {
+                if (e.which === 13) {
+                    checkPassword();
+                }
+            });
+            
+            function checkPassword() {
+                const password = $('#passwordInput').val();
+                const $error = $('#errorMessage');
+                const $addressContent = $('#addressContent');
+                const $addressText = $('#addressText');
+                
+                if (password === "504079959") {
+                    $error.hide();
+                    
+                    // 解密二进制数据
+                    let address = "";
+                    encryptedAddress.forEach(bin => {
+                        address += String.fromCharCode(parseInt(bin, 2));
+                    });
+                    
+                    // 格式化地址显示
+                    const formattedAddress = address.split(' ').join('<br>');
+                    $addressText.html(formattedAddress);
+                    $addressContent.fadeIn();
+                } else {
+                    $error.fadeIn();
+                    $addressContent.fadeOut();
+                    $('#passwordInput').addClass('error');
+                    setTimeout(() => {
+                        $('#passwordInput').removeClass('error');
+                    }, 1000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
