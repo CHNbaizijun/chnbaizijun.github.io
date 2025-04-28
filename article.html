@@ -14,28 +14,18 @@
             --light: #F5F7FA;
             --white: #FFFFFF;
             --dark: #1A1A1A;
-            --error: #e74c3c;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "AlibabaPuHuiTi", "Microsoft YaHei", "PingFang SC", sans-serif;
-        }
-
+        
         body {
             background-color: var(--light);
             color: var(--dark);
+            font-family: "AlibabaPuHuiTi", sans-serif;
             line-height: 1.6;
-        }
-
-        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
         }
-
+        
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -43,96 +33,58 @@
             color: var(--primary);
             text-decoration: none;
             font-size: 16px;
-            transition: all 0.3s;
         }
-
+        
         .back-button i {
             margin-right: 8px;
         }
-
-        .back-button:hover {
-            color: var(--accent);
-        }
-
-        .page-title {
-            font-size: 2.5em;
+        
+        h1 {
             color: var(--primary);
-            margin-bottom: 40px;
             text-align: center;
+            margin-bottom: 40px;
             position: relative;
             padding-bottom: 15px;
         }
-
-        .page-title::after {
+        
+        h1::after {
             content: "";
             display: block;
             width: 80px;
             height: 4px;
             background: var(--accent);
             margin: 15px auto;
-            border-radius: 2px;
         }
-
+        
         .article-list {
             background: var(--white);
             border-radius: 8px;
             padding: 30px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-
+        
         .article-item {
             padding: 15px 0;
             border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
         }
-
-        .article-item:hover {
-            background-color: rgba(212, 175, 55, 0.05);
-        }
-
+        
         .article-item:last-child {
             border-bottom: none;
         }
-
-        .article-title {
+        
+        .article-link {
             color: var(--primary);
-            font-size: 1.1em;
-            max-width: 70%;
-        }
-
-        .read-button {
-            padding: 8px 15px;
-            background-color: var(--accent);
-            color: var(--white);
-            border: none;
-            border-radius: 4px;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.3s;
             text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s;
         }
-
-        .read-button:hover {
-            background-color: #c19b2e;
-            transform: translateY(-2px);
+        
+        .article-link:hover {
+            color: var(--accent);
         }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-        }
-
-        .error {
-            color: var(--error);
-            padding: 20px;
-            text-align: center;
-        }
-
-        .article-modal {
+        
+        /* 弹窗样式 */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -143,18 +95,18 @@
             z-index: 1000;
             overflow-y: auto;
         }
-
+        
         .modal-content {
             background-color: var(--white);
             margin: 50px auto;
-            padding: 30px;
+            padding: 40px;
             border-radius: 8px;
             max-width: 800px;
             width: 90%;
             box-shadow: 0 5px 25px rgba(0,0,0,0.2);
             position: relative;
         }
-
+        
         .modal-title {
             font-size: 1.5em;
             color: var(--primary);
@@ -162,60 +114,47 @@
             padding-bottom: 10px;
             border-bottom: 1px solid #eee;
         }
-
+        
         .modal-text {
             white-space: pre-line;
             line-height: 1.8;
             color: #555;
-            max-height: 60vh;
-            overflow-y: auto;
         }
-
+        
         .close-modal {
             position: absolute;
             top: 15px;
             right: 15px;
-            font-size: 1.5em;
+            font-size: 1.8em;
             color: #999;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .close-modal:hover {
-            color: var(--primary);
-        }
-
-        @media (max-width: 768px) {
-            .page-title {
-                font-size: 2em;
-            }
-            
-            .article-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .read-button {
-                align-self: flex-end;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="more.html" class="back-button">
-            <i class="fas fa-arrow-left"></i>返回
-        </a>
+    <a href="more.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>返回
+    </a>
+    
+    <h1>文章中心</h1>
+    
+    <div class="article-list">
+        <!-- 手动维护文章列表 -->
+        <div class="article-item">
+            <a href="#" class="article-link" data-file="article/测试文件.txt">测试文件</a>
+        </div>
         
-        <h1 class="page-title">文章中心</h1>
+        <div class="article-item">
+            <a href="#" class="article-link" data-file="article/journey.txt">我的音乐学习之路</a>
+        </div>
         
-        <div class="article-list" id="articleList">
-            <div class="loading">正在加载文章列表...</div>
+        <div class="article-item">
+            <a href="#" class="article-link" data-file="article/beethoven.txt">贝多芬作品分析</a>
         </div>
     </div>
 
-    <div class="article-modal" id="articleModal">
+    <!-- 弹窗容器 -->
+    <div class="modal" id="articleModal">
         <div class="modal-content">
             <span class="close-modal" id="closeModal">&times;</span>
             <h2 class="modal-title" id="modalTitle"></h2>
@@ -223,186 +162,45 @@
         </div>
     </div>
 
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // ============= 增强配置 =============
-            const CONFIG = {
-                github: {
-                    user: 'chnbaizijun',
-                    repo: 'chnbaizijun.github.io',
-                    path: 'article',
-                    token: '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' // 可选：填写你的GitHub token
-                },
-                fallback: {
-                    use: true, // 启用备用方案
-                    jsonPath: 'articles.json' // 备用JSON文件路径
-                },
-                corsProxy: 'https://corsproxy.io/?' // CORS代理服务
-            };
-
-            // ============= 核心功能 =============
-            function loadArticles() {
-                showLoading();
+        // 弹窗控制
+        const modal = document.getElementById('articleModal');
+        const closeBtn = document.getElementById('closeModal');
+        
+        // 为所有文章链接添加点击事件
+        document.querySelectorAll('.article-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const filePath = this.getAttribute('data-file');
+                const title = this.textContent;
                 
-                // 尝试GitHub API方案
-                fetchFromGitHub().fail(function() {
-                    if (CONFIG.fallback.use) {
-                        // GitHub API失败时尝试备用方案
-                        fetchFromFallback();
-                    } else {
-                        showError("无法加载文章列表");
-                    }
-                });
-            }
-
-            function fetchFromGitHub() {
-                let apiUrl = `https://api.github.com/repos/${CONFIG.github.user}/${CONFIG.github.repo}/contents/${CONFIG.github.path}`;
+                // 显示加载状态
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalText').textContent = '加载中...';
+                modal.style.display = 'block';
                 
-                // 添加token（如果有）
-                if (CONFIG.github.token) {
-                    apiUrl += `?access_token=${CONFIG.github.token}`;
-                }
-
-                return $.ajax({
-                    url: CONFIG.corsProxy + encodeURIComponent(apiUrl),
-                    dataType: 'json',
-                    success: function(files) {
-                        const txtFiles = files.filter(file => 
-                            file.name.endsWith('.txt') && file.type === 'file'
-                        );
-                        
-                        if (txtFiles.length > 0) {
-                            renderArticleList(txtFiles);
-                        } else {
-                            showError("没有找到文章");
-                        }
-                    },
-                    error: function(xhr) {
-                        console.error("GitHub API错误:", xhr.status, xhr.statusText);
-                        return $.Deferred().reject();
-                    }
-                });
-            }
-
-            function fetchFromFallback() {
-                $.get(CONFIG.fallback.jsonPath)
-                    .done(function(articles) {
-                        if (articles && articles.length > 0) {
-                            renderFallbackList(articles);
-                        } else {
-                            showError("备用方案加载失败");
-                        }
+                // 加载文章内容
+                fetch(filePath)
+                    .then(response => response.text())
+                    .then(content => {
+                        document.getElementById('modalText').textContent = content;
                     })
-                    .fail(function() {
-                        showError("无法加载任何文章数据");
+                    .catch(() => {
+                        document.getElementById('modalText').textContent = '加载失败，请稍后重试';
                     });
-            }
-
-            function renderArticleList(files) {
-                const $articleList = $('#articleList');
-                $articleList.empty();
-
-                files.forEach(file => {
-                    const title = file.name.replace('.txt', '');
-                    $articleList.append(`
-                        <div class="article-item">
-                            <div class="article-title">${title}</div>
-                            <button class="read-button" 
-                                    data-url="${file.download_url}"
-                                    data-name="${file.name}">阅读全文</button>
-                        </div>
-                    `);
-                });
-            }
-
-            function renderFallbackList(articles) {
-                const $articleList = $('#articleList');
-                $articleList.empty();
-
-                articles.forEach(article => {
-                    $articleList.append(`
-                        <div class="article-item">
-                            <div class="article-title">${article.title || article.filename.replace('.txt', '')}</div>
-                            <button class="read-button" 
-                                    data-url="${article.path}"
-                                    data-name="${article.filename}">阅读全文</button>
-                        </div>
-                    `);
-                });
-            }
-
-            function loadArticleContent(url, filename) {
-                showModal('正在加载文章...');
-                
-                // 尝试直接访问（GitHub raw内容）
-                $.ajax({
-                    url: CONFIG.corsProxy + encodeURIComponent(url),
-                    dataType: 'text',
-                    success: function(content) {
-                        showContent(filename.replace('.txt', ''), content);
-                    },
-                    error: function() {
-                        // 直接访问失败时尝试备用方案
-                        tryFallbackContent(url, filename);
-                    }
-                });
-            }
-
-            function tryFallbackContent(url, filename) {
-                // 尝试通过GitHub Pages路径访问
-                const fallbackUrl = url.replace('https://raw.githubusercontent.com', '');
-                $.get(fallbackUrl)
-                    .done(function(content) {
-                        showContent(filename.replace('.txt', ''), content);
-                    })
-                    .fail(function() {
-                        showContent(filename.replace('.txt', ''), 
-                            "⚠️ 无法加载文章内容\n\n可能原因：\n1. 文件路径不正确\n2. CORS限制\n3. 文件编码问题\n\n请检查控制台获取详细信息");
-                        console.error("加载失败的文件:", url);
-                    });
-            }
-
-            // ============= UI操作 =============
-            function showLoading() {
-                $('#articleList').html('<div class="loading">正在加载文章列表...</div>');
-            }
-
-            function showError(msg) {
-                $('#articleList').html(`<div class="error">${msg}</div>`);
-            }
-
-            function showModal(msg) {
-                $('#modalTitle').text('');
-                $('#modalText').text(msg);
-                $('#articleModal').fadeIn();
-            }
-
-            function showContent(title, content) {
-                $('#modalTitle').text(title);
-                $('#modalText').html(content.replace(/\n/g, '<br>'));
-            }
-
-            // ============= 事件绑定 =============
-            $(document).on('click', '.read-button', function() {
-                const fileUrl = $(this).data('url');
-                const fileName = $(this).data('name');
-                loadArticleContent(fileUrl, fileName);
             });
-
-            $('#closeModal, #articleModal').click(function(e) {
-                if (e.target === this || e.target.id === 'closeModal') {
-                    $('#articleModal').fadeOut();
-                }
-            });
-
-            // 阻止模态框内容点击时关闭
-            $('.modal-content').click(function(e) {
-                e.stopPropagation();
-            });
-
-            // 初始化加载
-            loadArticles();
+        });
+        
+        // 关闭弹窗
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        // 点击模态框外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
         });
     </script>
 </body>
