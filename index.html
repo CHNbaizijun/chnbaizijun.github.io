@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>白子俊 | 浙江音乐学院附中钢琴专业</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
 </head>
 
@@ -22,9 +22,7 @@
       <a href="#tools">工具站点</a>
       <a href="#contact">联系方式</a>
     </div>
-    <div class="hamburger">
-      <div class="line"></div><div class="line"></div><div class="line"></div>
-    </div>
+    <div class="hamburger"><div class="line"></div><div class="line"></div><div class="line"></div></div>
     <div class="user-info" id="userInfo"></div>
   </nav>
 
@@ -36,21 +34,33 @@
     <div class="login-box">
       <span class="login-close" id="closeLogin">&times;</span>
       <h2>登录 / 注册</h2>
-      <input type="email" id="loginEmail" placeholder="请输入邮箱">
-      <input type="password" id="loginPassword" placeholder="请输入密码">
+      <input type="email" id="loginEmail" placeholder="请输入邮箱" />
+      <input type="password" id="loginPassword" placeholder="请输入密码" />
       <button id="signupBtn">注册</button>
       <button id="loginBtn">登录</button>
     </div>
   </div>
 
-  <!-- 登录信息展示区域 -->
+  <!-- 登录状态展示区域 -->
   <section class="login-status-section">
     <div class="login-status-card" id="loginStatusBox">
       <p id="loginStatusText">请先登录以查看你的个人信息</p>
       <button id="logoutBtnBox" style="display: none;">退出登录</button>
     </div>
   </section>
-    
+
+  <!-- 个人中心模块 -->
+  <section class="personal-center-section" id="personalCenter" style="display: none;">
+    <div class="personal-center-card">
+      <h2>个人中心</h2>
+      <p><strong>昵称：</strong><span id="pc-username">加载中…</span></p>
+      <p><strong>邮箱：</strong><span id="pc-email">加载中…</span></p>
+      <p><strong>用户 ID：</strong><span id="pc-userid">加载中…</span></p>
+      <p><strong>注册时间：</strong><span id="pc-created">加载中…</span></p>
+      <p><strong>上次登录：</strong><span id="pc-login">加载中…</span></p>
+    </div>
+  </section>
+
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>白子俊</h1>
