@@ -97,3 +97,38 @@ window.addEventListener('load', () => {
         setTimeout(() => loader.remove(), 500);
     }
 });
+
+// 登录弹窗控制
+$(document).ready(function(){
+    $('#loginButton').click(function(){
+        $('#loginModal').addClass('active');
+    });
+
+    $('#closeLogin').click(function(){
+        $('#loginModal').removeClass('active');
+    });
+
+    // 注册按钮点击
+    $('#signupBtn').click(function(){
+        const email = $('#loginEmail').val();
+        const password = $('#loginPassword').val();
+        if(email && password) {
+            alert('注册成功（模拟功能）');
+            $('#loginModal').removeClass('active');
+        } else {
+            alert('请填写完整信息');
+        }
+    });
+
+    // 登录按钮点击
+    $('#loginBtn').click(function(){
+        const email = $('#loginEmail').val();
+        const password = $('#loginPassword').val();
+        if(email && password) {
+            alert('登录成功（模拟功能）');
+            $('#loginModal').removeClass('active');
+        } else {
+            alert('请填写完整信息');
+        }
+    });
+});
