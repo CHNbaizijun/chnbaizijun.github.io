@@ -1204,6 +1204,14 @@ footer {
   padding: 20px;
   z-index: 999;
   display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+.floating-panel.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 .floating-panel h3 {
   margin-bottom: 10px;
@@ -1218,7 +1226,7 @@ footer {
 .floating-toggle {
   position: fixed;
   bottom: 20px;
-  right: 360px;
+  right: 340px; /* 根据面板宽度计算 */
   background: var(--accent);
   color: white;
   border-radius: 4px;
@@ -1226,6 +1234,11 @@ footer {
   font-size: 0.9em;
   cursor: pointer;
   z-index: 999;
+  transition: all 0.3s ease;
+  display: none;
+}
+.floating-toggle.active {
+  display: block;
 }
 
 /* 登录提示浮窗 */
