@@ -857,3 +857,121 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+/* 悬浮登录按钮 */
+.login-float-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--accent);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 999;
+    transition: var(--transition);
+}
+
+.login-float-button:hover {
+    background-color: #c19e2e;
+}
+
+/* 登录弹窗整体 */
+.login-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(30, 43, 58, 0.8);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+}
+
+/* 弹出的登录框 */
+.login-box {
+    background: var(--white);
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    animation: fadeInScale 0.5s ease forwards;
+}
+
+/* 输入框 */
+.login-box input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid var(--gray);
+    border-radius: 6px;
+    outline: none;
+    font-size: 1em;
+    transition: var(--transition);
+}
+
+.login-box input:focus {
+    border-color: var(--accent);
+}
+
+/* 按钮 */
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.login-box button:hover {
+    background: #c19e2e;
+}
+
+/* 关闭按钮 */
+.login-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5em;
+    color: var(--dark);
+    cursor: pointer;
+}
+
+.login-close:hover {
+    color: var(--accent);
+}
+
+/* 动画 */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 显示弹窗 */
+.login-modal.active {
+    display: flex;
+}
