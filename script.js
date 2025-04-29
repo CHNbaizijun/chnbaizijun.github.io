@@ -1,3 +1,4 @@
+
 // 初始化 LeanCloud
 AV.init({
   appId: '0lpjg6Zgwua9jqUZDeJMVxpr-gzGzoHsz',
@@ -5,20 +6,35 @@ AV.init({
   serverURL: 'https://0lpjg6zg.lc-cn-n1-shared.com'
 });
 
-// 更新用户登录状态显示
+// 更新用户登录状态显示（合并登录卡片更新逻辑）
 function updateUserStatus() {
   const user = AV.User.current();
   const infoEl = $('#userInfo');
+  const loginBox = $('#loginStatusBox');
+  const statusText = $('#loginStatusText');
+  const logoutBtn = $('#logoutBtnBox');
+
   if (user) {
-    infoEl.html(`欢迎：${user.getUsername()} <span id="logoutBtn">退出</span>`);
+    const email = user.getUsername();
+    infoEl.html(`欢迎：${email} <span id="logoutBtn">退出</span>`);
     $('#loginButton').hide();
+    if (statusText && logoutBtn) {
+      statusText.text(`欢迎：${email}`);
+      logoutBtn.show();
+    }
   } else {
     infoEl.empty();
     $('#loginButton').show();
+    if (statusText && logoutBtn) {
+      statusText.text("请先登录以查看你的个人信息");
+      logoutBtn.hide();
+    }
   }
 }
 
 $(document).ready(function(){
+
+    updateUserStatus();
 
     // 平滑滚动
     $("a").on('click', function(event) {
@@ -26,7 +42,6 @@ $(document).ready(function(){
             event.preventDefault();
             const hash = this.hash;
             const targetOffset = $(hash).offset().top - 80;
-            
             $('html, body').animate({
                 scrollTop: targetOffset
             }, 800, function(){
@@ -51,10 +66,8 @@ $(document).ready(function(){
     $('#tools .section-title').click(function() {
         const $container = $('.tools-container');
         const $icon = $(this).find('.toggle-icon');
-        
         $icon.toggleClass('active');
         $container.toggleClass('active');
-        
         if ($container.hasClass('active')) {
             $container.css('max-height', $container[0].scrollHeight + 'px');
         } else {
@@ -65,13 +78,11 @@ $(document).ready(function(){
     // 视频模态框控制
     const videoModal = $('#videoModal');
     const video = $('#videoModal video')[0];
-
     $('#watch-performance').click(function(e) {
         e.preventDefault();
         videoModal.addClass('active');
         video.play().catch(error => console.log('视频播放失败:', error));
     });
-
     $('.close-video, #videoModal').click(function(e) {
         if (e.target === this) {
             videoModal.removeClass('active');
@@ -115,7 +126,7 @@ $(document).ready(function(){
         setTimeout(() => loader.remove(), 500);
     }
 
-    // 处理登录弹窗
+    // 登录弹窗控制
     $('#loginButton').click(() => $('#loginModal').addClass('active'));
     $('#closeLogin').click(() => $('#loginModal').removeClass('active'));
 
@@ -153,13 +164,16 @@ $(document).ready(function(){
         }
     });
 
-    // 登出功能
+    // 登出功能（两个按钮）
     $(document).on('click', '#logoutBtn', async () => {
         await AV.User.logOut();
         alert("已退出");
         updateUserStatus();
     });
 
-    // 初始检测用户状态
-    updateUserStatus();
+    $(document).on('click', '#logoutBtnBox', async () => {
+        await AV.User.logOut();
+        alert("已退出");
+        updateUserStatus();
+    });
 });
