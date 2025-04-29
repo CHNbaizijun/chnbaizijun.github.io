@@ -41,26 +41,6 @@
     </div>
   </div>
 
-  <!-- 登录状态展示区域 -->
-  <section class="login-status-section">
-    <div class="login-status-card" id="loginStatusBox">
-      <p id="loginStatusText">请先登录以查看你的个人信息</p>
-      <button id="logoutBtnBox" style="display: none;">退出登录</button>
-    </div>
-  </section>
-
-  <!-- 个人中心模块 -->
-  <section class="personal-center-section" id="personalCenter" style="display: none;">
-    <div class="personal-center-card">
-      <h2>个人中心</h2>
-      <p><strong>昵称：</strong><span id="pc-username">加载中…</span></p>
-      <p><strong>邮箱：</strong><span id="pc-email">加载中…</span></p>
-      <p><strong>用户 ID：</strong><span id="pc-userid">加载中…</span></p>
-      <p><strong>注册时间：</strong><span id="pc-created">加载中…</span></p>
-      <p><strong>上次登录：</strong><span id="pc-login">加载中…</span></p>
-    </div>
-  </section>
-
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>白子俊</h1>
@@ -264,6 +244,22 @@
         </div>
     </footer>
 
+  <!-- 悬浮：个人中心面板 -->
+<div class="floating-panel" id="floatingUserPanel">
+  <h3>个人中心</h3>
+  <p><strong>昵称：</strong><span id="pc-username">--</span></p>
+  <p><strong>邮箱：</strong><span id="pc-email">--</span></p>
+  <p><strong>ID：</strong><span id="pc-userid">--</span></p>
+  <p><strong>注册时间：</strong><span id="pc-created">--</span></p>
+  <p><strong>登录时间：</strong><span id="pc-login">--</span></p>
+</div>
+
+<!-- 悬浮：展开/收起按钮 -->
+<div class="floating-toggle" id="toggleUserPanel">收起</div>
+
+<!-- 悬浮：未登录提示 -->
+<div class="login-float-tip" id="loginFloatTip">请先登录以查看个人中心</div>
+  
     <div id="videoModal" class="video-modal">
         <div class="video-modal-content">
             <span class="close-video">&times;</span>
