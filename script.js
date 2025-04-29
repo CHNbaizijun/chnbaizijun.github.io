@@ -9,10 +9,9 @@ AV.init({
 function updateUserStatus() {
   const user = AV.User.current();
   const infoEl = $('#userInfo');
-  const loginBox = $('#loginStatusBox');
-  const statusText = $('#loginStatusText');
-  const logoutBtn = $('#logoutBtnBox');
-  const personalCenter = $('#personalCenter');
+  const panel = $('#floatingUserPanel');
+  const toggleBtn = $('#toggleUserPanel');
+  const tip = $('#loginFloatTip');
 
   if (user) {
     const email = user.getEmail();
@@ -23,26 +22,37 @@ function updateUserStatus() {
 
     infoEl.html(`欢迎：${username} <span id="logoutBtn">退出</span>`);
     $('#loginButton').hide();
-    loginBox.hide();
+    tip.hide();
 
+    // 显示浮窗
     $('#pc-username').text(username);
     $('#pc-email').text(email || '未绑定');
     $('#pc-userid').text(id);
     $('#pc-created').text(created);
     $('#pc-login').text(updated);
-    personalCenter.show();
+    panel.show();
+    toggleBtn.show();
   } else {
     infoEl.empty();
     $('#loginButton').show();
-    loginBox.show();
-    if (statusText && logoutBtn) {
-      statusText.text("请先登录以查看你的个人信息");
-      logoutBtn.hide();
-    }
-    personalCenter.hide();
+    $('#floatingUserPanel').hide();
+    $('#toggleUserPanel').hide();
+    $('#loginFloatTip').show();
   }
 }
 
+// 悬浮窗切换按钮
+$(document).on('click', '#toggleUserPanel', function () {
+  const panel = $('#floatingUserPanel');
+  const btn = $(this);
+  if (panel.is(':visible')) {
+    panel.hide();
+    btn.text('展开个人中心');
+  } else {
+    panel.show();
+    btn.text('收起');
+  }
+});
 $(document).ready(function () {
   updateUserStatus();
 
