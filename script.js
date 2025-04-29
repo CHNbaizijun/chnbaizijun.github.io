@@ -108,27 +108,67 @@ $(document).ready(function(){
         $('#loginModal').removeClass('active');
     });
 
-    // 注册按钮点击
-    $('#signupBtn').click(function(){
-        const email = $('#loginEmail').val();
-        const password = $('#loginPassword').val();
-        if(email && password) {
-            alert('注册成功（模拟功能）');
-            $('#loginModal').removeClass('active');
-        } else {
-            alert('请填写完整信息');
-        }
-    });
-
-    // 登录按钮点击
-    $('#loginBtn').click(function(){
-        const email = $('#loginEmail').val();
-        const password = $('#loginPassword').val();
-        if(email && password) {
-            alert('登录成功（模拟功能）');
-            $('#loginModal').removeClass('active');
-        } else {
-            alert('请填写完整信息');
-        }
-    });
+AV.init({
+  appId: '0lpjg6Zgwua9jqUZDeJMVxpr-gzGzoHsz',
+  appKey: 'gV34QMHiVXzzDiS4GdyXtZt9',
+  serverURL: 'https://0lpjg6zg.lc-cn-n1-shared.com'
 });
+
+function updateUserStatus() {
+  const user = AV.User.current();
+  const infoEl = $('#userInfo');
+  if (user) {
+    infoEl.html(`欢迎：${user.getUsername()} <span id="logoutBtn">退出</span>`);
+    $('#loginButton').hide();
+  } else {
+    infoEl.empty();
+    $('#loginButton').show();
+  }
+}
+
+$(document).ready(function () {
+  updateUserStatus();
+
+  $('#loginButton').click(() => $('#loginModal').addClass('active'));
+  $('#closeLogin').click(() => $('#loginModal').removeClass('active'));
+
+  $('#signupBtn').click(async () => {
+    const email = $('#loginEmail').val();
+    const password = $('#loginPassword').val();
+    if (!email || !password) return alert("请填写完整信息");
+    const user = new AV.User();
+    user.setUsername(email);
+    user.setPassword(password);
+    user.setEmail(email);
+    try {
+      await user.signUp();
+      alert("注册成功！");
+      $('#loginModal').removeClass('active');
+      updateUserStatus();
+    } catch (err) {
+      alert("注册失败：" + err.message);
+    }
+  });
+
+  $('#loginBtn').click(async () => {
+    const email = $('#loginEmail').val();
+    const password = $('#loginPassword').val();
+    if (!email || !password) return alert("请填写完整信息");
+    try {
+      await AV.User.logIn(email, password);
+      alert("登录成功！");
+      $('#loginModal').removeClass('active');
+      updateUserStatus();
+    } catch (err) {
+      alert("登录失败：" + err.message);
+    }
+  });
+
+  // 监听登出按钮
+  $(document).on('click', '#logoutBtn', async () => {
+    await AV.User.logOut();
+    alert("已退出");
+    updateUserStatus();
+  });
+});
+
