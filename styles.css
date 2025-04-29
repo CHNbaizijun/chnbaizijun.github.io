@@ -1175,11 +1175,11 @@ footer {
   background-color: #c19e2e;
 }
 
-/* 导航栏右上角用户信息样式修复 */
+/* 登录状态信息位置进一步右移，防遮挡导航 */
 .user-info {
   position: absolute;
-  top: 18px;
-  right: 20px;
+  top: 22px;
+  right: 30px;
   font-size: 14px;
   color: var(--primary);
   z-index: 1001;
@@ -1190,31 +1190,56 @@ footer {
   cursor: pointer;
 }
 
-/* 个人中心卡片样式 */
-.personal-center-section {
-  padding: 60px 5%;
-  background-color: var(--white);
-  text-align: center;
+/* 悬浮窗：个人中心 */
+.floating-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  background: var(--light);
+  border: 1px solid var(--gray);
+  border-left: 5px solid var(--accent);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  padding: 20px;
+  z-index: 999;
+  display: none;
 }
-.personal-center-card {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 40px;
-  border-radius: 12px;
-  background-color: var(--light);
-  border-left: 6px solid var(--accent);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-}
-.personal-center-card h2 {
+.floating-panel h3 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
   color: var(--primary);
-  margin-bottom: 20px;
 }
-.personal-center-card p {
-  font-size: 1.05em;
+.floating-panel p {
+  margin: 6px 0;
+  font-size: 0.95em;
+  color: #333;
+}
+.floating-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 360px;
+  background: var(--accent);
+  color: white;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+  z-index: 999;
+}
+
+/* 登录提示浮窗 */
+.login-float-tip {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: var(--white);
   color: var(--dark);
-  line-height: 1.8;
-  text-align: left;
-}
-.personal-center-card strong {
-  color: var(--accent);
+  border-left: 4px solid var(--accent);
+  padding: 12px 16px;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  font-size: 0.95em;
+  z-index: 998;
+  display: none;
 }
