@@ -1,51 +1,55 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>白子俊 | 浙江音乐学院附中钢琴专业</title>
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <!-- LeanCloud SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>白子俊 | 浙江音乐学院附中钢琴专业</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
 </head>
+
 <body>
-    <nav class="navbar">
-        <div class="logo">白子俊</div>
-        <div class="nav-links">
-            <a href="#home">首页</a>
-            <a href="#about">个人简介</a>
-            <a href="#achievements">获奖情况</a>
-            <a href="#teachers">学习经历</a>
-            <a href="#timeline">艺术历程</a>
-            <a href="#tools">工具站点</a>
-            <a href="#contact">联系方式</a>
-        </div>
-        <div class="hamburger">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-        </div>
-    </nav>
-
-    
-    <!-- 悬浮登录按钮 -->
-    <div class="login-float-button" id="loginButton">
-        <i class="fas fa-user-lock"></i>
+  <nav class="navbar">
+    <div class="logo">白子俊</div>
+    <div class="nav-links">
+      <a href="#home">首页</a>
+      <a href="#about">个人简介</a>
+      <a href="#achievements">获奖情况</a>
+      <a href="#teachers">学习经历</a>
+      <a href="#timeline">艺术历程</a>
+      <a href="#tools">工具站点</a>
+      <a href="#contact">联系方式</a>
     </div>
-
-    <!-- 登录弹窗 -->
-    <div class="login-modal" id="loginModal">
-        <div class="login-box">
-            <span class="login-close" id="closeLogin">&times;</span>
-            <h2>登录 / 注册</h2>
-            <input type="email" id="loginEmail" placeholder="请输入邮箱">
-            <input type="password" id="loginPassword" placeholder="请输入密码">
-            <button id="signupBtn">注册</button>
-            <button id="loginBtn">登录</button>
-        </div>
+    <div class="hamburger">
+      <div class="line"></div><div class="line"></div><div class="line"></div>
     </div>
+    <div class="user-info" id="userInfo"></div>
+  </nav>
+
+  <!-- 悬浮登录按钮 -->
+  <div class="login-float-button" id="loginButton"><i class="fas fa-user-lock"></i></div>
+
+  <!-- 登录弹窗 -->
+  <div class="login-modal" id="loginModal">
+    <div class="login-box">
+      <span class="login-close" id="closeLogin">&times;</span>
+      <h2>登录 / 注册</h2>
+      <input type="email" id="loginEmail" placeholder="请输入邮箱">
+      <input type="password" id="loginPassword" placeholder="请输入密码">
+      <button id="signupBtn">注册</button>
+      <button id="loginBtn">登录</button>
+    </div>
+  </div>
+
+  <!-- 登录信息展示区域 -->
+  <section class="login-status-section">
+    <div class="login-status-card" id="loginStatusBox">
+      <p id="loginStatusText">请先登录以查看你的个人信息</p>
+      <button id="logoutBtnBox" style="display: none;">退出登录</button>
+    </div>
+  </section>
     
     <section class="hero" id="home">
         <div class="hero-content">
