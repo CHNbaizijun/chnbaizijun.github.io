@@ -81,6 +81,98 @@ $(document).ready(function () {
     }
   });
 
+// script.js 新增内容
+// 在原注册功能之后添加
+// 密码强度实时检测
+$('#signupPassword').on('input', function() {
+  const strength = checkPasswordStrength($(this).val());
+  $('.password-strength').attr('class', 'password-strength ' + strength);
+});
+
+function checkPasswordStrength(password) {
+  let strength = 0;
+  if (password.length >= 8) strength++;
+  if (password.match(/[A-Z]/)) strength++;
+  if (password.match(/[0-9]/)) strength++;
+  if (password.match(/[^A-Za-z0-9]/)) strength++;
+  
+  return strength > 3 ? 'strong' : strength > 1 ? 'medium' : 'weak';
+}
+
+// 选项卡切换
+$('.form-tabs').on('click', '.tab', function() {
+  const tab = $(this).data('tab');
+  $('.tab').removeClass('active');
+  $(this).addClass('active');
+  $('.tab-content').removeClass('active');
+  $(`#${tab}Form`).addClass('active');
+  $('.error-message').hide().text('');
+});
+
+// 增强注册功能
+$('#signupBtn').click(async () => {
+  const nickname = $('#signupNickname').val().trim();
+  const email = $('#signupEmail').val().trim();
+  const password = $('#signupPassword').val();
+  const passwordConfirm = $('#signupPasswordConfirm').val();
+
+  // 验证逻辑
+  if (!nickname || nickname.length < 2 || nickname.length > 16) {
+    return showError('昵称需为2-16位字符');
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return showError('请输入有效的邮箱地址');
+  }
+  if (password.length < 8) {
+    return showError('密码长度至少8位');
+  }
+  if (password !== passwordConfirm) {
+    return showError('两次输入的密码不一致');
+  }
+  if (!$('#agreeTerms').prop('checked')) {
+    return showError('请同意用户协议');
+  }
+
+  try {
+    const user = new AV.User();
+    user.setUsername(email);
+    user.setPassword(password);
+    user.setEmail(email);
+    user.set('nickname', nickname);
+    
+    await user.signUp();
+    alert('注册成功，已自动登录');
+    updateUserStatus();
+    $('#loginModal').removeClass('active');
+  } catch (err) {
+    showError(`注册失败：${err.message}`);
+  }
+});
+
+// 忘记密码功能
+$('#forgotBtn').click(async () => {
+  const email = $('#forgotEmail').val().trim();
+  if (!validateEmail(email)) return showError('请输入有效邮箱地址');
+  
+  try {
+    await AV.User.requestPasswordReset(email);
+    alert('密码重置邮件已发送至您的邮箱');
+    $('#loginModal').removeClass('active');
+  } catch (err) {
+    showError(`操作失败：${err.message}`);
+  }
+});
+
+// 通用函数
+function showError(msg) {
+  const $error = $('.tab-content.active').find('.error-message');
+  $error.text(msg).fadeIn().delay(3000).fadeOut();
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
   // 登录功能
   $('#loginBtn').click(async () => {
     const email = $('#loginEmail').val();

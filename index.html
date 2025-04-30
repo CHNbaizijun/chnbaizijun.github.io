@@ -38,17 +38,48 @@
   <!-- 悬浮登录按钮 -->
   <div class="login-float-button" id="loginButton"><i class="fas fa-user-lock"></i></div>
 
-  <!-- 登录弹窗 -->
-  <div class="login-modal" id="loginModal">
-    <div class="login-box">
-      <span class="login-close" id="closeLogin">&times;</span>
-      <h2>登录 / 注册</h2>
-      <input type="email" id="loginEmail" placeholder="请输入邮箱" />
-      <input type="password" id="loginPassword" placeholder="请输入密码" />
-      <button id="signupBtn">注册</button>
-      <button id="loginBtn">登录</button>
+  <!-- index.html -->
+<!-- 仅显示修改部分，其余内容保持不变 -->
+<div class="login-modal" id="loginModal">
+  <div class="login-box">
+    <span class="login-close" id="closeLogin">&times;</span>
+    <h2>用户中心</h2>
+    
+    <div class="form-tabs">
+      <button class="tab active" data-tab="login">登录</button>
+      <button class="tab" data-tab="signup">注册</button>
+      <button class="tab" data-tab="forgot">找回密码</button>
+    </div>
+
+    <div class="tab-content active" id="loginForm">
+      <div class="error-message"></div>
+      <input type="email" id="loginEmail" placeholder="注册邮箱" />
+      <input type="password" id="loginPassword" placeholder="密码" />
+      <button id="loginBtn">立即登录</button>
+    </div>
+
+    <div class="tab-content" id="signupForm">
+      <div class="error-message"></div>
+      <input type="text" id="signupNickname" placeholder="昵称（2-16位字符）" />
+      <input type="email" id="signupEmail" placeholder="邮箱" />
+      <input type="password" id="signupPassword" placeholder="密码（至少8位）" class="pwd-strength" />
+      <div class="password-strength"></div>
+      <input type="password" id="signupPasswordConfirm" placeholder="确认密码" />
+      <button id="signupBtn">立即注册</button>
+    </div>
+
+    <div class="tab-content" id="forgotForm">
+      <div class="error-message"></div>
+      <input type="email" id="forgotEmail" placeholder="输入注册邮箱" />
+      <button id="forgotBtn">发送重置邮件</button>
+    </div>
+
+    <div class="terms-box">
+      <input type="checkbox" id="agreeTerms" checked />
+      <label for="agreeTerms">我已阅读并同意<a href="/privacy.html" target="_blank">隐私政策</a></label>
     </div>
   </div>
+</div>
 
     <section class="hero" id="home">
         <div class="hero-content">
