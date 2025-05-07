@@ -910,84 +910,76 @@ footer {
     animation: fadeInScale 0.5s ease forwards;
 }
 
-/* styles.css 新增内容 */
-/* 在原login-box样式之后添加 */
+/* 登录弹窗选项卡样式 */
 .form-tabs {
-  display: flex;
-  margin: 20px 0;
-  border-bottom: 2px solid var(--gray);
+    background: var(--dark-blue);
+    border-radius: 6px;
+    margin: 20px -10px;
 }
 
 .tab {
-  flex: 1;
-  padding: 12px;
-  background: none;
-  border: none;
-  color: var(--dark);
-  cursor: pointer;
-  transition: var(--transition);
-  position: relative;
-  font-size: 0.95em;
+    color: var(--white); /* 未选中为白色 */
+    opacity: 0.7;
 }
 
 .tab.active {
-  color: var(--accent);
-  font-weight: 500;
+    color: var(--dark); /* 选中为黑色 */
+    opacity: 1;
 }
 
 .tab.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--accent);
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
 }
 
 .tab-content {
-  display: none;
-  animation: fadeIn 0.3s ease;
+    display: none;
+    animation: fadeIn 0.3s ease;
 }
 
 .tab-content.active {
-  display: block;
+    display: block;
 }
 
 .terms-box {
-  margin: 15px 0 5px;
-  font-size: 0.85em;
-  color: #666;
-  display: flex;
-  align-items: center;
+    margin: 15px 0 5px;
+    font-size: 0.85em;
+    color: #666;
+    display: flex;
+    align-items: center;
 }
 
 .terms-box input {
-  margin-right: 8px;
+    margin-right: 8px;
 }
 
 .terms-box a {
-  color: var(--accent);
-  text-decoration: none;
-  margin-left: 3px;
+    color: var(--accent);
+    text-decoration: none;
+    margin-left: 3px;
 }
 
 .error-message {
-  color: #e74c3c;
-  font-size: 0.9em;
-  margin: 0 0 10px;
-  padding: 8px;
-  background: rgba(231, 76, 60, 0.1);
-  border-radius: 4px;
-  display: none;
+    color: #e74c3c;
+    font-size: 0.9em;
+    margin: 0 0 10px;
+    padding: 8px;
+    background: rgba(231, 76, 60, 0.1);
+    border-radius: 4px;
+    display: none;
 }
 
 .password-strength {
-  height: 3px;
-  background: var(--gray);
-  margin: -10px 0 15px;
-  transition: var(--transition);
-  border-radius: 2px;
+    height: 3px;
+    background: var(--gray);
+    margin: -10px 0 15px;
+    transition: var(--transition);
+    border-radius: 2px;
 }
 
 .password-strength.weak { width: 30%; background: #e74c3c; }
@@ -995,8 +987,8 @@ footer {
 .password-strength.strong { width: 100%; background: #2ecc71; }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* 输入框 */
@@ -1060,288 +1052,74 @@ footer {
     }
 }
 
-/* 显示弹窗 */
-.login-modal.active {
-    display: flex;
-}
-
-.login-float-button {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 60px;
-  height: 60px;
-  background-color: var(--accent);
-  color: var(--white);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 26px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  cursor: pointer;
-  z-index: 999;
-  transition: var(--transition);
-}
-.login-float-button:hover {
-  background-color: #c19e2e;
-}
-
-.login-modal {
-  display: none;
-  position: fixed;
-  z-index: 2000;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(30, 43, 58, 0.8);
-  backdrop-filter: blur(5px);
-  justify-content: center;
-  align-items: center;
-}
-.login-modal.active {
-  display: flex;
-}
-.login-box {
-  background: var(--white);
-  padding: 40px 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  position: relative;
-}
-.login-box input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 6px;
-  border: 1px solid var(--gray);
-}
-.login-box button {
-  width: 100%;
-  padding: 12px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-.login-close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 24px;
-  cursor: pointer;
-}
-.user-info {
-  position: absolute;
-  right: 20px;
-  top: 25px;
-  font-size: 14px;
-  color: var(--primary);
-}
-.user-info span {
-  margin-left: 10px;
-  color: var(--accent);
-  cursor: pointer;
-}
-/* 登录信息展示块和按钮 */
-.login-float-button {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 60px;
-  height: 60px;
-  background-color: var(--accent);
-  color: var(--white);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 26px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  cursor: pointer;
-  z-index: 999;
-  transition: var(--transition);
-}
-.login-float-button:hover {
-  background-color: #c19e2e;
-}
-
-.login-modal {
-  display: none;
-  position: fixed;
-  z-index: 2000;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(30, 43, 58, 0.8);
-  backdrop-filter: blur(5px);
-  justify-content: center;
-  align-items: center;
-}
-.login-modal.active {
-  display: flex;
-}
-.login-box {
-  background: var(--white);
-  padding: 40px 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  position: relative;
-}
-.login-box input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 6px;
-  border: 1px solid var(--gray);
-}
-.login-box button {
-  width: 100%;
-  padding: 12px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-.login-close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.user-info {
-  position: absolute;
-  right: 20px;
-  top: 25px;
-  font-size: 14px;
-  color: var(--primary);
-}
-.user-info span {
-  margin-left: 10px;
-  color: var(--accent);
-  cursor: pointer;
-}
-
-.login-status-section {
-  padding: 60px 5%;
-  background-color: var(--light);
-  text-align: center;
-}
-.login-status-card {
-  background-color: var(--white);
-  border: 1px solid var(--gray);
-  border-left: 6px solid var(--accent);
-  border-radius: 8px;
-  padding: 30px;
-  max-width: 600px;
-  margin: 0 auto;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-}
-.login-status-card p {
-  font-size: 1.1em;
-  color: var(--dark);
-  margin-bottom: 20px;
-}
-#logoutBtnBox {
-  padding: 10px 24px;
-  background-color: var(--accent);
-  color: var(--white);
-  border: none;
-  border-radius: 6px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: var(--transition);
-}
-#logoutBtnBox:hover {
-  background-color: #c19e2e;
-}
-
-/* 登录状态信息位置进一步右移，防遮挡导航 */
-.user-info {
-  position: absolute;
-  top: 22px;
-  right: 30px;
-  font-size: 14px;
-  color: var(--primary);
-  z-index: 1001;
-}
-.user-info span {
-  margin-left: 10px;
-  color: var(--accent);
-  cursor: pointer;
-}
-
 /* 悬浮窗：个人中心 */
 .floating-panel {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 320px;
-  background: var(--light);
-  border: 1px solid var(--gray);
-  border-left: 5px solid var(--accent);
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  padding: 20px;
-  z-index: 999;
-  display: none;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    background: var(--light);
+    border: 1px solid var(--gray);
+    border-left: 5px solid var(--accent);
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 20px;
+    z-index: 999;
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
 }
+
 .floating-panel.active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
+
 .floating-panel h3 {
-  margin-bottom: 10px;
-  font-size: 1.2em;
-  color: var(--primary);
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: var(--primary);
 }
+
 .floating-panel p {
-  margin: 6px 0;
-  font-size: 0.95em;
-  color: #333;
+    margin: 6px 0;
+    font-size: 0.95em;
+    color: #333;
 }
+
 .floating-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 340px; /* 根据面板宽度计算 */
-  background: var(--accent);
-  color: white;
-  border-radius: 4px;
-  padding: 6px 10px;
-  font-size: 0.9em;
-  cursor: pointer;
-  z-index: 999;
-  transition: all 0.3s ease;
-  display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 340px; /* 根据面板宽度计算 */
+    background: var(--accent);
+    color: white;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    z-index: 999;
+    transition: all 0.3s ease;
+    display: none;
 }
+
 .floating-toggle.active {
-  display: block;
+    display: block;
 }
 
 /* 登录提示浮窗 */
 .login-float-tip {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background-color: var(--white);
-  color: var(--dark);
-  border-left: 4px solid var(--accent);
-  padding: 12px 16px;
-  border-radius: 6px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-  font-size: 0.95em;
-  z-index: 998;
-  display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: var(--white);
+    color: var(--dark);
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 6px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    font-size: 0.95em;
+    z-index: 998;
+    display: none;
 }
