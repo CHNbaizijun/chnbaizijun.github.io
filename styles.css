@@ -14,7 +14,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "AlibabaPuHuiTi", "Microsoft YaHei", "PingFang SC", sans-serif;
+    font-family: "AlibabaPuHuiTi", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
 body {
@@ -179,6 +179,73 @@ h1, h2, h3 {
 
 .login-float-button:hover {
     background-color: #c19e2e;
+}
+
+/* 修复选项卡样式 */
+.form-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    border-radius: 6px;
+    background: var(--dark-blue);
+    padding: 5px;
+}
+
+.tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    font-family: inherit;
+    font-size: 1em;
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition);
+}
+
+.tab.active {
+    color: var(--white);
+    background: var(--accent);
+    border-radius: 4px;
+}
+
+/* 修复字体显示 */
+.login-box {
+    font-family: "AlibabaPuHuiTi", "Microsoft YaHei", sans-serif;
+}
+
+/* 使表单元素与网站风格一致 */
+.login-box input {
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 14px;
+    margin: 12px 0;
+    width: 100%;
+    font-family: inherit;
+}
+
+.login-box button {
+    background: var(--accent);
+    border-radius: 8px;
+    padding: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    width: 100%;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.login-box button:hover {
+    background: #c19e2e;
+}
+
+.tab-content {
+    padding: 15px 0;
+    animation: fadeIn 0.3s ease;
 }
 
 /* 首页区域 */
@@ -995,4 +1062,17 @@ footer {
     font-size: 0.95em;
     z-index: 998;
     display: none;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 确保中文字体兼容 */
+.login-box h2,
+.tab,
+.login-box input {
+    font-family: "AlibabaPuHuiTi", "PingFang SC", "Microsoft YaHei", sans-serif;
 }

@@ -293,23 +293,32 @@ $(document).ready(function () {
     loader.classList.add("hidden");
     setTimeout(() => loader.remove(), 500);
   }
-});
 
-// 通用函数
-function showError(msg) {
-  const $error = $('.tab-content.active').find('.error-message');
-  $error.text(msg).fadeIn().delay(3000).fadeOut();
-}
+  // 通用函数
+  function showError(msg) {
+    const $error = $('.tab-content.active').find('.error-message');
+    $error.text(msg).fadeIn().delay(3000).fadeOut();
+  }
 
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
-// 增强点击处理逻辑
-$(document).on('click', '[data-auth]', function(e) {
+  // 添加选项卡切换功能
+  $(document).on('click', '.tab', function() {
+    const tab = $(this).data('tab');
+    $('.tab').removeClass('active');
+    $(this).addClass('active');
+    $('.tab-content').removeClass('active');
+    $(`#${tab}Form`).addClass('active');
+  });
+
+  // 增强点击处理逻辑
+  $(document).on('click', '[data-auth]', function(e) {
     e.preventDefault();
     if (!AV.User.current()) {
         $('#loginModal').addClass('active');
         $('body').addClass('no-scroll');
     }
+  });
 });
