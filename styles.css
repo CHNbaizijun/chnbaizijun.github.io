@@ -35,20 +35,26 @@ h1, h2, h3 {
     font-weight: 500;
 }
 
-/* 登录遮罩层样式 */
+/* 遮罩层样式 */
 #authOverlay {
     position: fixed !important;
-    top: 0 !important;  /* 覆盖整个视口 */
+    top: 0 !important;
     left: 0 !important;
-    z-index: 9998 !important;  /* 低于登录弹窗 */
+    z-index: 9998 !important;
     width: 100vw !important;
     height: 100vh !important;
     background: rgba(255,255,255,0.97) !important;
     backdrop-filter: blur(10px);
     display: flex !important;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+}
+
+#authMessage {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: var(--primary);
 }
 
 /* 导航栏 */

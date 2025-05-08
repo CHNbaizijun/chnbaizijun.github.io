@@ -14,25 +14,11 @@ function updateUserStatus() {
     // 创建遮罩层
     if (overlay.length === 0) {
       $('body').append(`
-        <div id="authOverlay" style="
-          position: fixed !important;
-          top: 0 !important;
-          left: 0 !important;
-          z-index: 9998 !important;
-          width: 100vw !important;
-          height: 100vh !important;
-          background: rgba(255,255,255,0.97) !important;
-          backdrop-filter: blur(10px);
-          display: flex !important;
-          align-items: center;
-          justify-content: center;
-          flex-direction: column;
-        ">
-          <h2 style="color: var(--primary); margin-bottom: 20px;">请登录查看内容</h2>
-          <button class="cta-button" id="overlayLoginButton" 
-            style="font-size: 1.2em; padding: 12px 40px;">
-            立即登录
-          </button>
+        <div id="authOverlay">
+            <div id="authMessage">请登录后查看页面</div>
+            <button class="cta-button" id="overlayLoginButton">
+                立即登录
+            </button>
         </div>
       `);
     }
