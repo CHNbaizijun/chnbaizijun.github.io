@@ -2,7 +2,7 @@
 AV.init({
   appId: '0lpjg6Zgwua9jqUZDeJMVxpr-gzGzoHsz',
   appKey: 'gV34QMHiVXzzDiS4GdyXtZt9',
-  serverURL: 'https://0lpjg6zg.lc-cn-n1-shared.com'
+  serverURL: 'https://0lpjzgw.lc-cn-n1-shared.com'
 });
 
 // 更新用户状态，控制欢迎信息与个人中心显示
@@ -91,6 +91,29 @@ $(document).ready(function () {
     $('body').removeClass('no-scroll');
   });
 
+  // 修改后的平滑滚动锚点逻辑
+  $("a[href^='#']").on("click", function (event) { // 只匹配锚点链接
+    event.preventDefault();
+    const hash = this.hash;
+    if (!$(hash).length) return; // 确保目标存在
+    
+    const targetOffset = $(hash).offset().top - 80;
+    $("html, body").animate(
+        { scrollTop: targetOffset },
+        800,
+        () => window.history.pushState(null, null, hash)
+    );
+  });
+
+  // 修改后的选项卡切换逻辑
+  $(document).on('click', '.tab', function() {
+    const tab = $(this).data('tab');
+    $('.tab').removeClass('active');
+    $(this).addClass('active');
+    $('.tab-page').removeClass('active');
+    $(`#${tab}Page`).addClass('active');
+  });
+
   // 注册功能
   $('#signupBtn').click(async () => {
     const nickname = $('#signupNickname').val().trim();
@@ -124,6 +147,7 @@ $(document).ready(function () {
       
       await user.signUp();
       alert('注册成功，已自动登录');
+      $('#pc-username').text(nickname); 
       updateUserStatus();
       $('#loginModal').removeClass('active');
       $('body').removeClass('no-scroll');
@@ -184,20 +208,6 @@ $(document).ready(function () {
     await AV.User.logOut();
     alert("已退出");
     updateUserStatus();
-  });
-
-  // 平滑滚动锚点
-  $("a").on("click", function (event) {
-    if (this.hash !== "") {
-      event.preventDefault();
-      const hash = this.hash;
-      const targetOffset = $(hash).offset().top - 80;
-      $("html, body").animate(
-        { scrollTop: targetOffset },
-        800,
-        () => window.history.pushState(null, null, hash)
-      );
-    }
   });
 
   // 导航栏滚动效果
@@ -282,22 +292,13 @@ $(document).ready(function () {
 
   // 通用函数
   function showError(msg) {
-    const $error = $('.tab-content.active').find('.error-message');
+    const $error = $('.tab-page.active').find('.error-message');
     $error.text(msg).fadeIn().delay(3000).fadeOut();
   }
 
   function validateEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
-
-  // 添加选项卡切换功能
-  $(document).on('click', '.tab', function() {
-    const tab = $(this).data('tab');
-    $('.tab').removeClass('active');
-    $(this).addClass('active');
-    $('.tab-content').removeClass('active');
-    $(`#${tab}Form`).addClass('active');
-  });
 
   // 增强点击处理逻辑
   $(document).on('click', '[data-auth]', function(e) {

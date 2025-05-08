@@ -187,6 +187,31 @@ h1, h2, h3 {
     background-color: #c19e2e;
 }
 
+/* 选项卡页面样式 */
+.tab-page {
+    display: none;
+    width: 100%;
+    padding: 20px;
+}
+
+.tab-page.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 登录弹窗尺寸调整 */
+.login-modal {
+    max-width: 450px;
+    margin: auto;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.login-box {
+    background: var(--white);
+    padding: 30px;
+}
+
 /* 修复选项卡样式 */
 .form-tabs {
     display: flex;
@@ -217,11 +242,6 @@ h1, h2, h3 {
 }
 
 /* 修复字体显示 */
-.login-box {
-    font-family: "AlibabaPuHuiTi", "Microsoft YaHei", sans-serif;
-}
-
-/* 使表单元素与网站风格一致 */
 .login-box input {
     border: 2px solid var(--gray);
     border-radius: 8px;
@@ -247,11 +267,6 @@ h1, h2, h3 {
 
 .login-box button:hover {
     background: #c19e2e;
-}
-
-.tab-content {
-    padding: 15px 0;
-    animation: fadeIn 0.3s ease;
 }
 
 /* 首页区域 */
