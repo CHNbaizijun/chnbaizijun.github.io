@@ -15,21 +15,21 @@ function updateUserStatus() {
     if (overlay.length === 0) {
       $('body').append(`
         <div id="authOverlay" style="
-          position: fixed;
-          top: 80px; /* 保留导航栏 */
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(255,255,255,0.95);
-          z-index: 9999;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          z-index: 9998 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          background: rgba(255,255,255,0.97) !important;
           backdrop-filter: blur(10px);
-          display: flex;
+          display: flex !important;
           align-items: center;
           justify-content: center;
           flex-direction: column;
         ">
           <h2 style="color: var(--primary); margin-bottom: 20px;">请登录查看内容</h2>
-          <button class="cta-button" onclick="$('#loginButton').click()" 
+          <button class="cta-button" id="overlayLoginButton" 
             style="font-size: 1.2em; padding: 12px 40px;">
             立即登录
           </button>
@@ -95,8 +95,15 @@ $(document).ready(function () {
   updateUserStatus();
 
   // 登录弹窗显示
-  $('#loginButton').click(() => $('#loginModal').addClass('active'));
-  $('#closeLogin').click(() => $('#loginModal').removeClass('active'));
+  $('#loginButton, #overlayLoginButton').click(function () {
+    $('#loginModal').addClass('active');
+    $('body').addClass('no-scroll');
+  });
+  
+  $('#closeLogin').click(function () {
+    $('#loginModal').removeClass('active');
+    $('body').removeClass('no-scroll');
+  });
 
   // 注册功能
   $('#signupBtn').click(async () => {
@@ -133,6 +140,7 @@ $(document).ready(function () {
       alert('注册成功，已自动登录');
       updateUserStatus();
       $('#loginModal').removeClass('active');
+      $('body').removeClass('no-scroll');
     } catch (err) {
       showError(`注册失败：${err.message}`);
     }
@@ -163,6 +171,7 @@ $(document).ready(function () {
       await AV.User.requestPasswordReset(email);
       alert('密码重置邮件已发送至您的邮箱');
       $('#loginModal').removeClass('active');
+      $('body').removeClass('no-scroll');
     } catch (err) {
       showError(`操作失败：${err.message}`);
     }
@@ -177,6 +186,7 @@ $(document).ready(function () {
       await AV.User.logIn(email, password);
       alert("登录成功！");
       $('#loginModal').removeClass('active');
+      $('body').removeClass('no-scroll');
       updateUserStatus();
     } catch (err) {
       alert("登录失败：" + err.message);
@@ -294,3 +304,12 @@ function showError(msg) {
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
+
+// 增强点击处理逻辑
+$(document).on('click', '[data-auth]', function(e) {
+    e.preventDefault();
+    if (!AV.User.current()) {
+        $('#loginModal').addClass('active');
+        $('body').addClass('no-scroll');
+    }
+});

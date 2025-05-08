@@ -14,18 +14,21 @@
   <!-- 添加首页标识 -->
   <div id="home"></div>
   
+  <!-- 登录遮罩层 -->
+  <div id="authOverlay"></div>
+  
   <!-- 导航栏 -->
   <nav class="navbar">
     <div class="nav-brand">
       <div class="logo">白子俊</div>
       <div class="nav-links">
         <a href="#home">首页</a>
-        <a href="#about">个人简介</a>
-        <a href="#achievements">获奖情况</a>
-        <a href="#teachers">学习经历</a>
-        <a href="#timeline">艺术历程</a>
-        <a href="#tools">工具站点</a>
-        <a href="#contact">联系方式</a>
+        <a href="#about" data-auth>个人简介</a>
+        <a href="#achievements" data-auth>获奖情况</a>
+        <a href="#teachers" data-auth>学习经历</a>
+        <a href="#timeline" data-auth>艺术历程</a>
+        <a href="#tools" data-auth>工具站点</a>
+        <a href="#contact" data-auth>联系方式</a>
       </div>
     </div>
     
@@ -91,7 +94,7 @@
           <p>浙江音乐学院附中高三钢琴专业学生</p>
           <div class="hero-buttons">
               <button class="cta-button" id="watch-performance">观看演奏视频</button>
-              <button class="cta-button outline" onclick="window.location.href='https://chnbaizijun.github.io/more.html'">更多</button>
+              <button class="cta-button outline" onclick="window.location.href='https://chnbaizijun.github.io/more.html'" data-auth>更多</button>
           </div>
       </div>
       <div class="scroll-down">
@@ -277,7 +280,6 @@
 
   <!-- 页脚 -->
   <footer id="contact">
-      <img src="https://p1.ssl.qhimg.com/t0125b8c25bfab864a2.jpg" alt="中央音乐学院" class="school-logo">
       <p>2025级中央音乐学院钢琴系</p>
       <div class="contact-info">
           <p>WeChat: FreedomOfSpace</p>
