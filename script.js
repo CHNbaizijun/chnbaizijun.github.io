@@ -140,7 +140,7 @@ $(document).ready(function () {
 
     try {
       const user = new AV.User();
-      user.setUsername(email);
+      user.setUsername(nickname);
       user.setPassword(password);
       user.setEmail(email);
       user.set('nickname', nickname);
@@ -308,4 +308,3 @@ $(document).ready(function () {
         $('body').addClass('no-scroll');
     }
   });
-});
