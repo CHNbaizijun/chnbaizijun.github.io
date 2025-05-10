@@ -1,17 +1,14 @@
-// 初始化 LeanCloud
 AV.init({
   appId: '0lpjg6Zgwua9jqUZDeJMVxpr-gzGzoHsz',
   appKey: 'gV34QMHiVXzzDiS4GdyXtZt9',
   serverURL: 'https://0lpjzgw.lc-cn-n1-shared.com'
 });
 
-// 更新用户状态，控制欢迎信息与个人中心显示
 function updateUserStatus() {
   const user = AV.User.current();
   const overlay = $('#authOverlay');
   
   if (!user) {
-    // 创建遮罩层
     if (overlay.length === 0) {
       $('body').append(`
         <div id="authOverlay">
@@ -22,10 +19,8 @@ function updateUserStatus() {
         </div>
       `);
     }
-    // 隐藏非首页内容
     $('section:not(#home), footer').hide();
   } else {
-    // 登录后显示所有内容
     $('#authOverlay').remove();
     $('section, footer').show();
   }
@@ -46,7 +41,6 @@ function updateUserStatus() {
     $('#loginButton').hide();
     tip.hide();
 
-    // 显示浮窗
     $('#pc-username').text(username);
     $('#pc-email').text(email || '未绑定');
     $('#pc-userid').text(id);
@@ -63,7 +57,6 @@ function updateUserStatus() {
   }
 }
 
-// 悬浮窗切换按钮
 $(document).on('click', '#toggleUserPanel', function () {
   const panel = $('#floatingUserPanel');
   const btn = $(this);
@@ -76,11 +69,9 @@ $(document).on('click', '#toggleUserPanel', function () {
   }
 });
 
-// 文档加载完成
 $(document).ready(function () {
   updateUserStatus();
 
-  // 登录弹窗显示
   $('#loginButton, #overlayLoginButton').click(function () {
     $('#loginModal').addClass('active');
     $('body').addClass('no-scroll');
@@ -91,11 +82,10 @@ $(document).ready(function () {
     $('body').removeClass('no-scroll');
   });
 
-  // 修改后的平滑滚动锚点逻辑
-  $("a[href^='#']").on("click", function (event) { // 只匹配锚点链接
+  $("a[href^='#']").on("click", function (event) { 
     event.preventDefault();
     const hash = this.hash;
-    if (!$(hash).length) return; // 确保目标存在
+    if (!$(hash).length) return; 
     
     const targetOffset = $(hash).offset().top - 80;
     $("html, body").animate(
@@ -105,7 +95,6 @@ $(document).ready(function () {
     );
   });
 
-  // 修改后的选项卡切换逻辑
   $(document).on('click', '.tab', function() {
     const tab = $(this).data('tab');
     $('.tab').removeClass('active');
@@ -114,14 +103,13 @@ $(document).ready(function () {
     $(`#${tab}Page`).addClass('active');
   });
 
-  // 注册功能
+  // 修改后的注册逻辑
   $('#signupBtn').click(async () => {
     const nickname = $('#signupNickname').val().trim();
     const email = $('#signupEmail').val().trim();
     const password = $('#signupPassword').val();
     const passwordConfirm = $('#signupPasswordConfirm').val();
 
-    // 验证逻辑
     if (!nickname || nickname.length < 2 || nickname.length > 16) {
       return showError('昵称需为2-16位字符');
     }
@@ -146,17 +134,36 @@ $(document).ready(function () {
       user.set('nickname', nickname);
       
       await user.signUp();
-      alert('注册成功，已自动登录');
-      $('#pc-username').text(nickname); 
-      updateUserStatus();
+      
+      // 发送验证邮件
+      await AV.User.requestEmailVerify(email);
+      
+      // 强制退出当前用户
+      await AV.User.logOut();
+
+      // 显示嵌入式弹窗
+      $('#regVerifyAlert').addClass('active');
+      // 8秒后自动关闭
+      setTimeout(() => {
+        $('#regVerifyAlert').removeClass('active');
+      }, 8000);
+
+      // 关闭按钮事件
+      $('.close-alert').click(() => {
+        $('#regVerifyAlert').removeClass('active');
+      });
+
+      alert('注册成功！请检查您的注册邮箱完成验证后再登录');
+      
       $('#loginModal').removeClass('active');
       $('body').removeClass('no-scroll');
+      updateUserStatus();
+
     } catch (err) {
       showError(`注册失败：${err.message}`);
     }
   });
 
-  // 密码强度实时检测
   $('#signupPassword').on('input', function() {
     const strength = checkPasswordStrength($(this).val());
     $('.password-strength').attr('class', 'password-strength ' + strength);
@@ -172,7 +179,6 @@ $(document).ready(function () {
     return strength > 3 ? 'strong' : strength > 1 ? 'medium' : 'weak';
   }
 
-  // 忘记密码功能
   $('#forgotBtn').click(async () => {
     const email = $('#forgotEmail').val().trim();
     if (!validateEmail(email)) return showError('请输入有效邮箱地址');
@@ -187,42 +193,52 @@ $(document).ready(function () {
     }
   });
 
-  // 登录功能
+  // 修改后的登录逻辑
   $('#loginBtn').click(async () => {
     const email = $('#loginEmail').val();
     const password = $('#loginPassword').val();
     if (!email || !password) return alert("请填写完整信息");
     try {
-      await AV.User.logIn(email, password);
+      const user = await AV.User.logIn(email, password);
+      
+      // 检查邮箱是否已验证
+      if (!user.get('emailVerified')) {
+        await AV.User.logOut(); 
+        alert("安全提示：请到您的电子邮箱验证账户后再登录！");
+        return;
+      }
+
       alert("登录成功！");
       $('#loginModal').removeClass('active');
       $('body').removeClass('no-scroll');
       updateUserStatus();
+      
     } catch (err) {
-      alert("登录失败：" + err.message);
+      // 错误信息定制
+      if (err.message.includes("Email address isn't verified")) {
+        alert("安全提示：请到您的电子邮箱验证账户后再登录！");
+      } else {
+        alert("登录失败：" + err.message);
+      }
     }
   });
 
-  // 登出功能
   $(document).on('click', '#logoutBtn, #logoutBtnBox', async () => {
     await AV.User.logOut();
     alert("已退出");
     updateUserStatus();
   });
 
-  // 导航栏滚动效果
   $(window).scroll(function () {
     $(".navbar").toggleClass("scrolled", $(this).scrollTop() > 50);
   });
 
-  // 移动端菜单切换
   $(".hamburger").click(function () {
     $(this).toggleClass("active");
     $(".nav-links").toggleClass("active");
     $("body").toggleClass("no-scroll");
   });
 
-  // 工具站点折叠
   $("#tools .section-title").click(function () {
     const $container = $(".tools-container");
     const $icon = $(this).find(".toggle-icon");
@@ -231,7 +247,6 @@ $(document).ready(function () {
     $container.css("max-height", $container.hasClass("active") ? $container[0].scrollHeight + "px" : "0");
   });
 
-  // 视频弹窗控制
   const videoModal = $("#videoModal");
   const video = $("#videoModal video")[0];
   $("#watch-performance").click(function (e) {
@@ -247,7 +262,6 @@ $(document).ready(function () {
     }
   });
 
-  // 图片懒加载
   const lazyImages = $("img[data-src]");
   const imageObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -261,36 +275,44 @@ $(document).ready(function () {
   });
   lazyImages.each((i, img) => imageObserver.observe(img));
 
-  // 卡片悬停效果
   $(".achievement-card, .teacher-card, .tool-card").hover(
     () => $(this).addClass("hover"),
     () => $(this).removeClass("hover")
   );
 
-  // 窗口尺寸调整
   $(window).resize(function () {
-    // 响应式导航栏
     if ($(window).width() > 768) {
       $(".hamburger").removeClass("active");
       $(".nav-links").removeClass("active");
       $("body").removeClass("no-scroll");
     }
 
-    // 调整个人中心按钮位置
     $('#toggleUserPanel').css(
       'right',
       $(window).width() < 768 ? '20px' : '340px'
     );
   });
 
-  // 加载动画
   const loader = document.querySelector(".loader");
   if (loader) {
     loader.classList.add("hidden");
     setTimeout(() => loader.remove(), 500);
   }
 
-  // 通用函数
+  // 重新发送验证邮件
+  async function resendVerifyEmail() {
+    const email = $('#signupEmail').val().trim();
+    if (!validateEmail(email)) return showError('请输入有效邮箱地址');
+    
+    try {
+      await AV.User.requestEmailVerify(email);
+      $('#emailVerifyTip').fadeIn().delay(3000).fadeOut();
+      alert('验证邮件已重新发送');
+    } catch (err) {
+      showError(`发送失败：${err.message}`);
+    }
+  }
+
   function showError(msg) {
     const $error = $('.tab-page.active').find('.error-message');
     $error.text(msg).fadeIn().delay(3000).fadeOut();
@@ -300,7 +322,6 @@ $(document).ready(function () {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
-  // 增强点击处理逻辑
   $(document).on('click', '[data-auth]', function(e) {
     e.preventDefault();
     if (!AV.User.current()) {
@@ -308,3 +329,4 @@ $(document).ready(function () {
         $('body').addClass('no-scroll');
     }
   });
+});

@@ -792,6 +792,70 @@ footer {
     color: var(--accent);
 }
 
+/* 邮箱验证提示 */
+.email-verify-tip {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--accent);
+  color: var(--white);
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 10000;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.email-verify-tip.active {
+  display: block;
+}
+
+/* 注册验证提醒样式 */
+.registration-alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff6b6b;
+  color: white;
+  padding: 18px 35px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 10001;
+  display: none;
+  align-items: center;
+  font-size: 1.1em;
+  animation: slideIn 0.3s ease-out;
+}
+
+.registration-alert.active {
+  display: flex;
+}
+
+.alert-text {
+  margin-right: 25px;
+}
+
+.close-alert {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: opacity 0.2s;
+}
+
+.close-alert:hover {
+  opacity: 0.8;
+}
+
+@keyframes slideIn {
+  from { top: -100px; opacity: 0; }
+  to { top: 20px; opacity: 1; }
+}
+
 /* 视频弹窗样式 */
 .video-modal {
     display: none;
