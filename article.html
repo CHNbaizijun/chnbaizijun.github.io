@@ -6,6 +6,11 @@
     <title>文章中心 | 白子俊</title>
     <link rel="stylesheet" href="assets/font-awesome/css/all.min.css">
     <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
+    
+    <!-- 新增必要的JS库 -->
+    <script src="//cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+
     <style>
         :root {
             --primary: #6D8B74;
@@ -254,6 +259,13 @@
     </div>
 
     <script>
+        // LeanCloud初始化
+        AV.init({
+          appId: '0lpjg6Zgwua9jqUZDeJMVxpr-gzGzoHsz',
+          appKey: 'gV34QMHiVXzzDiS4GdyXtZt9',
+          serverURL: 'https://0lpjzgw.lc-cn-n1-shared.com'
+        });
+
         // 弹窗控制
         const modal = document.getElementById('articleModal');
         const closeBtn = document.getElementById('closeModal');
@@ -262,6 +274,11 @@
         document.querySelectorAll('.article-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
+                // 移除其他文章的active状态
+                document.querySelectorAll('.article-link').forEach(l => l.classList.remove('active'));
+                // 为当前点击的文章添加active状态
+                this.classList.add('active');
+                
                 const filePath = this.getAttribute('data-file');
                 const title = this.textContent;
                 const dateString = this.closest('.article-meta').querySelector('.article-date').textContent;
@@ -297,48 +314,90 @@
             }
         });
         
-        // 加载评论
-        function loadComments(articleId) {
-            // 这里需要根据实际情况调整，示例使用本地存储模拟
-            const comments = JSON.parse(localStorage.getItem(articleId) || '[]');
-            let html = '';
-            comments.forEach(comment => {
-                html += `<div class="comment-item">
-                    <div class="comment-author">${comment.author} <span class="comment-date">${comment.date}</span></div>
-                    <div class="comment-content">${comment.content}</div>
-                </div>`;
-            });
-            document.getElementById('commentsList').innerHTML = html;
-            document.getElementById('commentCount').textContent = comments.length;
-        }
-        
-        // 提交评论
-        document.getElementById('submitComment').addEventListener('click', () => {
+        // 修改后的评论功能逻辑
+        document.getElementById('submitComment').addEventListener('click', async () => {
             const user = AV.User.current();
             if (!user) {
                 alert('请先登录');
                 return;
             }
-            
+
             const content = document.getElementById('commentInput').value.trim();
             if (!content) return;
-            
-            const articleId = document.querySelector('.article-link.active').getAttribute('data-file');
-            const date = new Date().toLocaleDateString();
-            
-            const comment = {
-                author: user.get('nickname') || user.getUsername(),
-                content: content,
-                date: date
-            };
-            
-            // 保存到本地存储
-            const comments = JSON.parse(localStorage.getItem(articleId) || '[]');
-            comments.push(comment);
-            localStorage.setItem(articleId, JSON.stringify(comments));
-            
-            loadComments(articleId);
-            document.getElementById('commentInput').value = '';
+
+            // 获取当前激活的文章ID
+            const activeLink = document.querySelector('.article-link.active');
+            if (!activeLink) {
+                alert('无法获取文章信息');
+                return;
+            }
+            const articleId = activeLink.getAttribute('data-file');
+
+            try {
+                // 保存评论到LeanCloud
+                const Comment = AV.Object.extend('Comment');
+                const newComment = new Comment();
+                
+                newComment.set('articleId', articleId);
+                newComment.set('content', content);
+                newComment.set('author', user.get('nickname') || user.getUsername());
+                newComment.set('user', user);
+                
+                await newComment.save();
+                
+                // 清空输入框并刷新评论列表
+                document.getElementById('commentInput').value = '';
+                loadComments(articleId);
+            } catch (err) {
+                console.error('评论提交失败:', err);
+                alert('评论提交失败，请稍后重试');
+            }
+        });
+
+        // 修改后的加载评论方法
+        async function loadComments(articleId) {
+            try {
+                const query = new AV.Query('Comment');
+                query.equalTo('articleId', articleId);
+                query.include('user');
+                query.descending('createdAt');
+                const comments = await query.find();
+
+                let html = '';
+                comments.forEach(comment => {
+                    const date = new Date(comment.get('createdAt')).toLocaleDateString();
+                    html += `<div class="comment-item">
+                        <div class="comment-author">${comment.get('author')} 
+                            <span class="comment-date">${date}</span>
+                        </div>
+                        <div class="comment-content">${comment.get('content')}</div>
+                    </div>`;
+                });
+
+                document.getElementById('commentsList').innerHTML = html;
+                document.getElementById('commentCount').textContent = comments.length;
+            } catch (err) {
+                console.error('加载评论失败:', err);
+                document.getElementById('commentsList').innerHTML = '评论加载失败';
+            }
+        }
+
+        // 用户状态检测
+        function checkAuth() {
+            const user = AV.User.current();
+            if (!user) {
+                alert('请先登录');
+                return false;
+            }
+            return true;
+        }
+
+        // 初始化用户状态
+        $(document).ready(() => {
+            const user = AV.User.current();
+            if (!user) {
+                alert('请登录后使用评论功能');
+            }
         });
     </script>
 </body>
