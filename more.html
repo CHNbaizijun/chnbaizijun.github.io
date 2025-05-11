@@ -8,12 +8,12 @@
     <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2C3E50;
-            --secondary: #4A6B8A;
-            --accent: #D4AF37;
-            --light: #F5F7FA;
+            --primary: #6D8B74;
+            --secondary: #94B49F;
+            --accent: #9DAB86;
+            --light: #F5F0E1;
             --white: #FFFFFF;
-            --dark: #1A1A1A;
+            --dark: #4D4D4D;
         }
         
         * {
@@ -76,7 +76,7 @@
             background: var(--white);
             border-radius: 8px;
             padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: var(--soft-shadow);
             margin-bottom: 30px;
         }
         
@@ -92,6 +92,7 @@
         .section-content {
             color: #555;
             margin-bottom: 20px;
+            line-height: 1.6;
         }
         
         .enter-button {
@@ -112,9 +113,9 @@
         }
         
         .enter-button:hover {
-            background-color: #c19b2e;
+            background-color: #899c71;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 5px 15px rgba(157, 171, 134, 0.3);
         }
         
         @media (max-width: 768px) {
@@ -141,14 +142,12 @@
             <p class="section-content">这里收录了我的所有文章和随笔，点击下方按钮查看完整列表。</p>
             <a href="article.html" class="enter-button">进入</a>
         </div>
-    </div>
- 	<!-- 头部保持不变，只展示新增部分 -->
-   	<div class="section-box">
+        
+        <div class="section-box">
             <h2 class="section-title">地址查询</h2>
             <p class="section-content">安全查询我的联系地址，请输入密码访问。</p>
             <a href="address.html" class="enter-button">进入</a>
+        </div>
     </div>
-</head>
-<!-- 其余部分保持不变 -->
 </body>
 </html>

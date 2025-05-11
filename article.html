@@ -8,12 +8,12 @@
     <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2C3E50;
-            --secondary: #4A6B8A;
-            --accent: #D4AF37;
-            --light: #F5F7FA;
+            --primary: #6D8B74;
+            --secondary: #94B49F;
+            --accent: #9DAB86;
+            --light: #F5F0E1;
             --white: #FFFFFF;
-            --dark: #1A1A1A;
+            --dark: #4D4D4D;
         }
         
         body {
@@ -60,7 +60,7 @@
             background: var(--white);
             border-radius: 8px;
             padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: var(--soft-shadow);
         }
         
         .article-item {
@@ -83,6 +83,18 @@
             color: var(--accent);
         }
         
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .article-date {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
         /* 弹窗样式 */
         .modal {
             display: none;
@@ -103,7 +115,7 @@
             border-radius: 8px;
             max-width: 800px;
             width: 90%;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            box-shadow: var(--soft-shadow);
             position: relative;
         }
         
@@ -129,6 +141,65 @@
             color: #999;
             cursor: pointer;
         }
+        
+        /* 评论区域 */
+        .comments-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--soft-shadow);
+        }
+        
+        .comments-section h3 {
+            font-size: 1.2em;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .comment-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comment-author {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .comment-date {
+            font-size: 0.8em;
+            color: #888;
+            margin-left: 10px;
+        }
+        
+        .comment-input-area {
+            margin-top: 30px;
+        }
+        
+        #commentInput {
+            width: 100%;
+            height: 100px;
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid var(--secondary);
+            border-radius: 6px;
+            resize: vertical;
+        }
+        
+        #submitComment {
+            padding: 10px 20px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #submitComment:hover {
+            background-color: #899c71;
+        }
     </style>
 </head>
 <body>
@@ -141,15 +212,24 @@
     <div class="article-list">
         <!-- 手动维护文章列表 -->
         <div class="article-item">
-            <a href="#" class="article-link" data-file="article/测试文件.txt">测试文件</a>
+            <div class="article-meta">
+                <a href="#" class="article-link" data-file="article/测试文件.txt">测试文件</a>
+                <span class="article-date">20230815</span>
+            </div>
         </div>
         
         <div class="article-item">
-            <a href="#" class="article-link" data-file="article/journey.txt">我的音乐学习之路</a>
+            <div class="article-meta">
+                <a href="#" class="article-link" data-file="article/journey.txt">我的音乐学习之路</a>
+                <span class="article-date">20230815</span>
+            </div>
         </div>
         
         <div class="article-item">
-            <a href="#" class="article-link" data-file="article/beethoven.txt">贝多芬作品分析</a>
+            <div class="article-meta">
+                <a href="#" class="article-link" data-file="article/beethoven.txt">贝多芬作品分析</a>
+                <span class="article-date">20230910</span>
+            </div>
         </div>
     </div>
 
@@ -159,6 +239,17 @@
             <span class="close-modal" id="closeModal">&times;</span>
             <h2 class="modal-title" id="modalTitle"></h2>
             <div class="modal-text" id="modalText"></div>
+            
+            <!-- 评论区域 -->
+            <div class="comments-section">
+                <h3>读者评论（<span id="commentCount">0</span>）</h3>
+                <div id="commentsList"></div>
+                
+                <div class="comment-input-area">
+                    <textarea id="commentInput" placeholder="请输入您的评论..."></textarea>
+                    <button id="submitComment">提交评论</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -173,9 +264,11 @@
                 e.preventDefault();
                 const filePath = this.getAttribute('data-file');
                 const title = this.textContent;
+                const dateString = this.closest('.article-meta').querySelector('.article-date').textContent;
+                const formattedDate = `${dateString.slice(0,4)}-${dateString.slice(4,6)}-${dateString.slice(6,8)}`;
                 
                 // 显示加载状态
-                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalTitle').textContent = `${title} (${formattedDate})`;
                 document.getElementById('modalText').textContent = '加载中...';
                 modal.style.display = 'block';
                 
@@ -184,6 +277,7 @@
                     .then(response => response.text())
                     .then(content => {
                         document.getElementById('modalText').textContent = content;
+                        loadComments(filePath);
                     })
                     .catch(() => {
                         document.getElementById('modalText').textContent = '加载失败，请稍后重试';
@@ -201,6 +295,50 @@
             if (e.target === modal) {
                 modal.style.display = 'none';
             }
+        });
+        
+        // 加载评论
+        function loadComments(articleId) {
+            // 这里需要根据实际情况调整，示例使用本地存储模拟
+            const comments = JSON.parse(localStorage.getItem(articleId) || '[]');
+            let html = '';
+            comments.forEach(comment => {
+                html += `<div class="comment-item">
+                    <div class="comment-author">${comment.author} <span class="comment-date">${comment.date}</span></div>
+                    <div class="comment-content">${comment.content}</div>
+                </div>`;
+            });
+            document.getElementById('commentsList').innerHTML = html;
+            document.getElementById('commentCount').textContent = comments.length;
+        }
+        
+        // 提交评论
+        document.getElementById('submitComment').addEventListener('click', () => {
+            const user = AV.User.current();
+            if (!user) {
+                alert('请先登录');
+                return;
+            }
+            
+            const content = document.getElementById('commentInput').value.trim();
+            if (!content) return;
+            
+            const articleId = document.querySelector('.article-link.active').getAttribute('data-file');
+            const date = new Date().toLocaleDateString();
+            
+            const comment = {
+                author: user.get('nickname') || user.getUsername(),
+                content: content,
+                date: date
+            };
+            
+            // 保存到本地存储
+            const comments = JSON.parse(localStorage.getItem(articleId) || '[]');
+            comments.push(comment);
+            localStorage.setItem(articleId, JSON.stringify(comments));
+            
+            loadComments(articleId);
+            document.getElementById('commentInput').value = '';
         });
     </script>
 </body>

@@ -8,12 +8,12 @@
     <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2C3E50;
-            --secondary: #4A6B8A;
-            --accent: #D4AF37;
-            --light: #F5F7FA;
+            --primary: #6D8B74;
+            --secondary: #94B49F;
+            --accent: #9DAB86;
+            --light: #F5F0E1;
             --white: #FFFFFF;
-            --dark: #1A1A1A;
+            --dark: #4D4D4D;
             --error: #e74c3c;
         }
         
@@ -79,7 +79,7 @@
             padding: 40px;
             background: var(--white);
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: var(--soft-shadow);
             text-align: center;
         }
         
@@ -102,7 +102,7 @@
         .password-input:focus {
             border-color: var(--accent);
             outline: none;
-            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 0 2px rgba(157, 171, 134, 0.2);
         }
         
         .submit-button {
@@ -118,7 +118,7 @@
         }
         
         .submit-button:hover {
-            background-color: #c19b2e;
+            background-color: #899c71;
             transform: translateY(-2px);
         }
         
@@ -133,10 +133,11 @@
             display: none;
             margin-top: 30px;
             padding: 30px;
-            background: #f9f9f9;
+            background: var(--white);
             border-radius: 8px;
             text-align: left;
             animation: fadeIn 0.5s ease;
+            box-shadow: var(--soft-shadow);
         }
         
         .address-title {
