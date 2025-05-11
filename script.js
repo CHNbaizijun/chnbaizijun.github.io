@@ -57,18 +57,6 @@ function updateUserStatus() {
   }
 }
 
-$(document).on('click', '#toggleUserPanel', function () {
-  const panel = $('#floatingUserPanel');
-  const btn = $(this);
-  if (panel.hasClass('active')) {
-    panel.removeClass('active');
-    btn.text('展开个人中心');
-  } else {
-    panel.addClass('active');
-    btn.text('收起');
-  }
-});
-
 $(document).ready(function () {
   updateUserStatus();
 
@@ -103,7 +91,6 @@ $(document).ready(function () {
     $(`#${tab}Page`).addClass('active');
   });
 
-  // 修改后的注册逻辑
   $('#signupBtn').click(async () => {
     const nickname = $('#signupNickname').val().trim();
     const email = $('#signupEmail').val().trim();
@@ -135,20 +122,15 @@ $(document).ready(function () {
       
       await user.signUp();
       
-      // 发送验证邮件
       await AV.User.requestEmailVerify(email);
       
-      // 强制退出当前用户
       await AV.User.logOut();
 
-      // 显示嵌入式弹窗
       $('#regVerifyAlert').addClass('active');
-      // 8秒后自动关闭
       setTimeout(() => {
         $('#regVerifyAlert').removeClass('active');
       }, 8000);
 
-      // 关闭按钮事件
       $('.close-alert').click(() => {
         $('#regVerifyAlert').removeClass('active');
       });
@@ -193,7 +175,6 @@ $(document).ready(function () {
     }
   });
 
-  // 修改后的登录逻辑
   $('#loginBtn').click(async () => {
     const email = $('#loginEmail').val();
     const password = $('#loginPassword').val();
@@ -201,7 +182,6 @@ $(document).ready(function () {
     try {
       const user = await AV.User.logIn(email, password);
       
-      // 检查邮箱是否已验证
       if (!user.get('emailVerified')) {
         await AV.User.logOut(); 
         alert("安全提示：请到您的电子邮箱验证账户后再登录！");
@@ -214,7 +194,6 @@ $(document).ready(function () {
       updateUserStatus();
       
     } catch (err) {
-      // 错误信息定制
       if (err.message.includes("Email address isn't verified")) {
         alert("安全提示：请到您的电子邮箱验证账户后再登录！");
       } else {
@@ -293,13 +272,28 @@ $(document).ready(function () {
     );
   });
 
+  // 修复后的用户中心面板展开/收起逻辑
+  $(document).on('click', '#toggleUserPanel', function () {
+    const panel = $('#floatingUserPanel');
+    const btn = $(this);
+    
+    if (panel.hasClass('active')) {
+      // 如果面板处于展开状态，则收起
+      panel.removeClass('active');
+      btn.text('展开个人中心');
+    } else {
+      // 如果面板处于收起状态，则展开
+      panel.addClass('active');
+      btn.text('收起');
+    }
+  });
+
   const loader = document.querySelector(".loader");
   if (loader) {
     loader.classList.add("hidden");
     setTimeout(() => loader.remove(), 500);
   }
 
-  // 重新发送验证邮件
   async function resendVerifyEmail() {
     const email = $('#signupEmail').val().trim();
     if (!validateEmail(email)) return showError('请输入有效邮箱地址');

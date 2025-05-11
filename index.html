@@ -5,36 +5,50 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>白子俊 | 浙江音乐学院附中钢琴专业</title>
+  
+  <!-- 引入样式表 -->
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- 引入Font Awesome图标库 -->
+  <link rel="stylesheet" href="assets/font-awesome/css/all.min.css" />
+  
+  <!-- 引入阿里巴巴普惠体字体 -->
   <link href="https://fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.15.0/dist/av-min.js"></script>
+  
+  <!-- 引入AVOSCloud SDK -->
+  <script src="assets/js/av-min.js"></script>
 </head>
 
 <body>
-  <!-- 添加首页标识 -->
+  <!-- 页面首页锚点标识 -->
   <div id="home"></div>
   
-  <!-- 邮箱验证提示 -->
+  <!-- 邮箱验证提示框 -->
   <div class="email-verify-tip" id="emailVerifyTip">
     验证邮件已发送至您的邮箱，请查收后完成验证
+    <!-- 验证邮件重新发送按钮 -->
     <button onclick="resendVerifyEmail()" class="resend-btn">重新发送</button>
   </div>
   
-  <!-- 遮罩层 -->
+  <!-- 登录遮罩层 -->
   <div id="authOverlay">
+    <!-- 登录提示信息 -->
     <div id="authMessage">请登录后查看页面</div>
+    <!-- 登录按钮 -->
     <button class="cta-button" id="overlayLoginButton">
         立即登录
     </button>
   </div>
   
-  <!-- 导航栏 -->
+  <!-- 导航栏组件 -->
   <nav class="navbar">
     <div class="nav-brand">
+      <!-- 网站标志 -->
       <div class="logo">白子俊</div>
+      <!-- 导航链接 -->
       <div class="nav-links">
         <a href="#home">首页</a>
+        <!-- 需要认证的页面链接 -->
         <a href="#about" data-auth>个人简介</a>
         <a href="#achievements" data-auth>获奖情况</a>
         <a href="#teachers" data-auth>学习经历</a>
@@ -45,7 +59,9 @@
     </div>
     
     <div class="nav-controls">
+      <!-- 用户信息显示区域 -->
       <div class="user-info" id="userInfo"></div>
+      <!-- 移动端菜单按钮 -->
       <div class="hamburger">
         <div class="line"></div>
         <div class="line"></div>
@@ -55,20 +71,24 @@
   </nav>
 
   <!-- 悬浮登录按钮 -->
-  <div class="login-float-button" id="loginButton"><i class="fas fa-user-lock"></i></div>
+  <div class="login-float-button" id="loginButton">
+    <i class="fas fa-user-lock"></i>
+  </div>
 
   <!-- 登录弹窗 -->
   <div class="login-modal" id="loginModal">
     <div class="login-box">
+        <!-- 关闭按钮 -->
         <span class="login-close" id="closeLogin">&times;</span>
         
+        <!-- 登录选项卡 -->
         <div class="form-tabs">
             <button class="tab active" data-tab="login">登录</button>
             <button class="tab" data-tab="signup">注册</button>
             <button class="tab" data-tab="forgot">找回密码</button>
         </div>
 
-        <!-- 独立页面式内容 -->
+        <!-- 登录页面内容 -->
         <div class="tab-page active" id="loginPage">
             <div class="error-message"></div>
             <input type="email" id="loginEmail" placeholder="注册邮箱">
@@ -76,22 +96,26 @@
             <button id="loginBtn">立即登录</button>
         </div>
 
+        <!-- 注册页面内容 -->
         <div class="tab-page" id="signupPage">
             <div class="error-message"></div>
             <input type="text" id="signupNickname" placeholder="昵称（2-16位字符）">
             <input type="email" id="signupEmail" placeholder="邮箱">
             <input type="password" id="signupPassword" placeholder="密码（至少8位）" class="pwd-strength">
+            <!-- 密码强度提示 -->
             <div class="password-strength"></div>
             <input type="password" id="signupPasswordConfirm" placeholder="确认密码">
             <button id="signupBtn">立即注册</button>
         </div>
 
+        <!-- 找回密码页面内容 -->
         <div class="tab-page" id="forgotPage">
             <div class="error-message"></div>
             <input type="email" id="forgotEmail" placeholder="输入注册邮箱">
             <button id="forgotBtn">发送重置邮件</button>
         </div>
 
+        <!-- 用户协议勾选框 -->
         <div class="terms-box">
             <input type="checkbox" id="agreeTerms" checked />
             <label for="agreeTerms">我已阅读并同意<a href="/privacy.html" target="_blank">隐私政策</a></label>
@@ -99,31 +123,34 @@
     </div>
   </div>
 
-  <!-- 首页内容 -->
+  <!-- 首页内容区域 -->
   <section class="hero" id="home">
       <div class="hero-content">
           <h1>白子俊</h1>
           <p>浙江音乐学院附中高三钢琴专业学生</p>
           <div class="hero-buttons">
+              <!-- 播放视频按钮 -->
               <button class="cta-button" id="watch-performance">观看演奏视频</button>
-              <button class="cta-button outline" onclick="window.location.href='https://chnbaizijun.github.io/more.html'" data-auth>更多</button>
+              <!-- 更多内容按钮 -->
+              <button class="cta-button outline" onclick="window.location.href='more.html'" data-auth>更多</button>
           </div>
       </div>
+      <!-- 滚动提示箭头 -->
       <div class="scroll-down">
           <i class="fas fa-chevron-down"></i>
       </div>
   </section>
 
-  <!-- 个人简介 -->
+  <!-- 个人简介部分 -->
   <section class="about" id="about">
       <h2 class="section-title">个人简介</h2>
       <div class="about-content">
           <div class="about-text">
-              <p>白子俊，2007年出生，4岁开始学习钢琴，现为浙江音乐学院附中高三钢琴专业学生，2025年考入中央音乐学院钢琴系。</p>
+              <p>白子俊，现为浙江音乐学院附中高三钢琴专业学生，2025年考入中央音乐学院钢琴系。</p>
               <p>2022年以专业和文化课第一的成绩升入高中部，连续五年评为校级三好学生并获得奖学金，现任浙音附中学生会主席。</p>
               <p>2021年入选浙江音乐学院李叔同学院"拔尖人才培养计划"。</p>
               <p>曾与浙江交响乐团、台北国际联合青年交响乐团合作演出，指挥家孙舒彦、韦丹文等合作演出钢琴协奏曲。成功举办了三场个人独奏音乐会。</p>
-              <p>作为第十届施坦威全国青少年钢琴比赛总决赛的获奖选手，应邀在施坦威霍洛维茨音乐厅举办了"施坦威获奖选手导赏音乐会"。入学以来参加了近40场学院和附中组织的社会实践活动演出，2021年获得浙江音乐学院暑期社会实践先进个人称号，2023年度浙江音乐学院优秀团员。</p>
+              <p>入学以来参加了近40场学院和附中组织的社会实践活动演出，2021年获得浙江音乐学院暑期社会实践先进个人称号，2023年度浙江音乐学院优秀团员。</p>
           </div>
           <div class="about-image">
               <img src="../library/personalphoto.jpg" alt="白子俊">
@@ -131,7 +158,7 @@
       </div>
   </section>
 
-  <!-- 获奖情况 -->
+  <!-- 获奖情况部分 -->
   <section class="achievements" id="achievements">
       <h2 class="section-title">获奖情况</h2>
       <div class="achievements-grid">
@@ -178,7 +205,7 @@
       </div>
   </section>
 
-  <!-- 学习经历 -->
+  <!-- 学习经历部分 -->
   <section class="teachers" id="teachers">
       <h2 class="section-title">学习经历</h2>
       <div class="teachers-container">
@@ -204,7 +231,7 @@
       </div>
   </section>
 
-  <!-- 艺术历程 -->
+  <!-- 艺术历程部分 -->
   <section class="timeline-section" id="timeline">
       <h2 class="section-title">艺术历程</h2>
       <div class="timeline">
@@ -261,7 +288,7 @@
       </div>
   </section>
 
-  <!-- 工具站点 -->
+  <!-- 工具站点部分 -->
   <section class="tools-section" id="tools">
       <h2 class="section-title">工具站点 <i class="fas fa-chevron-down toggle-icon"></i></h2>
       <div class="tools-container">
@@ -290,7 +317,7 @@
       </div>
   </section>
 
-  <!-- 页脚 -->
+  <!-- 页脚部分 -->
   <footer id="contact">
       <p>2019级浙江音乐学院附属音乐学校钢琴专业</p>
       <div class="contact-info">
@@ -308,7 +335,7 @@
       </div>
   </footer>
 
-  <!-- 悬浮：个人中心面板 -->
+  <!-- 悬浮个人中心面板 -->
   <div class="floating-panel" id="floatingUserPanel">
       <h3>个人中心</h3>
       <p><strong>昵称：</strong><span id="pc-username">--</span></p>
@@ -318,13 +345,13 @@
       <p><strong>登录时间：</strong><span id="pc-login">--</span></p>
   </div>
 
-  <!-- 悬浮：展开/收起按钮 -->
+  <!-- 悬浮面板展开/收起按钮 -->
   <div class="floating-toggle" id="toggleUserPanel">收起</div>
 
-  <!-- 悬浮：未登录提示 -->
+  <!-- 悬浮未登录提示 -->
   <div class="login-float-tip" id="loginFloatTip">请先登录以查看个人中心</div>
   
-  <!-- 播放视频弹窗 -->
+  <!-- 视频播放弹窗 -->
   <div id="videoModal" class="video-modal">
       <div class="video-modal-content">
           <span class="close-video">&times;</span>
@@ -335,13 +362,16 @@
       </div>
   </div>
 
-  <!-- 注册提示弹窗 -->
+  <!-- 注册验证提示弹窗 -->
   <div id="regVerifyAlert" class="registration-alert">
     <span class="alert-text">重要：验证邮件已发送，请前往您的电子邮箱对此账号进行验证，否则您以后将无法登录！（人机识别系统）</span>
     <button class="close-alert">&times;</button>
   </div>
 
-  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- 引入jQuery库 -->
+  <script src="assets/js/jquery.min.js"></script>
+  
+  <!-- 引入主脚本文件 -->
   <script src="script.js"></script>
 </body>
 </html>

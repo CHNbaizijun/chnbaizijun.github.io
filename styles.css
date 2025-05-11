@@ -1,41 +1,47 @@
+/* 根元素变量设置全局样式 */
 :root {
+    /* 主题颜色变量 */
     --primary: #2C3E50;  /* 深蓝灰主色 */
     --secondary: #4A6B8A;  /* 蓝灰辅色 */
     --light: #F5F7FA;  /* 浅灰背景 */
     --dark: #1A1A1A;  /* 深灰文字 */
-    --accent: #D4AF37;  /* 金色 */
+    --accent: #D4AF37;  /* 金色强调色 */
     --white: #FFFFFF;
     --gray: #E1E5EA;
     --dark-blue: #1E2B3A;
-    --transition: all 0.3s ease;
+    --transition: all 0.3s ease;  /* 全局过渡动效 */
 }
 
+/* 全局样式重置与字体规范 */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "AlibabaPuHuiTi", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-family: "AlibabaPuHuiTi", "PingFang SC", "Microsoft YaHei", sans-serif;  /* 统一中文字体 */
 }
 
+/* 基础页面样式 */
 body {
     background-color: var(--light);
     color: var(--dark);
     line-height: 1.6;
-    overflow-x: hidden;
+    overflow-x: hidden;  /* 禁用水平滚动条 */
 }
 
 body.no-scroll {
+    /* 滚动锁定样式 */
     overflow: hidden !important;
     position: fixed;
     width: 100%;
     height: 100%;
 }
 
+/* 标题统一样式 */
 h1, h2, h3 {
     font-weight: 500;
 }
 
-/* 遮罩层样式 */
+/* 登录遮罩层样式 */
 #authOverlay {
     position: fixed !important;
     top: 0 !important;
@@ -43,8 +49,8 @@ h1, h2, h3 {
     z-index: 9998 !important;
     width: 100vw !important;
     height: 100vh !important;
-    background: rgba(255,255,255,0.97) !important;
-    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.97) !important;  /* 半透明遮罩 */
+    backdrop-filter: blur(10px);  /* 模糊效果 */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -57,26 +63,28 @@ h1, h2, h3 {
     color: var(--primary);
 }
 
-/* 导航栏 */
+/* 导航栏样式 */
 .navbar {
     position: fixed;
     width: 100%;
-    padding: 20px 5%;
+    padding: 20px 5%;  /* 内边距 */
     background-color: var(--white);
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-    transition: var(--transition);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);  /* 阴影效果 */
+    transition: var(--transition);  /* 使用全局过渡 */
 }
 
 .navbar.scrolled {
+    /* 滚动时导航栏样式变化 */
     padding: 15px 5%;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .logo {
+    /* 网站标志样式 */
     color: var(--primary);
     font-size: 24px;
     font-weight: 600;
@@ -84,11 +92,13 @@ h1, h2, h3 {
 }
 
 .nav-links {
+    /* 导航链接容器 */
     display: flex;
     gap: 30px;
 }
 
 .nav-links a {
+    /* 导航链接样式 */
     color: var(--dark);
     text-decoration: none;
     font-size: 16px;
@@ -97,6 +107,7 @@ h1, h2, h3 {
     padding: 5px 0;
 }
 
+/* 导航链接悬停效果 */
 .nav-links a::after {
     content: '';
     position: absolute;
@@ -116,8 +127,9 @@ h1, h2, h3 {
     color: var(--primary);
 }
 
+/* 移动端菜单按钮 */
 .hamburger {
-    display: none;
+    display: none;  /* 默认隐藏 */
     cursor: pointer;
     flex-direction: column;
     justify-content: space-between;
@@ -125,6 +137,7 @@ h1, h2, h3 {
     height: 18px;
 }
 
+/* 移动端菜单线样式 */
 .hamburger .line {
     width: 100%;
     height: 2px;
@@ -132,6 +145,7 @@ h1, h2, h3 {
     transition: var(--transition);
 }
 
+/* 移动端菜单激活状态样式 */
 .hamburger.active .line:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
 }
@@ -144,17 +158,17 @@ h1, h2, h3 {
     transform: translateY(-8px) rotate(-45deg);
 }
 
-/* 登录弹窗样式 */
+/* 登录弹窗基础样式 */
 .login-modal {
     display: none;
     position: fixed;
-    z-index: 9999 !important;  /* 高于遮罩层 */
+    z-index: 9999 !important;  /* 确保弹窗在最上层 */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(30, 43, 58, 0.8);
-    backdrop-filter: blur(5px);
+    background: rgba(30, 43, 58, 0.8);  /* 半透明黑色背景 */
+    backdrop-filter: blur(5px);  /* 背景模糊效果 */
     justify-content: center;
     align-items: center;
 }
@@ -164,6 +178,7 @@ h1, h2, h3 {
     opacity: 1;
 }
 
+/* 登录按钮样式 */
 .login-float-button {
     position: fixed;
     bottom: 30px;
@@ -184,7 +199,7 @@ h1, h2, h3 {
 }
 
 .login-float-button:hover {
-    background-color: #c19e2e;
+    background-color: #c19e2e;  /* 悬停变色效果 */
 }
 
 /* 选项卡页面样式 */
@@ -269,7 +284,7 @@ h1, h2, h3 {
     background: #c19e2e;
 }
 
-/* 首页区域 */
+/* 首页区域样式 */
 .hero {
     height: 100vh;
     position: relative;
@@ -292,7 +307,7 @@ h1, h2, h3 {
     color: var(--white);
     transform: translateY(20px);
     opacity: 0;
-    animation: fadeInUp 1s forwards 0.3s;
+    animation: fadeInUp 1s forwards 0.3s;  /* 使用动画 */
 }
 
 .hero-content h1 {
@@ -352,7 +367,7 @@ h1, h2, h3 {
     transform: translateX(-50%);
     color: var(--white);
     font-size: 24px;
-    animation: bounce 2s infinite;
+    animation: bounce 2s infinite;  /* 下方箭头动画 */
     cursor: pointer;
     opacity: 0.7;
     transition: var(--transition);
@@ -362,7 +377,7 @@ h1, h2, h3 {
     opacity: 1;
 }
 
-/* 关于部分 */
+/* 关于部分样式 */
 .about {
     padding: 100px 5%;
     background-color: var(--white);
@@ -424,10 +439,10 @@ h1, h2, h3 {
 }
 
 .about-image:hover img {
-    transform: scale(1.03);
+    transform: scale(1.03);  /* 图片悬停放大效果 */
 }
 
-/* 获奖部分 */
+/* 获奖部分样式 */
 .achievements {
     padding: 100px 5%;
     background-color: var(--light);
@@ -455,8 +470,6 @@ h1, h2, h3 {
 .achievement-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0));
@@ -500,7 +513,7 @@ h1, h2, h3 {
     z-index: 1;
 }
 
-/* 导师部分 */
+/* 导师部分样式 */
 .teachers {
     padding: 100px 5%;
     background-color: var(--white);
@@ -571,7 +584,7 @@ h1, h2, h3 {
     line-height: 1.6;
 }
 
-/* 时间线 */
+/* 时间线样式 */
 .timeline-section {
     padding: 100px 5%;
     background-color: var(--light);
@@ -661,7 +674,7 @@ h1, h2, h3 {
     line-height: 1.7;
 }
 
-/* 工具站点 */
+/* 工具站点样式 */
 .tools-section {
     padding: 80px 5% 40px;
     background-color: var(--white);
@@ -729,7 +742,7 @@ h1, h2, h3 {
     transform: rotate(180deg);
 }
 
-/* 页脚 */
+/* 页脚样式 */
 footer {
     background-color: var(--dark-blue);
     color: var(--white);
@@ -792,7 +805,7 @@ footer {
     color: var(--accent);
 }
 
-/* 邮箱验证提示 */
+/* 邮箱验证提示样式 */
 .email-verify-tip {
   position: fixed;
   top: 20px;
@@ -910,7 +923,7 @@ footer {
     opacity: 1;
 }
 
-/* 动画 */
+/* 动画关键帧定义 */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -934,7 +947,7 @@ footer {
     }
 }
 
-/* 响应式设计 */
+/* 响应式设计断点 */
 @media (max-width: 992px) {
     .about-content {
         gap: 40px;
@@ -1077,7 +1090,7 @@ footer {
     }
 }
 
-/* 悬浮窗：个人中心 */
+/* 悬浮窗：个人中心样式 */
 .floating-panel {
     position: fixed;
     bottom: 20px;
@@ -1133,7 +1146,7 @@ footer {
     display: block;
 }
 
-/* 登录提示浮窗 */
+/* 登录提示浮窗样式 */
 .login-float-tip {
     position: fixed;
     bottom: 20px;
@@ -1149,15 +1162,8 @@ footer {
     display: none;
 }
 
-/* 动画 */
+/* 动画关键帧补充 */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-/* 确保中文字体兼容 */
-.login-box h2,
-.tab,
-.login-box input {
-    font-family: "AlibabaPuHuiTi", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
