@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人中心 | 白子俊</title>
+  
+  <!-- 复用原站样式 -->
+  <link rel="stylesheet" href="styles.css" />
+  
+  <!-- 单独样式补充 -->
+  <style>
+  .profile-container {
+    max-width: 800px;
+    margin: 100px auto 50px;
+    padding: 40px;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--soft-shadow);
+  }
+
+  .profile-header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 20px;
+  }
+
+  .info-display {
+    background: var(--light);
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+  }
+
+  .info-item {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .info-label {
+    width: 120px;
+    color: var(--primary);
+    font-weight: 500;
+  }
+
+  .info-content {
+    flex: 1;
+    color: var(--dark);
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--primary);
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+  .btn-danger {
+    background: #ff6b6b !important;
+  }
+  </style>
+</head>
+
+<body>
+  <!-- 导航栏（与主页一致） -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <div class="logo">白子俊</div>
+      <div class="nav-links">
+        <a href="index.html">返回首页</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="profile-container">
+    <!-- 账户信息展示 -->
+    <div class="info-display">
+      <div class="info-item">
+        <div class="info-label">用户ID：</div>
+        <div class="info-content" id="infoId">--</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">注册邮箱：</div>
+        <div class="info-content" id="infoEmail">--</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">注册时间：</div>
+        <div class="info-content" id="infoCreated">--</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">最后登录：</div>
+        <div class="info-content" id="infoLogin">--</div>
+      </div>
+    </div>
+
+    <!-- 信息编辑表单 -->
+    <form id="profileForm">
+      <div class="form-group">
+        <label>修改昵称</label>
+        <input type="text" class="form-control" 
+               id="profileName" required
+               placeholder="2-16位字符">
+      </div>
+
+      <div class="form-group">
+        <label>修改邮箱（需重新验证）</label>
+        <input type="email" class="form-control" 
+               id="profileEmail" required>
+      </div>
+
+      <div class="form-group">
+        <label>修改密码（留空不修改）</label>
+        <input type="password" class="form-control"
+               id="newPassword" 
+               placeholder="至少8位字符">
+        <div class="password-strength"></div>
+      </div>
+
+      <div class="action-buttons">
+        <button type="submit" class="cta-button">保存更改</button>
+        <button type="button" class="cta-button btn-danger" 
+                id="deleteAccount">注销账号</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 页脚（与主页完全一致） -->
+  <footer id="contact">
+    <p>笃行致远  事必尽善</p>
+    <div class="contact-info">
+      <p>WeChat: FreedomOfSpace</p>
+      <p>电子邮件: CHNbaizijun@163.com</p>
+    </div>
+    <div class="social-icons">
+      <a href="#"><i class="fab fa-weixin"></i></a>
+      <a href="#"><i class="fab fa-weibo"></i></a>
+      <a href="#"><i class="fab fa-qq"></i></a>
+      <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
+    </div>
+    <div class="beian">
+      <a href="https://beian.miit.gov.cn">京ICP备XXXXXXXX号</a>
+    </div>
+  </footer>
+
+  <!-- 复用原站脚本 -->
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/av-min.js"></script>
+  <script>
+  // 初始化AV
+  AV.init({
+    appId: '0lpjg6Zgwua9jqUZDeJMVxpr-gzGzoHsz',
+    appKey: 'gV34QMHiVXzzDiS4GdyXtZt9',
+    serverURL: 'https://0lpjzgw.lc-cn-n1-shared.com'
+  });
+
+  // 加载用户信息
+  function loadProfile() {
+    const user = AV.User.current();
+    if (!user) {
+      alert('请先登录');
+      window.location.href = 'index.html';
+      return;
+    }
+
+    // 显示账户信息
+    $('#infoId').text(user.id);
+    $('#infoEmail').text(user.getEmail());
+    $('#infoCreated').text(new Date(user.createdAt).toLocaleString());
+    $('#infoLogin').text(new Date(user.updatedAt).toLocaleString());
+    
+    // 填充表单
+    $('#profileName').val(user.get('nickname') || '');
+    $('#profileEmail').val(user.getEmail() || '');
+  }
+
+  // 保存修改
+  $('#profileForm').submit(async function(e) {
+    e.preventDefault();
+    const user = AV.User.current();
+    if (!user) return;
+
+    const newName = $('#profileName').val().trim();
+    const newEmail = $('#profileEmail').val().trim();
+    const newPassword = $('#newPassword').val();
+
+    try {
+      // 验证昵称
+      if (newName.length < 2 || newName.length > 16) {
+        throw new Error('昵称需为2-16位字符');
+      }
+
+      // 更新信息
+      user.setUsername(newName);
+      user.set('nickname', newName);
+
+      // 邮箱变更处理
+      if (newEmail !== user.getEmail()) {
+        user.setEmail(newEmail);
+        await user.save();
+        alert('验证邮件已发送至新邮箱，请完成验证');
+      }
+
+      // 密码变更处理
+      if (newPassword) {
+        if (newPassword.length < 8) {
+          throw new Error('密码至少需要8位');
+        }
+        user.setPassword(newPassword);
+      }
+
+      await user.save();
+      alert('信息更新成功');
+      loadProfile(); // 刷新显示
+    } catch (err) {
+      alert('操作失败：' + err.message);
+    }
+  });
+
+  // 注销账户
+  $('#deleteAccount').click(async () => {
+    if (!confirm('确定永久注销账户吗？所有数据将被删除！')) return;
+    
+    try {
+      await AV.User.current().destroy();
+      await AV.User.logOut();
+      alert('账户已永久删除');
+      window.location.href = 'index.html';
+    } catch (err) {
+      alert('操作失败：' + err.message);
+    }
+  });
+
+  // 初始化
+  $(document).ready(() => {
+    if (!AV.User.current()) {
+      window.location.href = 'index.html';
+    }
+    loadProfile();
+  });
+  </script>
+</body>
+</html>
