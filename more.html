@@ -76,7 +76,7 @@
             background: var(--white);
             border-radius: 8px;
             padding: 30px;
-            box-shadow: var(--soft-shadow);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             margin-bottom: 30px;
         }
         
@@ -127,6 +127,55 @@
                 padding: 20px;
             }
         }
+
+        /* 页脚样式 */
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 60px 20px 30px;
+            text-align: center;
+            font-size: 0.95em;
+            margin-top: 40px;
+        }
+
+        .contact-info {
+            margin: 20px 0;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+
+        .social-icons {
+            margin: 30px 0;
+        }
+
+        .social-icons a {
+            color: var(--white);
+            margin: 0 15px;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent);
+            opacity: 1;
+        }
+
+        .beian {
+            margin-top: 30px;
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .beian a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .beian a:hover {
+            color: var(--accent);
+        }
     </style>
 </head>
 <body>
@@ -149,5 +198,24 @@
             <a href="address.html" class="enter-button">进入</a>
         </div>
     </div>
+
+    <!-- 页脚部分 -->
+    <footer>
+        <p>2019级浙江音乐学院附属音乐学校钢琴专业</p>
+        <div class="contact-info">
+            <p>WeChat: FreedomOfSpace</p>
+            <p>电子邮件: CHNbaizijun@163.com</p>
+        </div>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-weixin"></i></a>
+            <a href="#"><i class="fab fa-weibo"></i></a>
+            <a href="#"><i class="fab fa-qq"></i></a>
+            <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
+        </div>
+        <div class="beian">
+            <a href="https://beian.miit.gov.cn">京ICP备XXXXXXXX号</a>
+        </div>
+    </footer>
+
 </body>
 </html>
