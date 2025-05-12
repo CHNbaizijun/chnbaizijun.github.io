@@ -449,25 +449,46 @@ h1, h2, h3 {
 .achievements {
     padding: 100px 5%;
     background-color: var(--light);
+    overflow: hidden; /* 隐藏溢出内容 */
 }
 
-.achievements-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+.achievements-container {
     max-width: 1200px;
     margin: 0 auto;
+    padding-bottom: 20px; /* 给滚动条留空间 */
 }
 
+.achievements-scroll {
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    scroll-behavior: smooth; /* 平滑滚动 */
+    -webkit-overflow-scrolling: touch; /* 移动端优化 */
+    padding-bottom: 15px; /* 滚动条位置调整 */
+}
+
+/* 隐藏滚动条 */
+.achievements-scroll::-webkit-scrollbar {
+    height: 8px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+.achievements-scroll::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+}
+
+/* 卡片样式 */
 .achievement-card {
+    flex: 0 0 300px; /* 固定卡片宽度 */
     background: var(--white);
     padding: 30px;
     border-radius: 8px;
     box-shadow: var(--soft-shadow);
     transition: var(--transition);
     border-top: 3px solid var(--accent);
-    position: relative;
-    overflow: hidden;
+    scroll-snap-align: start; /* 滚动对齐 */
 }
 
 .achievement-card::before {
@@ -502,16 +523,6 @@ h1, h2, h3 {
     color: #666;
     font-size: 0.95em;
     line-height: 1.7;
-    position: relative;
-    z-index: 1;
-}
-
-.year-badge {
-    color: var(--accent);
-    font-size: 0.9em;
-    font-weight: bold;
-    display: inline-block;
-    margin-bottom: 10px;
     position: relative;
     z-index: 1;
 }
@@ -656,7 +667,7 @@ h1, h2, h3 {
 
 .timeline-content:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
 .timeline-content::before {

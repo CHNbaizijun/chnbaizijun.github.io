@@ -323,4 +323,29 @@ $(document).ready(function () {
         $('body').addClass('no-scroll');
     }
   });
+
+  // 自动滚动实现（新增）
+  let scrollPosition = 0;
+  const scrollContainer = $('.achievements-scroll')[0];
+
+  function autoScroll() {
+    if (scrollContainer.scrollWidth - scrollContainer.clientWidth > scrollPosition) {
+        scrollPosition += 1;
+    } else {
+        scrollPosition = 0;
+    }
+    scrollContainer.scrollTo({
+        left: scrollPosition,
+        behavior: 'auto'
+    });
+  }
+
+  // 开启自动滚动（根据需要调整间隔时间）
+  let scrollInterval = setInterval(autoScroll, 30);
+
+  // 当鼠标悬停时暂停滚动
+  $('.achievements-scroll').hover(
+      () => clearInterval(scrollInterval),
+      () => scrollInterval = setInterval(autoScroll, 30)
+  );
 });
