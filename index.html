@@ -43,19 +43,20 @@
   <!-- 导航栏组件 -->
   <nav class="navbar">
     <div class="nav-brand">
-      <!-- 网站标志 -->
-      <div class="logo">白子俊</div>
-      <!-- 导航链接 -->
-      <div class="nav-links">
-        <a href="#home">首页</a>
-        <!-- 需要认证的页面链接 -->
-        <a href="#about" data-auth>个人简介</a>
-        <a href="#achievements" data-auth>获奖情况</a>
-        <a href="#teachers" data-auth>学习经历</a>
-        <a href="#timeline" data-auth>艺术历程</a>
-        <a href="#tools" data-auth>工具站点</a>
-        <a href="#contact" data-auth>联系方式</a>
-      </div>
+        <!-- 网站标志 -->
+        <div class="logo">白子俊</div>
+        <!-- 新增下拉菜单 -->
+        <div class="dropdown-menu">
+            <a href="#home" class="dropdown-toggle">首页导航 <i class="fas fa-chevron-down"></i></a>
+            <div class="dropdown-content">
+                <a href="#home">首页</a>
+                <a href="#about" data-auth>个人简介</a>
+                <a href="#achievements" data-auth>获奖情况</a>
+                <a href="#teachers" data-auth>学习经历</a>
+                <a href="#tools" data-auth>工具站点</a>
+                <a href="#contact" data-auth>联系方式</a>
+            </div>
+        </div>
     </div>
     
     <div class="nav-controls">
@@ -234,63 +235,6 @@
       </div>
   </section>
 
-  <!-- 艺术历程部分 -->
-  <section class="timeline-section" id="timeline">
-      <h2 class="section-title">艺术历程</h2>
-      <div class="timeline">
-          <div class="timeline-item">
-              <div class="timeline-year">2025年</div>
-              <div class="timeline-content">
-                  <p class="timeline-text">考入中央音乐学院钢琴系</p>
-              </div>
-          </div>
-          <div class="timeline-item">
-              <div class="timeline-year">2024年</div>
-              <div class="timeline-content">
-                  <p class="timeline-text">入围中国音乐小金钟全国展演</p>
-                  <p class="timeline-text">举办第三场个人独奏音乐会</p>
-              </div>
-          </div>
-          <div class="timeline-item">
-              <div class="timeline-year">2023年</div>
-              <div class="timeline-content">
-                  <p class="timeline-text">第十二届鼓浪屿青少年钢琴比赛少年组第一名</p>
-                  <p class="timeline-text">获得浙江音乐学院优秀团员称号</p>
-              </div>
-          </div>
-          <div class="timeline-item">
-              <div class="timeline-year">2022年</div>
-              <div class="timeline-content">
-                  <p class="timeline-text">第十届施坦威全国青少年钢琴比赛华东一区专业B组第一名和全国总决赛第三名</p>
-                  <p class="timeline-text">在施坦威霍洛维茨音乐厅举办"施坦威获奖选手导赏音乐会"</p>
-                  <p class="timeline-text">以专业和文化课第一的成绩升入高中部</p>
-              </div>
-          </div>
-          <div class="timeline-item">
-              <div class="timeline-year">2021年</div>
-              <div class="timeline-content">
-                  <p class="timeline-text">入选浙江音乐学院李叔同学院"拔尖人才培养计划"</p>
-                  <p class="timeline-text">浙江音乐学院钢琴系"尽善奖"中国作品钢琴比赛附中组第一名</p>
-                  <p class="timeline-text">获得浙江音乐学院暑期社会实践先进个人称号</p>
-              </div>
-          </div>
-          <div class="timeline-item">
-              <div class="timeline-year">2020年</div>
-              <div class="timeline-content">
-                  <p class="timeline-text">浙江音乐学院"贝多芬钢琴协奏曲"比赛第二名</p>
-              </div>
-          </div>
-          <div class="timeline-item">
-              <div class="timeline-year">2019年</div>
-              <div class="timeline-content">
-                  <p class="timeline-text">考入浙江音乐学院附属音乐学校初中部</p>
-                  <p class="timeline-text">第九届施坦威全国青少年钢琴比赛华东一区专业A组第一名</p>
-                  <p class="timeline-text">获得雅马哈亚洲音乐奖学金</p>
-              </div>
-          </div>
-      </div>
-  </section>
-
   <!-- 工具站点部分 -->
   <section class="tools-section" id="tools">
       <h2 class="section-title">工具站点 <i class="fas fa-chevron-down toggle-icon"></i></h2>
@@ -334,7 +278,7 @@
           <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
       </div>
       <div class="beian">
-          <a href="https://beian.miit.gov.cn">京ICP备2020236654号-9</a>
+          <a href="https://beian.miit.gov.cn">京ICP备XXXXXXXX号</a>
       </div>
   </footer>
 

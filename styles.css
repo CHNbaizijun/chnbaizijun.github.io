@@ -92,42 +92,58 @@ h1, h2, h3 {
     letter-spacing: 1px;
 }
 
-.nav-links {
-    /* 导航链接容器 */
-    display: flex;
-    gap: 30px;
+/* 下拉菜单样式 */
+.dropdown-menu {
+    position: relative;
+    display: inline-block;
 }
 
-.nav-links a {
-    /* 导航链接样式 */
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
     color: var(--dark);
     text-decoration: none;
-    font-size: 16px;
     transition: var(--transition);
-    position: relative;
-    padding: 5px 0;
-    border-radius: 4px;
 }
 
-/* 导航链接悬停效果 */
-.nav-links a:hover {
-    color: var(--primary);
-    background: rgba(var(--secondary),0.1);
+.dropdown-toggle:hover {
+    background: rgba(var(--secondary), 0.1);
 }
 
-.nav-links a::after {
-    content: '';
+.dropdown-content {
     position: absolute;
-    width: 0;
-    height: 2px;
-    background: var(--accent);
-    bottom: 0;
+    top: 100%;
     left: 0;
+    background: var(--white);
+    box-shadow: var(--soft-shadow);
+    border-radius: 8px;
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
     transition: var(--transition);
+    z-index: 1001;
 }
 
-.nav-links a:hover::after {
-    width: 100%;
+.dropdown-menu:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(5px);
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 12px 20px;
+    color: var(--dark);
+    text-decoration: none;
+    transition: var(--transition);
+    border-bottom: 1px solid var(--gray);
+}
+
+.dropdown-content a:hover {
+    background: rgba(var(--secondary), 0.05);
+    padding-left: 25px;
 }
 
 /* 移动端菜单按钮 */
@@ -445,7 +461,7 @@ h1, h2, h3 {
     transform: scale(1.03);  /* 图片悬停放大效果 */
 }
 
-/* 获奖部分样式 */
+/* 获奖情况部分样式 */
 .achievements {
     padding: 100px 5%;
     background-color: var(--light);
@@ -596,96 +612,6 @@ h1, h2, h3 {
     color: #666;
     font-size: 1em;
     line-height: 1.6;
-}
-
-/* 时间线样式 */
-.timeline-section {
-    padding: 100px 5%;
-    background-color: var(--light);
-}
-
-.timeline {
-    position: relative;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 40px 0;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    width: 4px;
-    height: calc(100% - 80px);
-    background-color: var(--accent);
-    left: 50%;
-    top: 40px;
-    transform: translateX(-50%);
-}
-
-.timeline-item {
-    padding: 20px 0;
-    position: relative;
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-}
-
-.timeline-year {
-    width: 45%;
-    color: var(--primary);
-    font-weight: bold;
-    font-size: 1.2em;
-    text-align: right;
-    padding-right: 40px;
-    position: relative;
-}
-
-.timeline-year::after {
-    content: '';
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    background-color: var(--white);
-    border: 4px solid var(--accent);
-    border-radius: 50%;
-    right: -8px;
-    top: 5px;
-    z-index: 1;
-}
-
-.timeline-content {
-    width: 45%;
-    padding: 25px;
-    background-color: var(--white);
-    border-radius: 8px;
-    box-shadow: var(--soft-shadow);
-    margin-left: 40px;
-    position: relative;
-    transition: var(--transition);
-}
-
-.timeline-content:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-.timeline-content::before {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-right: 12px solid var(--white);
-    left: -12px;
-    top: 20px;
-}
-
-.timeline-text {
-    font-size: 1em;
-    color: #666;
-    line-height: 1.7;
 }
 
 /* 工具站点样式 */
@@ -970,45 +896,24 @@ footer {
     .about-image {
         height: 400px;
     }
-    
-    .timeline::before {
-        left: 120px;
-    }
-    
-    .timeline-item {
-        flex-direction: column;
-    }
-    
-    .timeline-year, .timeline-content {
-        width: 100%;
-        text-align: left;
-    }
-    
-    .timeline-year {
-        padding-right: 0;
-        padding-bottom: 10px;
-        padding-left: 140px;
-    }
-    
-    .timeline-year::after {
-        left: 112px;
-        top: 10px;
-    }
-    
-    .timeline-content {
-        margin-left: 140px;
-    }
-    
-    .timeline-content::before {
-        border-right: 12px solid transparent;
-        border-bottom: 12px solid var(--white);
-        border-left: 12px solid transparent;
-        top: -12px;
-        left: 20px;
-    }
 }
 
 @media (max-width: 768px) {
+    /* 移动端导航菜单隐藏 */
+    .dropdown-menu {
+        display: none;
+    }
+    
+    /* 移动端菜单按钮显示 */
+    .hamburger {
+        display: flex;
+    }
+    
+    /* 移动端菜单展开样式 */
+    .nav-links.active {
+        transform: translateY(0);
+    }
+    
     .nav-links {
         position: fixed;
         top: 80px;
@@ -1023,14 +928,6 @@ footer {
         transform: translateY(-150%);
         transition: transform 0.3s ease;
         z-index: 999;
-    }
-    
-    .nav-links.active {
-        transform: translateY(0);
-    }
-    
-    .hamburger {
-        display: flex;
     }
     
     .hero-content h1 {
@@ -1053,22 +950,6 @@ footer {
     .about-image {
         height: 350px;
         order: -1;
-    }
-    
-    .timeline::before {
-        left: 30px;
-    }
-    
-    .timeline-year {
-        padding-left: 50px;
-    }
-    
-    .timeline-year::after {
-        left: 22px;
-    }
-    
-    .timeline-content {
-        margin-left: 50px;
     }
 }
 

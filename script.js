@@ -4,6 +4,7 @@ AV.init({
   serverURL: 'https://0lpjzgw.lc-cn-n1-shared.com'
 });
 
+// 更新用户状态函数
 function updateUserStatus() {
   const user = AV.User.current();
   const overlay = $('#authOverlay');
@@ -60,16 +61,19 @@ function updateUserStatus() {
 $(document).ready(function () {
   updateUserStatus();
 
+  // 登录按钮点击事件
   $('#loginButton, #overlayLoginButton').click(function () {
     $('#loginModal').addClass('active');
     $('body').addClass('no-scroll');
   });
   
+  // 关闭登录弹窗
   $('#closeLogin').click(function () {
     $('#loginModal').removeClass('active');
     $('body').removeClass('no-scroll');
   });
 
+  // 平滑滚动到锚点
   $("a[href^='#']").on("click", function (event) { 
     event.preventDefault();
     const hash = this.hash;
@@ -83,6 +87,7 @@ $(document).ready(function () {
     );
   });
 
+  // 登录/注册/找回密码选项卡切换
   $(document).on('click', '.tab', function() {
     const tab = $(this).data('tab');
     $('.tab').removeClass('active');
@@ -91,6 +96,7 @@ $(document).ready(function () {
     $(`#${tab}Page`).addClass('active');
   });
 
+  // 注册按钮点击事件
   $('#signupBtn').click(async () => {
     const nickname = $('#signupNickname').val().trim();
     const email = $('#signupEmail').val().trim();
@@ -146,6 +152,7 @@ $(document).ready(function () {
     }
   });
 
+  // 密码强度检测
   $('#signupPassword').on('input', function() {
     const strength = checkPasswordStrength($(this).val());
     $('.password-strength').attr('class', 'password-strength ' + strength);
@@ -161,6 +168,7 @@ $(document).ready(function () {
     return strength > 3 ? 'strong' : strength > 1 ? 'medium' : 'weak';
   }
 
+  // 找回密码
   $('#forgotBtn').click(async () => {
     const email = $('#forgotEmail').val().trim();
     if (!validateEmail(email)) return showError('请输入有效邮箱地址');
@@ -175,6 +183,7 @@ $(document).ready(function () {
     }
   });
 
+  // 登录功能
   $('#loginBtn').click(async () => {
     const email = $('#loginEmail').val();
     const password = $('#loginPassword').val();
@@ -202,22 +211,26 @@ $(document).ready(function () {
     }
   });
 
+  // 退出登录
   $(document).on('click', '#logoutBtn, #logoutBtnBox', async () => {
     await AV.User.logOut();
     alert("已退出");
     updateUserStatus();
   });
 
+  // 导航栏滚动效果
   $(window).scroll(function () {
     $(".navbar").toggleClass("scrolled", $(this).scrollTop() > 50);
   });
 
+  // 汉堡菜单点击事件
   $(".hamburger").click(function () {
     $(this).toggleClass("active");
     $(".nav-links").toggleClass("active");
     $("body").toggleClass("no-scroll");
   });
 
+  // 工具站点展开/收起
   $("#tools .section-title").click(function () {
     const $container = $(".tools-container");
     const $icon = $(this).find(".toggle-icon");
@@ -226,6 +239,7 @@ $(document).ready(function () {
     $container.css("max-height", $container.hasClass("active") ? $container[0].scrollHeight + "px" : "0");
   });
 
+  // 视频弹窗
   const videoModal = $("#videoModal");
   const video = $("#videoModal video")[0];
   $("#watch-performance").click(function (e) {
@@ -241,6 +255,7 @@ $(document).ready(function () {
     }
   });
 
+  // 图片懒加载
   const lazyImages = $("img[data-src]");
   const imageObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -254,11 +269,13 @@ $(document).ready(function () {
   });
   lazyImages.each((i, img) => imageObserver.observe(img));
 
+  // 卡片悬停效果
   $(".achievement-card, .teacher-card, .tool-card").hover(
     () => $(this).addClass("hover"),
     () => $(this).removeClass("hover")
   );
 
+  // 窗口大小改变事件
   $(window).resize(function () {
     if ($(window).width() > 768) {
       $(".hamburger").removeClass("active");
@@ -272,28 +289,21 @@ $(document).ready(function () {
     );
   });
 
-  // 修复后的用户中心面板展开/收起逻辑
+  // 用户中心面板展开/收起
   $(document).on('click', '#toggleUserPanel', function () {
     const panel = $('#floatingUserPanel');
     const btn = $(this);
     
     if (panel.hasClass('active')) {
-      // 如果面板处于展开状态，则收起
       panel.removeClass('active');
       btn.text('展开个人中心');
     } else {
-      // 如果面板处于收起状态，则展开
       panel.addClass('active');
       btn.text('收起');
     }
   });
 
-  const loader = document.querySelector(".loader");
-  if (loader) {
-    loader.classList.add("hidden");
-    setTimeout(() => loader.remove(), 500);
-  }
-
+  // 重新发送验证邮件
   async function resendVerifyEmail() {
     const email = $('#signupEmail').val().trim();
     if (!validateEmail(email)) return showError('请输入有效邮箱地址');
@@ -307,15 +317,18 @@ $(document).ready(function () {
     }
   }
 
+  // 显示错误信息
   function showError(msg) {
     const $error = $('.tab-page.active').find('.error-message');
     $error.text(msg).fadeIn().delay(3000).fadeOut();
   }
 
+  // 验证邮箱格式
   function validateEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
+  // 需要登录的链接点击事件
   $(document).on('click', '[data-auth]', function(e) {
     e.preventDefault();
     if (!AV.User.current()) {
@@ -324,28 +337,19 @@ $(document).ready(function () {
     }
   });
 
-  // 自动滚动实现（新增）
-  let scrollPosition = 0;
-  const scrollContainer = $('.achievements-scroll')[0];
-
-  function autoScroll() {
-    if (scrollContainer.scrollWidth - scrollContainer.clientWidth > scrollPosition) {
-        scrollPosition += 1;
-    } else {
-        scrollPosition = 0;
+  // 下拉菜单交互
+  $(document).click(function(e) {
+    // 点击下拉菜单外部时关闭
+    if (!$(e.target).closest('.dropdown-menu').length) {
+      $(".dropdown-content").removeClass("mobile-active");
     }
-    scrollContainer.scrollTo({
-        left: scrollPosition,
-        behavior: 'auto'
-    });
-  }
+  });
 
-  // 开启自动滚动（根据需要调整间隔时间）
-  let scrollInterval = setInterval(autoScroll, 30);
-
-  // 当鼠标悬停时暂停滚动
-  $('.achievements-scroll').hover(
-      () => clearInterval(scrollInterval),
-      () => scrollInterval = setInterval(autoScroll, 30)
-  );
+  // 移动端下拉菜单点击事件
+  $(".dropdown-toggle").click(function(e) {
+    if ($(window).width() <= 768) {
+      e.preventDefault();
+      $(".dropdown-content").toggleClass("mobile-active");
+    }
+  });
 });
