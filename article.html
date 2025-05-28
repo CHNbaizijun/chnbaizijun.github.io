@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文章中心 | 白子俊</title>
-    <link rel="stylesheet" href="assets/font-awesome/css/all.min.css">
-    <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
-    
-    <!-- 新增必要的JS库 -->
-    <script src="//cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
     <style>
         :root {
             --primary: #6D8B74;
@@ -19,16 +15,27 @@
             --light: #F5F0E1;
             --white: #FFFFFF;
             --dark: #4D4D4D;
+            --light-gray: #f8f9fa;
+            --border: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --error: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
             background-color: var(--light);
             color: var(--dark);
-            font-family: "AlibabaPuHuiTi", sans-serif;
             line-height: 1.6;
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
+            min-height: 100vh;
         }
         
         .back-button {
@@ -38,66 +45,195 @@
             color: var(--primary);
             text-decoration: none;
             font-size: 16px;
+            transition: all 0.3s;
+            padding: 8px 16px;
+            border-radius: 30px;
+            background: rgba(109, 139, 116, 0.1);
         }
         
         .back-button i {
             margin-right: 8px;
         }
         
-        h1 {
-            color: var(--primary);
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-            padding-bottom: 15px;
+        .back-button:hover {
+            color: var(--white);
+            background-color: var(--accent);
+            transform: translateY(-2px);
         }
         
-        h1::after {
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .page-title {
+            font-size: 2.5em;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .page-title::after {
             content: "";
             display: block;
             width: 80px;
             height: 4px;
             background: var(--accent);
-            margin: 15px auto;
+            margin-top: 15px;
+            border-radius: 2px;
+        }
+        
+        .new-article-btn {
+            padding: 12px 25px;
+            background-color: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(157, 171, 134, 0.3);
+        }
+        
+        .new-article-btn:hover {
+            background-color: #7a9372;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(157, 171, 134, 0.4);
+        }
+        
+        .articles-container {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
         }
         
         .article-list {
-            background: var(--white);
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
         }
         
-        .article-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
+        .article-card {
+            background: var(--light-gray);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         
-        .article-item:last-child {
-            border-bottom: none;
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+            border-color: var(--accent);
         }
         
-        .article-link {
+        .article-image {
+            height: 180px;
+            background: linear-gradient(135deg, #6D8B74 0%, #9DAB86 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .article-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .article-title {
+            font-size: 1.3em;
             color: var(--primary);
-            text-decoration: none;
-            font-size: 1.1em;
-            transition: color 0.3s;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            font-weight: 600;
         }
         
-        .article-link:hover {
-            color: var(--accent);
+        .article-excerpt {
+            color: #555;
+            margin-bottom: 15px;
+            flex-grow: 1;
+            font-size: 0.95em;
         }
         
         .article-meta {
             display: flex;
             justify-content: space-between;
+            color: #777;
+            font-size: 0.85em;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            margin-top: auto;
+        }
+        
+        .article-author {
+            display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            gap: 6px;
         }
         
         .article-date {
-            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .article-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            padding: 8px 14px;
+            background: rgba(157, 171, 134, 0.1);
+            border: none;
+            border-radius: 6px;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
             font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+        
+        .action-btn:hover {
+            background: rgba(157, 171, 134, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.delete {
+            color: var(--error);
+            background: rgba(231, 76, 60, 0.1);
+        }
+        
+        .action-btn.delete:hover {
+            background: rgba(231, 76, 60, 0.2);
         }
         
         /* 弹窗样式 */
@@ -115,27 +251,38 @@
         
         .modal-content {
             background-color: var(--white);
-            margin: 50px auto;
+            margin: 40px auto;
             padding: 40px;
-            border-radius: 8px;
+            border-radius: 12px;
             max-width: 800px;
             width: 90%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow);
             position: relative;
         }
         
         .modal-title {
-            font-size: 1.5em;
+            font-size: 1.8em;
             color: var(--primary);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+        }
+        
+        .article-details {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 25px;
         }
         
         .modal-text {
             white-space: pre-line;
             line-height: 1.8;
             color: #555;
+            font-size: 1.05em;
+            margin-bottom: 30px;
         }
         
         .close-modal {
@@ -145,67 +292,245 @@
             font-size: 1.8em;
             color: #999;
             cursor: pointer;
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            background: rgba(0,0,0,0.05);
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        /* 表单样式 */
+        .form-container {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group textarea {
+            min-height: 300px;
+            resize: vertical;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(157, 171, 134, 0.2);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .form-btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .submit-btn {
+            background-color: var(--accent);
+            color: var(--white);
+        }
+        
+        .submit-btn:hover {
+            background-color: #7a9372;
+            transform: translateY(-3px);
+        }
+        
+        .cancel-btn {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+        
+        .cancel-btn:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-3px);
         }
         
         /* 评论区域 */
         .comments-section {
             margin-top: 40px;
-            padding: 30px;
-            background: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
         }
         
         .comments-section h3 {
-            font-size: 1.2em;
+            font-size: 1.4em;
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
         }
         
         .comment-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            transition: all 0.3s;
+        }
+        
+        .comment-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
         }
         
         .comment-author {
             font-weight: bold;
             color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .comment-date {
-            font-size: 0.8em;
             color: #888;
-            margin-left: 10px;
+            font-size: 0.85em;
+        }
+        
+        .comment-content {
+            line-height: 1.6;
+            color: #555;
+            padding-left: 28px;
         }
         
         .comment-input-area {
             margin-top: 30px;
+            background: rgba(157, 171, 134, 0.05);
+            padding: 25px;
+            border-radius: 12px;
         }
         
         #commentInput {
             width: 100%;
-            height: 100px;
-            margin: 20px 0;
+            height: 120px;
+            margin: 15px 0;
             padding: 15px;
-            border: 1px solid var(--secondary);
-            border-radius: 6px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             resize: vertical;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        #commentInput:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(157, 171, 134, 0.2);
         }
         
         #submitComment {
-            padding: 10px 20px;
+            padding: 12px 28px;
             background-color: var(--accent);
-            color: white;
+            color: var(--white);
             border: none;
-            border-radius: 4px;
+            border-radius: 30px;
+            font-size: 1em;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(157, 171, 134, 0.3);
         }
         
         #submitComment:hover {
-            background-color: #899c71;
+            background-color: #7a9372;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(157, 171, 134, 0.4);
         }
-
+        
+        #submitComment:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .comment-error {
+            color: var(--error);
+            margin-top: 10px;
+            font-size: 0.9em;
+            display: none;
+            padding: 8px 12px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 6px;
+        }
+        
+        .comment-success {
+            color: var(--primary);
+            margin-top: 10px;
+            font-size: 0.9em;
+            display: none;
+            padding: 8px 12px;
+            background: rgba(109, 139, 116, 0.1);
+            border-radius: 6px;
+        }
+        
+        /* 加载动画 */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(157, 171, 134, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         /* 页脚样式 */
         footer {
             background-color: var(--dark);
@@ -213,7 +538,8 @@
             padding: 60px 20px 30px;
             text-align: center;
             font-size: 0.95em;
-            margin-top: 40px;
+            margin-top: 60px;
+            border-radius: 12px;
         }
 
         .contact-info {
@@ -224,19 +550,30 @@
 
         .social-icons {
             margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
         }
 
         .social-icons a {
             color: var(--white);
-            margin: 0 15px;
-            font-size: 20px;
+            font-size: 24px;
             transition: all 0.3s ease;
             opacity: 0.7;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
         }
 
         .social-icons a:hover {
             color: var(--accent);
             opacity: 1;
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
         }
 
         .beian {
@@ -254,6 +591,53 @@
         .beian a:hover {
             color: var(--accent);
         }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            .page-title {
+                font-size: 2em;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .article-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 25px;
+            }
+            
+            .articles-container {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.7em;
+            }
+            
+            .new-article-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .form-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -261,47 +645,74 @@
         <i class="fas fa-arrow-left"></i>返回
     </a>
     
-    <h1>文章中心</h1>
+    <div class="header-container">
+        <h1 class="page-title">文章中心</h1>
+        <button class="new-article-btn" id="newArticleBtn">
+            <i class="fas fa-plus"></i>发布新文章
+        </button>
+    </div>
     
-    <div class="article-list">
-        <!-- 手动维护文章列表 -->
-        <div class="article-item">
-            <div class="article-meta">
-                <a href="#" class="article-link" data-file="article/测试文件.txt">测试文件</a>
-                <span class="article-date">20230815</span>
-            </div>
-        </div>
-        
-        <div class="article-item">
-            <div class="article-meta">
-                <a href="#" class="article-link" data-file="article/journey.txt">我的音乐学习之路</a>
-                <span class="article-date">20230815</span>
-            </div>
-        </div>
-        
-        <div class="article-item">
-            <div class="article-meta">
-                <a href="#" class="article-link" data-file="article/beethoven.txt">贝多芬作品分析</a>
-                <span class="article-date">20230910</span>
+    <div class="articles-container">
+        <div id="articlesList">
+            <div style="text-align: center; padding: 40px;">
+                <div class="loader" style="margin: 0 auto;"></div>
+                <p style="margin-top: 15px;">正在加载文章，请稍候...</p>
             </div>
         </div>
     </div>
 
-    <!-- 弹窗容器 -->
+    <!-- 文章详情弹窗 -->
     <div class="modal" id="articleModal">
         <div class="modal-content">
-            <span class="close-modal" id="closeModal">&times;</span>
+            <button class="close-modal" id="closeModal">&times;</button>
             <h2 class="modal-title" id="modalTitle"></h2>
+            <div class="article-details">
+                <div>
+                    <span id="modalAuthor"></span> · 
+                    <span id="modalDate"></span>
+                </div>
+            </div>
             <div class="modal-text" id="modalText"></div>
             
             <!-- 评论区域 -->
             <div class="comments-section">
-                <h3>读者评论（<span id="commentCount">0</span>）</h3>
+                <h3>
+                    <i class="fas fa-comments"></i>
+                    读者评论（<span id="commentCount">0</span>）
+                </h3>
                 <div id="commentsList"></div>
                 
                 <div class="comment-input-area">
+                    <h4><i class="fas fa-edit"></i> 发表评论</h4>
                     <textarea id="commentInput" placeholder="请输入您的评论..."></textarea>
+                    <div id="commentError" class="comment-error"></div>
+                    <div id="commentSuccess" class="comment-success"></div>
                     <button id="submitComment">提交评论</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 文章编辑弹窗 -->
+    <div class="modal" id="editArticleModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeEditModal">&times;</button>
+            <h2 class="modal-title" id="editModalTitle">发布新文章</h2>
+            
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="articleTitle">文章标题</label>
+                    <input type="text" id="articleTitle" placeholder="请输入文章标题">
+                </div>
+                
+                <div class="form-group">
+                    <label for="articleContent">文章内容</label>
+                    <textarea id="articleContent" placeholder="请输入文章内容..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="form-btn cancel-btn" id="cancelEdit">取消</button>
+                    <button class="form-btn submit-btn" id="saveArticle">保存文章</button>
                 </div>
             </div>
         </div>
@@ -314,147 +725,414 @@
           appKey: 'gV34QMHiVXzzDiS4GdyXtZt9',
           serverURL: 'https://0lpjzgw.lc-cn-n1-shared.com'
         });
-
-        // 弹窗控制
-        const modal = document.getElementById('articleModal');
-        const closeBtn = document.getElementById('closeModal');
         
-        // 为所有文章链接添加点击事件
-        document.querySelectorAll('.article-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                // 移除其他文章的active状态
-                document.querySelectorAll('.article-link').forEach(l => l.classList.remove('active'));
-                // 为当前点击的文章添加active状态
-                this.classList.add('active');
-                
-                const filePath = this.getAttribute('data-file');
-                const title = this.textContent;
-                const dateString = this.closest('.article-meta').querySelector('.article-date').textContent;
-                const formattedDate = `${dateString.slice(0,4)}-${dateString.slice(4,6)}-${dateString.slice(6,8)}`;
-                
-                // 显示加载状态
-                document.getElementById('modalTitle').textContent = `${title} (${formattedDate})`;
-                document.getElementById('modalText').textContent = '加载中...';
-                modal.style.display = 'block';
-                
-                // 加载文章内容
-                fetch(filePath)
-                    .then(response => response.text())
-                    .then(content => {
-                        document.getElementById('modalText').textContent = content;
-                        loadComments(filePath);
-                    })
-                    .catch(() => {
-                        document.getElementById('modalText').textContent = '加载失败，请稍后重试';
-                    });
-            });
-        });
+        // 全局变量
+        let currentUser = null;
+        let currentArticleId = null;
+        let isAdmin = false;
         
-        // 关闭弹窗
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
+        // DOM元素
+        const articlesList = $('#articlesList');
+        const articleModal = $('#articleModal');
+        const editArticleModal = $('#editArticleModal');
+        const newArticleBtn = $('#newArticleBtn');
+        const saveArticleBtn = $('#saveArticle');
+        const submitCommentBtn = $('#submitComment');
+        const commentError = $('#commentError');
+        const commentSuccess = $('#commentSuccess');
         
-        // 点击模态框外部关闭
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-        
-        // 修改后的评论功能逻辑
-        document.getElementById('submitComment').addEventListener('click', async () => {
-            const user = AV.User.current();
-            if (!user) {
+        // 初始化函数
+        async function init() {
+            // 检查用户登录状态
+            currentUser = AV.User.current();
+            if (!currentUser) {
                 alert('请先登录');
+                window.location.href = 'index.html';
                 return;
             }
-
-            const content = document.getElementById('commentInput').value.trim();
-            if (!content) return;
-
-            // 获取当前激活的文章ID
-            const activeLink = document.querySelector('.article-link.active');
-            if (!activeLink) {
-                alert('无法获取文章信息');
-                return;
+            
+            // 检查用户是否为管理员
+            isAdmin = checkIfAdmin(currentUser);
+            if (isAdmin) {
+                newArticleBtn.show();
+            } else {
+                newArticleBtn.hide();
             }
-            const articleId = activeLink.getAttribute('data-file');
-
+            
+            // 加载文章列表
+            await loadArticles();
+            
+            // 绑定事件
+            bindEvents();
+        }
+        
+        // 检查用户是否为管理员
+        function checkIfAdmin(user) {
+            // 实际应用中应使用更安全的权限检查
+            const adminUsernames = ['admin', 'baizijun', 'CHNbaizijun'];
+            return adminUsernames.includes(user.getUsername());
+        }
+        
+        // 加载文章列表
+        async function loadArticles() {
             try {
-                // 保存评论到LeanCloud
-                const Comment = AV.Object.extend('Comment');
-                const newComment = new Comment();
+                const query = new AV.Query('Article');
+                query.descending('createdAt');
+                query.include('author');
+                const articles = await query.find();
                 
-                newComment.set('articleId', articleId);
-                newComment.set('content', content);
-                newComment.set('author', user.get('nickname') || user.getUsername());
-                newComment.set('user', user);
-                
-                await newComment.save();
-                
-                // 清空输入框并刷新评论列表
-                document.getElementById('commentInput').value = '';
-                loadComments(articleId);
+                renderArticles(articles);
             } catch (err) {
-                console.error('评论提交失败:', err);
-                alert('评论提交失败，请稍后重试');
+                console.error('加载文章失败:', err);
+                articlesList.html('<div style="text-align: center; padding: 40px; color: #e74c3c;">加载文章失败，请稍后重试</div>');
             }
-        });
-
-        // 修改后的加载评论方法
+        }
+        
+        // 渲染文章列表
+        function renderArticles(articles) {
+            if (articles.length === 0) {
+                articlesList.html('<p style="text-align: center; padding: 40px;">暂无文章</p>');
+                return;
+            }
+            
+            let html = '<div class="article-list">';
+            
+            articles.forEach(article => {
+                const title = article.get('title');
+                const content = article.get('content');
+                const author = article.get('author')?.get('nickname') || '未知作者';
+                const date = new Date(article.createdAt).toLocaleDateString();
+                const excerpt = content.length > 100 ? content.substring(0, 100) + '...' : content;
+                const initials = title.charAt(0).toUpperCase();
+                
+                html += `
+                <div class="article-card" data-id="${article.id}">
+                    <div class="article-image">
+                        <div>${initials}</div>
+                    </div>
+                    <div class="article-content">
+                        <h3 class="article-title">${title}</h3>
+                        <p class="article-excerpt">${excerpt}</p>
+                        <div class="article-meta">
+                            <div class="article-author">
+                                <i class="fas fa-user"></i>${author}
+                            </div>
+                            <div class="article-date">
+                                <i class="far fa-calendar"></i>${date}
+                            </div>
+                        </div>
+                        <div class="article-actions">
+                            <button class="action-btn read-btn" data-id="${article.id}">
+                                <i class="fas fa-book-open"></i>阅读
+                            </button>
+                            ${isAdmin ? `
+                            <button class="action-btn edit-btn" data-id="${article.id}">
+                                <i class="fas fa-edit"></i>编辑
+                            </button>
+                            <button class="action-btn delete delete-btn" data-id="${article.id}">
+                                <i class="fas fa-trash"></i>删除
+                            </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            
+            html += '</div>';
+            articlesList.html(html);
+        }
+        
+        // 加载单个文章
+        async function loadArticle(articleId) {
+            try {
+                const query = new AV.Query('Article');
+                const article = await query.get(articleId);
+                
+                const title = article.get('title');
+                const content = article.get('content');
+                const author = article.get('author')?.get('nickname') || '未知作者';
+                const date = new Date(article.createdAt).toLocaleDateString();
+                
+                $('#modalTitle').text(title);
+                $('#modalText').text(content);
+                $('#modalAuthor').text(author);
+                $('#modalDate').text(date);
+                
+                // 加载评论
+                await loadComments(articleId);
+                
+                // 显示弹窗
+                articleModal.show();
+            } catch (err) {
+                console.error('加载文章失败:', err);
+                alert('加载文章失败，请稍后重试');
+            }
+        }
+        
+        // 加载评论（修复版）
         async function loadComments(articleId) {
             try {
                 const query = new AV.Query('Comment');
                 query.equalTo('articleId', articleId);
-                query.include('user');
                 query.descending('createdAt');
                 const comments = await query.find();
-
-                let html = '';
-                comments.forEach(comment => {
-                    const date = new Date(comment.get('createdAt')).toLocaleDateString();
-                    html += `<div class="comment-item">
-                        <div class="comment-author">${comment.get('author')} 
-                            <span class="comment-date">${date}</span>
-                        </div>
-                        <div class="comment-content">${comment.get('content')}</div>
-                    </div>`;
-                });
-
-                document.getElementById('commentsList').innerHTML = html;
-                document.getElementById('commentCount').textContent = comments.length;
+                
+                renderComments(comments);
             } catch (err) {
                 console.error('加载评论失败:', err);
-                document.getElementById('commentsList').innerHTML = '评论加载失败';
+                $('#commentsList').html('<p style="color: #e74c3c; padding: 20px; text-align: center;">评论加载失败</p>');
             }
         }
-
-        // 用户状态检测
-        function checkAuth() {
-            const user = AV.User.current();
-            if (!user) {
-                alert('请先登录');
-                return false;
+        
+        // 渲染评论（修复版）
+        function renderComments(comments) {
+            $('#commentCount').text(comments.length);
+            
+            if (comments.length === 0) {
+                $('#commentsList').html('<p style="text-align: center; padding: 30px; color: #777;">暂无评论，成为第一个评论者吧！</p>');
+                return;
             }
-            return true;
+            
+            let html = '';
+            
+            comments.forEach(comment => {
+                const content = comment.get('content');
+                const author = comment.get('author') || '匿名用户';
+                const date = new Date(comment.createdAt).toLocaleString();
+                
+                html += `
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <i class="fas fa-user"></i>${author}
+                        </div>
+                        <div class="comment-date">${date}</div>
+                    </div>
+                    <div class="comment-content">${content}</div>
+                </div>
+                `;
+            });
+            
+            $('#commentsList').html(html);
         }
-
-        // 初始化用户状态
+        
+        // 提交评论
+        async function submitComment() {
+            // 获取评论内容
+            const content = $('#commentInput').val().trim();
+            
+            // 验证评论内容
+            if (!content) {
+                commentError.text('请输入评论内容').show();
+                return;
+            }
+            
+            // 检查用户是否登录
+            if (!currentUser) {
+                commentError.text('请先登录后再发表评论').show();
+                return;
+            }
+            
+            // 确保有当前文章ID
+            if (!currentArticleId) {
+                commentError.text('无法确定评论的文章，请刷新页面重试').show();
+                return;
+            }
+            
+            try {
+                // 禁用提交按钮防止重复提交
+                submitCommentBtn.prop('disabled', true).text('提交中...');
+                commentError.hide();
+                
+                // 创建评论对象
+                const Comment = AV.Object.extend('Comment');
+                const newComment = new Comment();
+                
+                // 设置评论内容
+                newComment.set('articleId', currentArticleId);
+                newComment.set('content', content);
+                
+                // 存储用户名而不是用户对象
+                const username = currentUser.get('nickname') || currentUser.getUsername();
+                newComment.set('author', username);
+                
+                // 保存评论
+                await newComment.save();
+                
+                // 清空输入框
+                $('#commentInput').val('');
+                
+                // 重新加载评论列表
+                await loadComments(currentArticleId);
+                
+                // 显示成功消息
+                commentSuccess.text('评论提交成功！').show();
+                setTimeout(() => commentSuccess.hide(), 3000);
+            } catch (err) {
+                console.error('评论提交失败:', err);
+                commentError.text('评论提交失败: ' + err.message).show();
+            } finally {
+                // 重新启用提交按钮
+                submitCommentBtn.prop('disabled', false).text('提交评论');
+            }
+        }
+        
+        // 创建/编辑文章
+        async function saveArticle() {
+            const title = $('#articleTitle').val().trim();
+            const content = $('#articleContent').val().trim();
+            
+            if (!title || !content) {
+                alert('请填写标题和内容');
+                return;
+            }
+            
+            try {
+                saveArticleBtn.prop('disabled', true).text('保存中...');
+                
+                const Article = AV.Object.extend('Article');
+                let article;
+                
+                if (currentArticleId) {
+                    // 编辑现有文章
+                    article = AV.Object.createWithoutData('Article', currentArticleId);
+                } else {
+                    // 创建新文章
+                    article = new Article();
+                    article.set('author', currentUser);
+                }
+                
+                article.set('title', title);
+                article.set('content', content);
+                
+                await article.save();
+                
+                // 关闭编辑弹窗并刷新列表
+                editArticleModal.hide();
+                await loadArticles();
+            } catch (err) {
+                console.error('保存文章失败:', err);
+                alert('保存文章失败，请稍后重试');
+            } finally {
+                saveArticleBtn.prop('disabled', false).text('保存文章');
+            }
+        }
+        
+        // 删除文章
+        async function deleteArticle(articleId) {
+            if (!confirm('确定要删除这篇文章吗？此操作不可恢复。')) {
+                return;
+            }
+            
+            try {
+                const article = AV.Object.createWithoutData('Article', articleId);
+                await article.destroy();
+                
+                // 刷新文章列表
+                await loadArticles();
+            } catch (err) {
+                console.error('删除文章失败:', err);
+                alert('删除文章失败，请稍后重试');
+            }
+        }
+        
+        // 绑定事件
+        function bindEvents() {
+            // 打开文章详情
+            $(document).on('click', '.read-btn', function() {
+                const articleId = $(this).data('id');
+                currentArticleId = articleId;
+                loadArticle(articleId);
+            });
+            
+            // 编辑文章
+            $(document).on('click', '.edit-btn', function() {
+                const articleId = $(this).data('id');
+                editArticle(articleId);
+            });
+            
+            // 删除文章
+            $(document).on('click', '.delete-btn', function() {
+                const articleId = $(this).data('id');
+                deleteArticle(articleId);
+            });
+            
+            // 关闭详情弹窗
+            $('#closeModal').click(() => {
+                articleModal.hide();
+                commentError.hide();
+                commentSuccess.hide();
+            });
+            
+            // 关闭编辑弹窗
+            $('#closeEditModal, #cancelEdit').click(() => {
+                editArticleModal.hide();
+            });
+            
+            // 打开新文章表单
+            $('#newArticleBtn').click(() => {
+                editArticle(null);
+            });
+            
+            // 保存文章
+            $('#saveArticle').click(saveArticle);
+            
+            // 提交评论
+            $('#submitComment').click(submitComment);
+            
+            // 回车键提交评论（Shift+Enter换行）
+            $('#commentInput').keypress(function(e) {
+                if (e.which === 13 && !e.shiftKey) {
+                    e.preventDefault();
+                    submitComment();
+                }
+            });
+            
+            // 评论输入时隐藏错误消息
+            $('#commentInput').on('input', function() {
+                commentError.hide();
+            });
+        }
+        
+        // 编辑文章
+        async function editArticle(articleId) {
+            currentArticleId = articleId;
+            
+            if (articleId) {
+                // 编辑现有文章
+                $('#editModalTitle').text('编辑文章');
+                
+                try {
+                    const article = await (new AV.Query('Article')).get(articleId);
+                    $('#articleTitle').val(article.get('title'));
+                    $('#articleContent').val(article.get('content'));
+                } catch (err) {
+                    console.error('加载文章失败:', err);
+                    alert('加载文章失败');
+                    return;
+                }
+            } else {
+                // 创建新文章
+                $('#editModalTitle').text('发布新文章');
+                $('#articleTitle').val('');
+                $('#articleContent').val('');
+            }
+            
+            editArticleModal.show();
+        }
+        
+        // 页面初始化
         $(document).ready(() => {
-            const user = AV.User.current();
-            if (!user) {
-                alert('请登录后使用评论功能');
-            }
+            init();
         });
     </script>
 
     <!-- 页脚部分 -->
     <footer>
-        <p>笃行致远  事必尽善</p>
+        <p>笃行致远 事必尽善</p>
         <div class="contact-info">
-            <p>WeChat: FreedomOfSpace</p>
+            <p>微信: FreedomOfSpace</p>
             <p>电子邮件: CHNbaizijun@163.com</p>
         </div>
         <div class="social-icons">
@@ -467,6 +1145,5 @@
             <a href="https://beian.miit.gov.cn">京ICP备2020236654号-9</a>
         </div>
     </footer>
-
 </body>
 </html>
