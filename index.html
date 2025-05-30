@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ByteMelody</title>
+  <title>AeroMelody</title>
   
   <!-- 引入样式表 -->
   <link rel="stylesheet" href="styles.css" />
@@ -33,7 +33,7 @@
   <!-- 登录遮罩层 -->
   <div id="authOverlay">
     <!-- 登录提示信息 -->
-    <div id="authMessage">欢迎访问ByteMelody, 请登录后使用</div>
+    <div id="authMessage">欢迎访问AeroMelody, 请登录后使用</div>
     <!-- 登录按钮 -->
     <button class="cta-button" id="overlayLoginButton">
         立即登录
@@ -50,10 +50,7 @@
             <a href="#home" class="dropdown-toggle">首页导航 <i class="fas fa-chevron-down"></i></a>
             <div class="dropdown-content">
                 <a href="#home">首页</a>
-                <a href="#about" data-auth>个人简介</a>
-                <a href="#achievements" data-auth>获奖情况</a>
-                <a href="#teachers" data-auth>学习经历</a>
-                <a href="#tools" data-auth>工具站点</a>
+                <a href="#about" data-auth>简介</a>
                 <a href="#contact" data-auth>联系方式</a>
             </div>
         </div>
@@ -92,28 +89,36 @@
         <!-- 登录页面内容 -->
         <div class="tab-page active" id="loginPage">
             <div class="error-message"></div>
-            <input type="email" id="loginEmail" placeholder="注册邮箱">
-            <input type="password" id="loginPassword" placeholder="密码">
-            <button id="loginBtn">立即登录</button>
+            <input type="email" id="loginEmail" placeholder="注册邮箱" class="login-input">
+            <input type="password" id="loginPassword" placeholder="密码" class="login-input">
+            <button id="loginBtn" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> 立即登录
+              </button>
         </div>
 
         <!-- 注册页面内容 -->
         <div class="tab-page" id="signupPage">
             <div class="error-message"></div>
-            <input type="text" id="signupNickname" placeholder="昵称（2-16位字符）">
-            <input type="email" id="signupEmail" placeholder="邮箱">
-            <input type="password" id="signupPassword" placeholder="密码（至少8位）" class="pwd-strength">
+            <input type="text" id="signupNickname" placeholder="昵称（2-16位字符）" class="login-input">
+            <input type="email" id="signupEmail" placeholder="邮箱" class="login-input">
+            <input type="password" id="signupPassword" placeholder="密码（至少8位）" class="login-input" class="pwd-strength">
             <!-- 密码强度提示 -->
             <div class="password-strength"></div>
-            <input type="password" id="signupPasswordConfirm" placeholder="确认密码">
-            <button id="signupBtn">立即注册</button>
+            <input type="password" id="signupPasswordConfirm" placeholder="确认密码" class="login-input">
+            <!-- 注册按钮 -->
+            <button id="signupBtn" class="login-btn">
+             <i class="fas fa-user-plus"></i> 立即注册
+            </button>
         </div>
 
         <!-- 找回密码页面内容 -->
         <div class="tab-page" id="forgotPage">
             <div class="error-message"></div>
-            <input type="email" id="forgotEmail" placeholder="输入注册邮箱">
-            <button id="forgotBtn">发送重置邮件</button>
+            <input type="email" id="forgotEmail" placeholder="输入注册邮箱" class="login-input">
+        <!-- 找回密码按钮 -->
+            <button id="forgotBtn" class="login-btn">
+                <i class="fas fa-key"></i> 发送重置邮件
+            </button>
         </div>
 
         <!-- 用户协议勾选框 -->
@@ -126,142 +131,75 @@
 
   <!-- 首页内容区域 -->
   <section class="hero" id="home">
-      <div class="hero-content">
-          <h1>Zijun Bai</h1>
-          <p>Central Conservatory Of Music</p>
-          <div class="hero-buttons">
-              <!-- 播放视频按钮 -->
-              <button class="cta-button" id="watch-performance">观看演奏视频</button>
-              <!-- 更多内容按钮 -->
-              <button class="cta-button outline" onclick="window.location.href='more.html'" data-auth>更多</button>
-          </div>
-      </div>
-      <!-- 滚动提示箭头 -->
-      <div class="scroll-down">
-          <i class="fas fa-chevron-down"></i>
-      </div>
-  </section>
-
-  <!-- 个人简介部分 -->
-  <section class="about" id="about">
-      <h2 class="section-title">个人简介</h2>
-      <div class="about-content">
-          <div class="about-text">
-              <p>白子俊，现为浙江音乐学院附中高三钢琴专业学生，2025年考入中央音乐学院钢琴系。</p>
-              <p>2022年以专业和文化课第一的成绩升入高中部，连续五年评为校级三好学生并获得奖学金，现任浙音附中学生会主席。</p>
-              <p>2021年入选浙江音乐学院李叔同学院"拔尖人才培养计划"。</p>
-              <p>曾与浙江交响乐团、台北国际联合青年交响乐团合作演出，指挥家孙舒彦、韦丹文等合作演出钢琴协奏曲。成功举办了三场个人独奏音乐会。</p>
-              <p>入学以来参加了近40场学院和附中组织的社会实践活动演出，2021年获得浙江音乐学院暑期社会实践先进个人称号，2023年度浙江音乐学院优秀团员。</p>
-          </div>
-          <div class="about-image">
-              <img src="../library/personalphoto.jpg" alt="白子俊">
-          </div>
-      </div>
-  </section>
-
-  <!-- 获奖情况部分 -->
-  <section class="achievements" id="achievements">
-    <h2 class="section-title">获奖情况</h2>
-    <div class="achievements-container">
-        <div class="achievements-scroll">
-            <!-- 原有achievement-card内容保持不变 -->
-            <div class="achievement-card">
-                <span class="year-badge">2024年</span>
-                <h3>中国音乐小金钟全国展演</h3>
-                <p>入围中国音乐家协会"中国音乐小金钟"全国展演</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2023年</span>
-                <h3>鼓浪屿青少年钢琴比赛</h3>
-                <p>第十二届鼓浪屿青少年钢琴比赛少年组第一名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2022年</span>
-                <h3>施坦威全国青少年钢琴比赛</h3>
-                <p>第十届施坦威全国青少年钢琴比赛华东一区专业B组第一名和全国总决赛第三名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2021年</span>
-                <h3>浙江音乐学院"尽善奖"</h3>
-                <p>钢琴系中国作品钢琴比赛附中组第一名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2020年</span>
-                <h3>浙江音乐学院比赛</h3>
-                <p>"贝多芬钢琴协奏曲"比赛第二名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2019年</span>
-                <h3>施坦威全国青少年钢琴比赛</h3>
-                <p>第九届施坦威全国青少年钢琴比赛华东一区专业A组第一名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2019年</span>
-                <h3>雅马哈亚洲音乐奖学金</h3>
-                <p>2019年和2021年分别获得雅马哈亚洲音乐奖学金</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2013年</span>
-                <h3>嘉德威杯国际青少年钢琴大赛</h3>
-                <p>第三届嘉德威杯国际青少年钢琴大赛总决赛第一名</p>
-            </div>
+    <div class="hero-content">
+        <h1>AeroMelody</h1>
+        <p>Make Waves~</p>
+        <div class="hero-buttons">
+            <button class="cta-button" id="watch-performance">
+                <i class="fas fa-play-circle"></i> 观看演奏视频
+            </button>
+            <button class="cta-button outline" onclick="window.location.href='more.html'" data-auth>
+                <i class="fas fa-arrow-right"></i> 了解更多
+            </button>
         </div>
     </div>
-  </section>
+    <div class="scroll-down">
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</section>
 
-  <!-- 学习经历部分 -->
-  <section class="teachers" id="teachers">
-      <h2 class="section-title">学习经历</h2>
-      <div class="teachers-container">
-          <div class="current-teacher">
-              <img src="../library/cxy.jpg" alt="陈小雨博士" class="teacher-photo current-photo">
-              <h3>现任导师</h3>
-              <p>陈小雨 博士</p>
-              <p>浙江音乐学院</p>
+  <!-- 简介部分 -->
+<!-- index.html 修改部分 -->
+<section class="section" id="about">
+    <div class="container">
+      <h2 class="section-title">网站简介</h2>
+      <p class="section-subtitle">关于本站和站长</p>
+      
+      <div class="about-content">
+        <!-- 站长信息卡片 -->
+        <div class="about-card">
+          <div class="about-avatar">
+            <i class="fas fa-user-circle"></i>
           </div>
-          <div class="other-teachers">
-              <div class="teacher-card">
-                  <img src="../library/wx.jpg" alt="吴晓副教授" class="teacher-photo">
-                  <h3>前任导师</h3>
-                  <p>吴晓 副教授</p>
-                  <p>浙江音乐学院</p>
-              </div>
-              <div class="teacher-card">
-                  <img src="../library/ym.jpg" alt="姚镁老师" class="teacher-photo">
-                  <h3>启蒙导师</h3>
-                  <p>姚镁 老师</p>
-              </div>
+          
+          <div class="about-info">
+            <h3><i class="fas fa-user"></i> 站长信息</h3>
+            <p><strong>姓名：</strong>白子俊</p>
+            <p><strong>专业：</strong>钢琴表演</p>
+            <p><strong>联系方式：</strong>详见页脚</p>
           </div>
+        </div>
+        
+        <!-- 网站信息卡片 -->
+        <div class="about-card">
+          <div class="about-icon">
+            <i class="fas fa-music"></i>
+          </div>
+          
+          <div class="about-info">
+            <h3><i class="fas fa-globe"></i> 网站信息</h3>
+            <p>本站是一个专注于音乐交流与分享的平台</p>
+            <p>提供免费的博客展示、知识分享等功能</p>
+            <p>任何非法攻击行为都会被严格记录并谴责</p>
+          </div>
+        </div>
+        
+        <!-- 技术信息卡片 -->
+        <div class="about-card">
+          <div class="about-icon">
+            <i class="fas fa-code"></i>
+          </div>
+          
+          <div class="about-info">
+            <h3><i class="fas fa-cogs"></i> 技术信息</h3>
+            <p><strong>开发语言：</strong>HTML5, CSS3, JavaScript</p>
+            <p><strong>前端框架：</strong>无框架原生开发</p>
+            <p><strong>后端服务：</strong>LeanCloud云服务</p>
+            <p><strong>上线时间：</strong>2024年</p>
+          </div>
+        </div>
       </div>
-  </section>
-
-  <!-- 工具站点部分 -->
-  <section class="tools-section" id="tools">
-      <h2 class="section-title">工具站点 <i class="fas fa-chevron-down toggle-icon"></i></h2>
-      <div class="tools-container">
-          <div class="tools-grid">
-              <a href="https://www.musicnotes.com" target="_blank" class="tool-card">
-                  <i class="fas fa-music"></i>
-                  <h3>Musicnotes</h3>
-                  <p>乐谱下载平台</p>
-              </a>
-              <a href="https://imslp.org" target="_blank" class="tool-card">
-                  <i class="fas fa-book-open"></i>
-                  <h3>IMSLP</h3>
-                  <p>公共版权乐谱库</p>
-              </a>
-              <a href="https://www.metronomeonline.com" target="_blank" class="tool-card">
-                  <i class="fas fa-clock"></i>
-                  <h3>在线节拍器</h3>
-                  <p>免费节拍器工具</p>
-              </a>
-              <a href="https://www.pianoworld.com" target="_blank" class="tool-card">
-                  <i class="fas fa-piano-keyboard"></i>
-                  <h3>Piano World</h3>
-                  <p>钢琴爱好者论坛</p>
-              </a>
-          </div>
-      </div>
+    </div>
   </section>
 
   <!-- 页脚部分 -->
@@ -296,7 +234,7 @@
   <div class="floating-toggle" id="toggleUserPanel">收起</div>
 
   <!-- 悬浮未登录提示 -->
-  <div class="login-float-tip" id="loginFloatTip">请先登录以查看个人中心</div>
+  <div class="login-float-tip" id="loginFloatTip">登录以获取访问权限</div>
   
   <!-- 视频播放弹窗 -->
   <div id="videoModal" class="video-modal">
