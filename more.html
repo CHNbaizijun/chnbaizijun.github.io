@@ -3,46 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>更多 | 白子俊</title>
+    <title>更多 | AeroMelody</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="assets/font-awesome/css/all.min.css">
-    <link href="//fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #6D8B74;
-            --secondary: #94B49F;
-            --accent: #9DAB86;
-            --light: #F5F0E1;
-            --white: #FFFFFF;
-            --dark: #4D4D4D;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "AlibabaPuHuiTi", "Microsoft YaHei", "PingFang SC", sans-serif;
-        }
-        
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 120px 20px 40px;
+            min-height: 100vh;
         }
         
         .back-button {
             display: inline-flex;
             align-items: center;
             margin-bottom: 30px;
-            color: var(--primary);
+            color: var(--highlight);
             text-decoration: none;
-            font-size: 16px;
-            transition: all 0.3s;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: 30px;
+            background: rgba(233, 69, 96, 0.1);
         }
         
         .back-button i {
@@ -50,12 +32,14 @@
         }
         
         .back-button:hover {
-            color: var(--accent);
+            color: var(--text-light);
+            background-color: var(--highlight);
+            transform: translateY(-2px);
         }
         
         .page-title {
-            font-size: 2.5em;
-            color: var(--primary);
+            font-size: 2.5rem;
+            color: var(--text-light);
             margin-bottom: 40px;
             text-align: center;
             position: relative;
@@ -67,22 +51,31 @@
             display: block;
             width: 80px;
             height: 4px;
-            background: var(--accent);
+            background: var(--highlight);
             margin: 15px auto;
             border-radius: 2px;
         }
         
         .section-box {
-            background: var(--white);
-            border-radius: 8px;
+            background: rgba(30, 30, 46, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-md);
             padding: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-lg);
             margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+        
+        .section-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border-color: rgba(233, 69, 96, 0.3);
         }
         
         .section-title {
-            font-size: 1.5em;
-            color: var(--primary);
+            font-size: 1.5rem;
+            color: var(--text-light);
             margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
@@ -90,21 +83,22 @@
         }
         
         .section-content {
-            color: #555;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 20px;
             line-height: 1.6;
+            font-size: 1.1rem;
         }
         
         .enter-button {
-            padding: 12px 25px;
-            background-color: var(--accent);
+            padding: 14px 35px;
+            background: var(--gradient-accent);
             color: var(--white);
             border: none;
             border-radius: 30px;
-            font-size: 1em;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
+            transition: var(--transition);
+            font-weight: 600;
             display: block;
             margin: 0 auto;
             text-decoration: none;
@@ -113,115 +107,91 @@
         }
         
         .enter-button:hover {
-            background-color: #899c71;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(157, 171, 134, 0.3);
+            background: #d83a56;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(233, 69, 96, 0.4);
         }
         
         @media (max-width: 768px) {
             .page-title {
-                font-size: 2em;
+                font-size: 2rem;
             }
             
             .section-box {
                 padding: 20px;
             }
         }
-
-        /* 页脚样式 */
-        footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 60px 20px 30px;
-            text-align: center;
-            font-size: 0.95em;
-            margin-top: 40px;
-        }
-
-        .contact-info {
-            margin: 20px 0;
-            line-height: 1.8;
-            opacity: 0.8;
-        }
-
-        .social-icons {
-            margin: 30px 0;
-        }
-
-        .social-icons a {
-            color: var(--white);
-            margin: 0 15px;
-            font-size: 20px;
-            transition: all 0.3s ease;
-            opacity: 0.7;
-        }
-
-        .social-icons a:hover {
-            color: var(--accent);
-            opacity: 1;
-        }
-
-        .beian {
-            margin-top: 30px;
-            font-size: 0.85em;
-            color: rgba(255,255,255,0.6);
-        }
-
-        .beian a {
-            color: rgba(255,255,255,0.6);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .beian a:hover {
-            color: var(--accent);
-        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-button">
-            <i class="fas fa-arrow-left"></i>返回主页
-        </a>
-        
-        <h1 class="page-title">更多</h1>
-        
-        <div class="section-box">
-            <h2 class="section-title">文章中心</h2>
-            <p class="section-content">这里收录了我的所有文章和随笔，点击下方按钮查看完整列表。</p>
-            <a href="article.html" class="enter-button">进入</a>
-        </div>
-        
-        <div class="section-box">
-            <h2 class="section-title">个人中心</h2>
-            <p class="section-content">点击进入账号信息管理。您可以更改昵称、登录邮箱、密码等。</p>
-            <a href="profile.html" class="enter-button">进入</a>
-        </div>
-        
-        <div class="section-box">
-            <h2 class="section-title">地址查询</h2>
-            <p class="section-content">安全查询我的联系地址，请输入密码访问。</p>
-            <a href="address.html" class="enter-button">进入</a>
+  <!-- 导航栏组件 -->
+  <nav class="navbar">
+    <div class="nav-brand">
+        <div class="logo">白子俊</div>
+        <div class="dropdown-menu">
+            <a href="index.html" class="dropdown-toggle">网站导航 <i class="fas fa-chevron-down"></i></a>
+            <div class="dropdown-content">
+                <a href="index.html">首页</a>
+                <a href="article.html">文章中心</a>
+                <a href="more.html">更多</a>
+            </div>
         </div>
     </div>
+    
+    <div class="nav-controls">
+      <div class="user-info" id="userInfo"></div>
+      <div class="hamburger">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </nav>
 
-    <!-- 页脚部分 -->
-    <footer>
-        <p>笃行致远  事必尽善</p>
-        <div class="contact-info">
-            <p>WeChat: FreedomOfSpace</p>
-            <p>电子邮件: CHNbaizijun@163.com</p>
-        </div>
-        <div class="social-icons">
-            <a href="#"><i class="fab fa-weixin"></i></a>
-            <a href="#"><i class="fab fa-weibo"></i></a>
-            <a href="#"><i class="fab fa-qq"></i></a>
-            <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
-        </div>
-        <div class="beian">
-            <a href="https://beian.miit.gov.cn">京ICP备XXXXXXXX号</a>
-        </div>
-    </footer>
+  <div class="container">
+    <a href="index.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>返回主页
+    </a>
+    
+    <h1 class="page-title">更多</h1>
+    
+    <div class="section-box">
+        <h2 class="section-title">文章中心</h2>
+        <p class="section-content">这里收录了我的所有文章和随笔，点击下方按钮查看完整列表。</p>
+        <a href="article.html" class="enter-button">进入</a>
+    </div>
+    
+    <div class="section-box">
+        <h2 class="section-title">个人中心</h2>
+        <p class="section-content">点击进入账号信息管理。您可以更改昵称、登录邮箱、密码等。</p>
+        <a href="profile.html" class="enter-button">进入</a>
+    </div>
+  </div>
 
+  <!-- 页脚部分 -->
+  <footer id="contact">
+      <p>笃行致远  事必尽善</p>
+      <div class="contact-info">
+          <p>WeChat: FreedomOfSpace</p>
+          <p>电子邮件: CHNbaizijun@163.com</p>
+      </div>
+      <div class="social-icons">
+          <a href="#"><i class="fab fa-weixin"></i></a>
+          <a href="#"><i class="fab fa-weibo"></i></a>
+          <a href="#"><i class="fab fa-qq"></i></a>
+          <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
+      </div>
+      <div class="beian">
+          <a href="https://beian.miit.gov.cn">京ICP备2020236654号-9</a>
+      </div>
+  </footer>
+
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    $(document).ready(function() {
+        updateUserStatus();
+    });
+  </script>
 </body>
 </html>

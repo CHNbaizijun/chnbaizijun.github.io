@@ -3,38 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文章中心 | 白子俊</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+    <title>文章中心 | AeroMelody</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/font-awesome/css/all.min.css">
     <style>
-        :root {
-            --primary: #6D8B74;
-            --secondary: #94B49F;
-            --accent: #9DAB86;
-            --light: #F5F0E1;
-            --white: #FFFFFF;
-            --dark: #4D4D4D;
-            --light-gray: #f8f9fa;
-            --border: #e0e0e0;
-            --shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --error: #e74c3c;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
+        .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 120px 20px 40px;
             min-height: 100vh;
         }
         
@@ -42,13 +18,13 @@
             display: inline-flex;
             align-items: center;
             margin-bottom: 30px;
-            color: var(--primary);
+            color: var(--highlight);
             text-decoration: none;
-            font-size: 16px;
-            transition: all 0.3s;
+            font-size: 1.1rem;
+            transition: var(--transition);
             padding: 8px 16px;
             border-radius: 30px;
-            background: rgba(109, 139, 116, 0.1);
+            background: rgba(233, 69, 96, 0.1);
         }
         
         .back-button i {
@@ -56,8 +32,8 @@
         }
         
         .back-button:hover {
-            color: var(--white);
-            background-color: var(--accent);
+            color: var(--text-light);
+            background-color: var(--highlight);
             transform: translateY(-2px);
         }
         
@@ -71,8 +47,8 @@
         }
         
         .page-title {
-            font-size: 2.5em;
-            color: var(--primary);
+            font-size: 2.5rem;
+            color: var(--text-light);
             position: relative;
             padding-bottom: 15px;
             margin: 0;
@@ -84,40 +60,42 @@
             display: block;
             width: 80px;
             height: 4px;
-            background: var(--accent);
+            background: var(--highlight);
             margin-top: 15px;
             border-radius: 2px;
         }
         
         .new-article-btn {
-            padding: 12px 25px;
-            background-color: var(--accent);
+            padding: 14px 28px;
+            background: var(--gradient-accent);
             color: var(--white);
             border: none;
             border-radius: 30px;
-            font-size: 1em;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
+            transition: var(--transition);
+            font-weight: 600;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 10px rgba(157, 171, 134, 0.3);
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
         }
         
         .new-article-btn:hover {
-            background-color: #7a9372;
+            background: #d83a56;
             transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(157, 171, 134, 0.4);
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.4);
         }
         
         .articles-container {
-            background: var(--white);
-            border-radius: 12px;
+            background: rgba(30, 30, 46, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-md);
             padding: 30px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-lg);
             margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .article-list {
@@ -128,12 +106,12 @@
         }
         
         .article-card {
-            background: var(--light-gray);
-            border-radius: 12px;
+            background: rgba(20, 20, 35, 0.5);
+            border-radius: var(--radius-md);
             overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             flex-direction: column;
             height: 100%;
@@ -141,18 +119,18 @@
         
         .article-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
-            border-color: var(--accent);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            border-color: var(--highlight);
         }
         
         .article-image {
             height: 180px;
-            background: linear-gradient(135deg, #6D8B74 0%, #9DAB86 100%);
+            background: var(--gradient-accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 2em;
+            color: var(--white);
+            font-size: 2.5rem;
             font-weight: bold;
         }
         
@@ -164,37 +142,32 @@
         }
         
         .article-title {
-            font-size: 1.3em;
-            color: var(--primary);
+            font-size: 1.3rem;
+            color: var(--text-light);
             margin-bottom: 12px;
             line-height: 1.4;
             font-weight: 600;
         }
         
         .article-excerpt {
-            color: #555;
+            color: var(--text-light);
+            opacity: 0.8;
             margin-bottom: 15px;
             flex-grow: 1;
-            font-size: 0.95em;
+            font-size: 0.95rem;
         }
         
         .article-meta {
             display: flex;
             justify-content: space-between;
-            color: #777;
-            font-size: 0.85em;
-            border-top: 1px solid var(--border);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 15px;
             margin-top: auto;
         }
         
-        .article-author {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .article-date {
+        .article-author, .article-date {
             display: flex;
             align-items: center;
             gap: 6px;
@@ -209,13 +182,13 @@
         
         .action-btn {
             padding: 8px 14px;
-            background: rgba(157, 171, 134, 0.1);
+            background: rgba(233, 69, 96, 0.1);
             border: none;
             border-radius: 6px;
-            color: var(--primary);
+            color: var(--text-light);
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9em;
+            transition: var(--transition);
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -223,7 +196,7 @@
         }
         
         .action-btn:hover {
-            background: rgba(157, 171, 134, 0.2);
+            background: rgba(233, 69, 96, 0.2);
             transform: translateY(-2px);
         }
         
@@ -244,44 +217,46 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.9);
             z-index: 1000;
             overflow-y: auto;
         }
         
         .modal-content {
-            background-color: var(--white);
+            background: rgba(20, 20, 35, 0.95);
+            backdrop-filter: blur(10px);
             margin: 40px auto;
             padding: 40px;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
             max-width: 800px;
             width: 90%;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-lg);
             position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .modal-title {
-            font-size: 1.8em;
-            color: var(--primary);
+            font-size: 1.8rem;
+            color: var(--text-light);
             margin-bottom: 15px;
             padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             font-weight: 700;
         }
         
         .article-details {
             display: flex;
             justify-content: space-between;
-            color: #888;
-            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
             margin-bottom: 25px;
         }
         
         .modal-text {
             white-space: pre-line;
             line-height: 1.8;
-            color: #555;
-            font-size: 1.05em;
+            color: var(--text-light);
+            font-size: 1.05rem;
             margin-bottom: 30px;
         }
         
@@ -289,8 +264,8 @@
             position: absolute;
             top: 15px;
             right: 15px;
-            font-size: 1.8em;
-            color: #999;
+            font-size: 1.8rem;
+            color: var(--text-light);
             cursor: pointer;
             background: none;
             border: none;
@@ -300,22 +275,25 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all 0.3s;
+            transition: var(--transition);
+            opacity: 0.7;
         }
         
         .close-modal:hover {
-            background: rgba(0,0,0,0.05);
-            color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--highlight);
             transform: rotate(90deg);
+            opacity: 1;
         }
         
         /* 表单样式 */
         .form-container {
-            background: var(--white);
-            border-radius: 8px;
+            background: rgba(20, 20, 35, 0.5);
+            border-radius: var(--radius-md);
             padding: 30px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
             margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .form-group {
@@ -326,17 +304,19 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: var(--primary);
+            color: var(--text-light);
         }
         
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 14px 18px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
+            background: rgba(20, 20, 35, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-sm);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: var(--transition);
         }
         
         .form-group textarea {
@@ -346,9 +326,10 @@
         
         .form-group input:focus,
         .form-group textarea:focus {
-            border-color: var(--accent);
+            border-color: var(--highlight);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(157, 171, 134, 0.2);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
+            background: rgba(25, 25, 45, 0.8);
         }
         
         .form-actions {
@@ -362,30 +343,31 @@
             padding: 12px 28px;
             border: none;
             border-radius: 30px;
-            font-size: 1em;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
+            transition: var(--transition);
+            font-weight: 600;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         .submit-btn {
-            background-color: var(--accent);
+            background: var(--gradient-accent);
             color: var(--white);
         }
         
         .submit-btn:hover {
-            background-color: #7a9372;
+            background: #d83a56;
             transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(233, 69, 96, 0.4);
         }
         
         .cancel-btn {
-            background-color: #f0f0f0;
-            color: #555;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
         }
         
         .cancel-btn:hover {
-            background-color: #e0e0e0;
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
         }
         
@@ -393,12 +375,12 @@
         .comments-section {
             margin-top: 40px;
             padding-top: 30px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .comments-section h3 {
-            font-size: 1.4em;
-            color: var(--primary);
+            font-size: 1.4rem;
+            color: var(--text-light);
             margin-bottom: 25px;
             display: flex;
             align-items: center;
@@ -408,16 +390,18 @@
         
         .comment-item {
             padding: 20px;
-            background: var(--light-gray);
-            border-radius: 8px;
+            background: rgba(20, 20, 35, 0.5);
+            border-radius: var(--radius-sm);
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .comment-item:hover {
             transform: translateX(5px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-color: rgba(233, 69, 96, 0.3);
         }
         
         .comment-header {
@@ -428,28 +412,28 @@
         
         .comment-author {
             font-weight: bold;
-            color: var(--secondary);
+            color: var(--highlight);
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
         .comment-date {
-            color: #888;
-            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
         }
         
         .comment-content {
             line-height: 1.6;
-            color: #555;
+            color: var(--text-light);
             padding-left: 28px;
         }
         
         .comment-input-area {
             margin-top: 30px;
-            background: rgba(157, 171, 134, 0.05);
+            background: rgba(233, 69, 96, 0.05);
             padding: 25px;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
         }
         
         #commentInput {
@@ -457,62 +441,63 @@
             height: 120px;
             margin: 15px 0;
             padding: 15px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            background: rgba(20, 20, 35, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-sm);
             resize: vertical;
-            font-size: 1em;
-            transition: all 0.3s;
+            font-size: 1rem;
+            transition: var(--transition);
+            color: var(--text-light);
         }
         
         #commentInput:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(157, 171, 134, 0.2);
+            border-color: var(--highlight);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
+            background: rgba(25, 25, 45, 0.8);
         }
         
         #submitComment {
             padding: 12px 28px;
-            background-color: var(--accent);
+            background: var(--gradient-accent);
             color: var(--white);
             border: none;
             border-radius: 30px;
-            font-size: 1em;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-            box-shadow: 0 4px 8px rgba(157, 171, 134, 0.3);
+            transition: var(--transition);
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(233, 69, 96, 0.3);
         }
         
         #submitComment:hover {
-            background-color: #7a9372;
+            background: #d83a56;
             transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(157, 171, 134, 0.4);
+            box-shadow: 0 8px 15px rgba(233, 69, 96, 0.4);
         }
         
         #submitComment:disabled {
-            background-color: #cccccc;
+            background: #cccccc;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
         
-        .comment-error {
-            color: var(--error);
+        .comment-error, .comment-success {
             margin-top: 10px;
-            font-size: 0.9em;
+            font-size: 0.9rem;
             display: none;
             padding: 8px 12px;
-            background: rgba(231, 76, 60, 0.1);
             border-radius: 6px;
         }
         
+        .comment-error {
+            color: var(--error);
+            background: rgba(255, 107, 107, 0.1);
+        }
+        
         .comment-success {
-            color: var(--primary);
-            margin-top: 10px;
-            font-size: 0.9em;
-            display: none;
-            padding: 8px 12px;
-            background: rgba(109, 139, 116, 0.1);
-            border-radius: 6px;
+            color: var(--highlight);
+            background: rgba(233, 69, 96, 0.1);
         }
         
         /* 加载动画 */
@@ -520,9 +505,9 @@
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(157, 171, 134, 0.3);
+            border: 3px solid rgba(233, 69, 96, 0.3);
             border-radius: 50%;
-            border-top-color: var(--accent);
+            border-top-color: var(--highlight);
             animation: spin 1s ease-in-out infinite;
             margin-right: 10px;
         }
@@ -531,75 +516,14 @@
             to { transform: rotate(360deg); }
         }
         
-        /* 页脚样式 */
-        footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 60px 20px 30px;
-            text-align: center;
-            font-size: 0.95em;
-            margin-top: 60px;
-            border-radius: 12px;
-        }
-
-        .contact-info {
-            margin: 20px 0;
-            line-height: 1.8;
-            opacity: 0.8;
-        }
-
-        .social-icons {
-            margin: 30px 0;
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-        }
-
-        .social-icons a {
-            color: var(--white);
-            font-size: 24px;
-            transition: all 0.3s ease;
-            opacity: 0.7;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.1);
-        }
-
-        .social-icons a:hover {
-            color: var(--accent);
-            opacity: 1;
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-5px);
-        }
-
-        .beian {
-            margin-top: 30px;
-            font-size: 0.85em;
-            color: rgba(255,255,255,0.6);
-        }
-
-        .beian a {
-            color: rgba(255,255,255,0.6);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .beian a:hover {
-            color: var(--accent);
-        }
-        
         /* 响应式设计 */
         @media (max-width: 768px) {
             body {
-                padding: 20px 15px;
+                padding: 100px 15px 40px;
             }
             
             .page-title {
-                font-size: 2em;
+                font-size: 2rem;
             }
             
             .header-container {
@@ -622,7 +546,7 @@
         
         @media (max-width: 480px) {
             .page-title {
-                font-size: 1.7em;
+                font-size: 1.7rem;
             }
             
             .new-article-btn {
@@ -641,6 +565,31 @@
     </style>
 </head>
 <body>
+  <!-- 导航栏组件 -->
+  <nav class="navbar">
+    <div class="nav-brand">
+        <div class="logo">白子俊</div>
+        <div class="dropdown-menu">
+            <a href="index.html" class="dropdown-toggle">网站导航 <i class="fas fa-chevron-down"></i></a>
+            <div class="dropdown-content">
+                <a href="index.html">首页</a>
+                <a href="article.html">文章中心</a>
+                <a href="more.html">更多</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav-controls">
+      <div class="user-info" id="userInfo"></div>
+      <div class="hamburger">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
     <a href="more.html" class="back-button">
         <i class="fas fa-arrow-left"></i>返回
     </a>
@@ -717,433 +666,436 @@
             </div>
         </div>
     </div>
+  </div>
 
-    <script>
-        // LeanCloud初始化
-        AV.init({
-          appId: '0lpjg6Zgwua9jqUZDeJMVxpr-gzGzoHsz',
-          appKey: 'gV34QMHiVXzzDiS4GdyXtZt9',
-          serverURL: 'https://0lpjzgw.lc-cn-n1-shared.com'
-        });
-        
-        // 全局变量
-        let currentUser = null;
-        let currentArticleId = null;
-        let isAdmin = false;
-        
-        // DOM元素
-        const articlesList = $('#articlesList');
-        const articleModal = $('#articleModal');
-        const editArticleModal = $('#editArticleModal');
-        const newArticleBtn = $('#newArticleBtn');
-        const saveArticleBtn = $('#saveArticle');
-        const submitCommentBtn = $('#submitComment');
-        const commentError = $('#commentError');
-        const commentSuccess = $('#commentSuccess');
-        
-        // 初始化函数
-        async function init() {
-            // 检查用户登录状态
-            currentUser = AV.User.current();
-            if (!currentUser) {
-                alert('请先登录');
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            // 检查用户是否为管理员
-            isAdmin = checkIfAdmin(currentUser);
-            if (isAdmin) {
-                newArticleBtn.show();
-            } else {
-                newArticleBtn.hide();
-            }
-            
-            // 加载文章列表
-            await loadArticles();
-            
-            // 绑定事件
-            bindEvents();
+  <!-- 页脚部分 -->
+  <footer id="contact">
+      <p>笃行致远  事必尽善</p>
+      <div class="contact-info">
+          <p>WeChat: FreedomOfSpace</p>
+          <p>电子邮件: CHNbaizijun@163.com</p>
+      </div>
+      <div class="social-icons">
+          <a href="#"><i class="fab fa-weixin"></i></a>
+          <a href="#"><i class="fab fa-weibo"></i></a>
+          <a href="#"><i class="fab fa-qq"></i></a>
+          <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
+      </div>
+      <div class="beian">
+          <a href="https://beian.miit.gov.cn">京ICP备2020236654号-9</a>
+      </div>
+  </footer>
+
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/av-min.js"></script>
+  <script>
+    // LeanCloud初始化
+    AV.init({
+      appId: '0lpjg6Zgwua9jqUZDeJMVxpr-gzGzoHsz',
+      appKey: 'gV34QMHiVXzzDiS4GdyXtZt9',
+      serverURL: 'https://0lpjzgw.lc-cn-n1-shared.com'
+    });
+    
+    // 全局变量
+    let currentUser = null;
+    let currentArticleId = null;
+    let isAdmin = false;
+    
+    // DOM元素
+    const articlesList = $('#articlesList');
+    const articleModal = $('#articleModal');
+    const editArticleModal = $('#editArticleModal');
+    const newArticleBtn = $('#newArticleBtn');
+    const saveArticleBtn = $('#saveArticle');
+    const submitCommentBtn = $('#submitComment');
+    const commentError = $('#commentError');
+    const commentSuccess = $('#commentSuccess');
+    
+    // 初始化函数
+    async function init() {
+        // 检查用户登录状态
+        currentUser = AV.User.current();
+        if (!currentUser) {
+            alert('请先登录');
+            window.location.href = 'index.html';
+            return;
         }
         
         // 检查用户是否为管理员
-        function checkIfAdmin(user) {
-            // 实际应用中应使用更安全的权限检查
-            const adminUsernames = ['admin', 'baizijun', 'CHNbaizijun'];
-            return adminUsernames.includes(user.getUsername());
+        isAdmin = checkIfAdmin(currentUser);
+        if (isAdmin) {
+            newArticleBtn.show();
+        } else {
+            newArticleBtn.hide();
         }
         
         // 加载文章列表
-        async function loadArticles() {
-            try {
-                const query = new AV.Query('Article');
-                query.descending('createdAt');
-                query.include('author');
-                const articles = await query.find();
-                
-                renderArticles(articles);
-            } catch (err) {
-                console.error('加载文章失败:', err);
-                articlesList.html('<div style="text-align: center; padding: 40px; color: #e74c3c;">加载文章失败，请稍后重试</div>');
-            }
-        }
-        
-        // 渲染文章列表
-        function renderArticles(articles) {
-            if (articles.length === 0) {
-                articlesList.html('<p style="text-align: center; padding: 40px;">暂无文章</p>');
-                return;
-            }
-            
-            let html = '<div class="article-list">';
-            
-            articles.forEach(article => {
-                const title = article.get('title');
-                const content = article.get('content');
-                const author = article.get('author')?.get('nickname') || '未知作者';
-                const date = new Date(article.createdAt).toLocaleDateString();
-                const excerpt = content.length > 100 ? content.substring(0, 100) + '...' : content;
-                const initials = title.charAt(0).toUpperCase();
-                
-                html += `
-                <div class="article-card" data-id="${article.id}">
-                    <div class="article-image">
-                        <div>${initials}</div>
-                    </div>
-                    <div class="article-content">
-                        <h3 class="article-title">${title}</h3>
-                        <p class="article-excerpt">${excerpt}</p>
-                        <div class="article-meta">
-                            <div class="article-author">
-                                <i class="fas fa-user"></i>${author}
-                            </div>
-                            <div class="article-date">
-                                <i class="far fa-calendar"></i>${date}
-                            </div>
-                        </div>
-                        <div class="article-actions">
-                            <button class="action-btn read-btn" data-id="${article.id}">
-                                <i class="fas fa-book-open"></i>阅读
-                            </button>
-                            ${isAdmin ? `
-                            <button class="action-btn edit-btn" data-id="${article.id}">
-                                <i class="fas fa-edit"></i>编辑
-                            </button>
-                            <button class="action-btn delete delete-btn" data-id="${article.id}">
-                                <i class="fas fa-trash"></i>删除
-                            </button>
-                            ` : ''}
-                        </div>
-                    </div>
-                </div>
-                `;
-            });
-            
-            html += '</div>';
-            articlesList.html(html);
-        }
-        
-        // 加载单个文章
-        async function loadArticle(articleId) {
-            try {
-                const query = new AV.Query('Article');
-                const article = await query.get(articleId);
-                
-                const title = article.get('title');
-                const content = article.get('content');
-                const author = article.get('author')?.get('nickname') || '未知作者';
-                const date = new Date(article.createdAt).toLocaleDateString();
-                
-                $('#modalTitle').text(title);
-                $('#modalText').text(content);
-                $('#modalAuthor').text(author);
-                $('#modalDate').text(date);
-                
-                // 加载评论
-                await loadComments(articleId);
-                
-                // 显示弹窗
-                articleModal.show();
-            } catch (err) {
-                console.error('加载文章失败:', err);
-                alert('加载文章失败，请稍后重试');
-            }
-        }
-        
-        // 加载评论（修复版）
-        async function loadComments(articleId) {
-            try {
-                const query = new AV.Query('Comment');
-                query.equalTo('articleId', articleId);
-                query.descending('createdAt');
-                const comments = await query.find();
-                
-                renderComments(comments);
-            } catch (err) {
-                console.error('加载评论失败:', err);
-                $('#commentsList').html('<p style="color: #e74c3c; padding: 20px; text-align: center;">评论加载失败</p>');
-            }
-        }
-        
-        // 渲染评论（修复版）
-        function renderComments(comments) {
-            $('#commentCount').text(comments.length);
-            
-            if (comments.length === 0) {
-                $('#commentsList').html('<p style="text-align: center; padding: 30px; color: #777;">暂无评论，成为第一个评论者吧！</p>');
-                return;
-            }
-            
-            let html = '';
-            
-            comments.forEach(comment => {
-                const content = comment.get('content');
-                const author = comment.get('author') || '匿名用户';
-                const date = new Date(comment.createdAt).toLocaleString();
-                
-                html += `
-                <div class="comment-item">
-                    <div class="comment-header">
-                        <div class="comment-author">
-                            <i class="fas fa-user"></i>${author}
-                        </div>
-                        <div class="comment-date">${date}</div>
-                    </div>
-                    <div class="comment-content">${content}</div>
-                </div>
-                `;
-            });
-            
-            $('#commentsList').html(html);
-        }
-        
-        // 提交评论
-        async function submitComment() {
-            // 获取评论内容
-            const content = $('#commentInput').val().trim();
-            
-            // 验证评论内容
-            if (!content) {
-                commentError.text('请输入评论内容').show();
-                return;
-            }
-            
-            // 检查用户是否登录
-            if (!currentUser) {
-                commentError.text('请先登录后再发表评论').show();
-                return;
-            }
-            
-            // 确保有当前文章ID
-            if (!currentArticleId) {
-                commentError.text('无法确定评论的文章，请刷新页面重试').show();
-                return;
-            }
-            
-            try {
-                // 禁用提交按钮防止重复提交
-                submitCommentBtn.prop('disabled', true).text('提交中...');
-                commentError.hide();
-                
-                // 创建评论对象
-                const Comment = AV.Object.extend('Comment');
-                const newComment = new Comment();
-                
-                // 设置评论内容
-                newComment.set('articleId', currentArticleId);
-                newComment.set('content', content);
-                
-                // 存储用户名而不是用户对象
-                const username = currentUser.get('nickname') || currentUser.getUsername();
-                newComment.set('author', username);
-                
-                // 保存评论
-                await newComment.save();
-                
-                // 清空输入框
-                $('#commentInput').val('');
-                
-                // 重新加载评论列表
-                await loadComments(currentArticleId);
-                
-                // 显示成功消息
-                commentSuccess.text('评论提交成功！').show();
-                setTimeout(() => commentSuccess.hide(), 3000);
-            } catch (err) {
-                console.error('评论提交失败:', err);
-                commentError.text('评论提交失败: ' + err.message).show();
-            } finally {
-                // 重新启用提交按钮
-                submitCommentBtn.prop('disabled', false).text('提交评论');
-            }
-        }
-        
-        // 创建/编辑文章
-        async function saveArticle() {
-            const title = $('#articleTitle').val().trim();
-            const content = $('#articleContent').val().trim();
-            
-            if (!title || !content) {
-                alert('请填写标题和内容');
-                return;
-            }
-            
-            try {
-                saveArticleBtn.prop('disabled', true).text('保存中...');
-                
-                const Article = AV.Object.extend('Article');
-                let article;
-                
-                if (currentArticleId) {
-                    // 编辑现有文章
-                    article = AV.Object.createWithoutData('Article', currentArticleId);
-                } else {
-                    // 创建新文章
-                    article = new Article();
-                    article.set('author', currentUser);
-                }
-                
-                article.set('title', title);
-                article.set('content', content);
-                
-                await article.save();
-                
-                // 关闭编辑弹窗并刷新列表
-                editArticleModal.hide();
-                await loadArticles();
-            } catch (err) {
-                console.error('保存文章失败:', err);
-                alert('保存文章失败，请稍后重试');
-            } finally {
-                saveArticleBtn.prop('disabled', false).text('保存文章');
-            }
-        }
-        
-        // 删除文章
-        async function deleteArticle(articleId) {
-            if (!confirm('确定要删除这篇文章吗？此操作不可恢复。')) {
-                return;
-            }
-            
-            try {
-                const article = AV.Object.createWithoutData('Article', articleId);
-                await article.destroy();
-                
-                // 刷新文章列表
-                await loadArticles();
-            } catch (err) {
-                console.error('删除文章失败:', err);
-                alert('删除文章失败，请稍后重试');
-            }
-        }
+        await loadArticles();
         
         // 绑定事件
-        function bindEvents() {
-            // 打开文章详情
-            $(document).on('click', '.read-btn', function() {
-                const articleId = $(this).data('id');
-                currentArticleId = articleId;
-                loadArticle(articleId);
-            });
+        bindEvents();
+    }
+    
+    // 检查用户是否为管理员
+    function checkIfAdmin(user) {
+        // 实际应用中应使用更安全的权限检查
+        const adminUsernames = ['admin', 'baizijun', 'CHNbaizijun'];
+        return adminUsernames.includes(user.getUsername());
+    }
+    
+    // 加载文章列表
+    async function loadArticles() {
+        try {
+            const query = new AV.Query('Article');
+            query.descending('createdAt');
+            query.include('author');
+            const articles = await query.find();
             
-            // 编辑文章
-            $(document).on('click', '.edit-btn', function() {
-                const articleId = $(this).data('id');
-                editArticle(articleId);
-            });
-            
-            // 删除文章
-            $(document).on('click', '.delete-btn', function() {
-                const articleId = $(this).data('id');
-                deleteArticle(articleId);
-            });
-            
-            // 关闭详情弹窗
-            $('#closeModal').click(() => {
-                articleModal.hide();
-                commentError.hide();
-                commentSuccess.hide();
-            });
-            
-            // 关闭编辑弹窗
-            $('#closeEditModal, #cancelEdit').click(() => {
-                editArticleModal.hide();
-            });
-            
-            // 打开新文章表单
-            $('#newArticleBtn').click(() => {
-                editArticle(null);
-            });
-            
-            // 保存文章
-            $('#saveArticle').click(saveArticle);
-            
-            // 提交评论
-            $('#submitComment').click(submitComment);
-            
-            // 回车键提交评论（Shift+Enter换行）
-            $('#commentInput').keypress(function(e) {
-                if (e.which === 13 && !e.shiftKey) {
-                    e.preventDefault();
-                    submitComment();
-                }
-            });
-            
-            // 评论输入时隐藏错误消息
-            $('#commentInput').on('input', function() {
-                commentError.hide();
-            });
+            renderArticles(articles);
+        } catch (err) {
+            console.error('加载文章失败:', err);
+            articlesList.html('<div style="text-align: center; padding: 40px; color: #ff6b6b;">加载文章失败，请稍后重试</div>');
+        }
+    }
+    
+    // 渲染文章列表
+    function renderArticles(articles) {
+        if (articles.length === 0) {
+            articlesList.html('<p style="text-align: center; padding: 40px;">暂无文章</p>');
+            return;
         }
         
-        // 编辑文章
-        async function editArticle(articleId) {
-            currentArticleId = articleId;
+        let html = '<div class="article-list">';
+        
+        articles.forEach(article => {
+            const title = article.get('title');
+            const content = article.get('content');
+            const author = article.get('author')?.get('nickname') || '未知作者';
+            const date = new Date(article.createdAt).toLocaleDateString();
+            const excerpt = content.length > 100 ? content.substring(0, 100) + '...' : content;
+            const initials = title.charAt(0).toUpperCase();
             
-            if (articleId) {
+            html += `
+            <div class="article-card" data-id="${article.id}">
+                <div class="article-image">
+                    <div>${initials}</div>
+                </div>
+                <div class="article-content">
+                    <h3 class="article-title">${title}</h3>
+                    <p class="article-excerpt">${excerpt}</p>
+                    <div class="article-meta">
+                        <div class="article-author">
+                            <i class="fas fa-user"></i>${author}
+                        </div>
+                        <div class="article-date">
+                            <i class="far fa-calendar"></i>${date}
+                        </div>
+                    </div>
+                    <div class="article-actions">
+                        <button class="action-btn read-btn" data-id="${article.id}">
+                            <i class="fas fa-book-open"></i>阅读
+                        </button>
+                        ${isAdmin ? `
+                        <button class="action-btn edit-btn" data-id="${article.id}">
+                            <i class="fas fa-edit"></i>编辑
+                        </button>
+                        <button class="action-btn delete delete-btn" data-id="${article.id}">
+                            <i class="fas fa-trash"></i>删除
+                        </button>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        
+        html += '</div>';
+        articlesList.html(html);
+    }
+    
+    // 加载单个文章
+    async function loadArticle(articleId) {
+        try {
+            const query = new AV.Query('Article');
+            const article = await query.get(articleId);
+            
+            const title = article.get('title');
+            const content = article.get('content');
+            const author = article.get('author')?.get('nickname') || '未知作者';
+            const date = new Date(article.createdAt).toLocaleDateString();
+            
+            $('#modalTitle').text(title);
+            $('#modalText').text(content);
+            $('#modalAuthor').text(author);
+            $('#modalDate').text(date);
+            
+            // 加载评论
+            await loadComments(articleId);
+            
+            // 显示弹窗
+            articleModal.show();
+        } catch (err) {
+            console.error('加载文章失败:', err);
+            alert('加载文章失败，请稍后重试');
+        }
+    }
+    
+    // 加载评论（修复版）
+    async function loadComments(articleId) {
+        try {
+            const query = new AV.Query('Comment');
+            query.equalTo('articleId', articleId);
+            query.descending('createdAt');
+            const comments = await query.find();
+            
+            renderComments(comments);
+        } catch (err) {
+            console.error('加载评论失败:', err);
+            $('#commentsList').html('<p style="color: #ff6b6b; padding: 20px; text-align: center;">评论加载失败</p>');
+        }
+    }
+    
+    // 渲染评论（修复版）
+    function renderComments(comments) {
+        $('#commentCount').text(comments.length);
+        
+        if (comments.length === 0) {
+            $('#commentsList').html('<p style="text-align: center; padding: 30px; color: #777;">暂无评论，成为第一个评论者吧！</p>');
+            return;
+        }
+        
+        let html = '';
+        
+        comments.forEach(comment => {
+            const content = comment.get('content');
+            const author = comment.get('author') || '匿名用户';
+            const date = new Date(comment.createdAt).toLocaleString();
+            
+            html += `
+            <div class="comment-item">
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <i class="fas fa-user"></i>${author}
+                    </div>
+                    <div class="comment-date">${date}</div>
+                </div>
+                <div class="comment-content">${content}</div>
+            </div>
+            `;
+        });
+        
+        $('#commentsList').html(html);
+    }
+    
+    // 提交评论
+    async function submitComment() {
+        // 获取评论内容
+        const content = $('#commentInput').val().trim();
+        
+        // 验证评论内容
+        if (!content) {
+            commentError.text('请输入评论内容').show();
+            return;
+        }
+        
+        // 检查用户是否登录
+        if (!currentUser) {
+            commentError.text('请先登录后再发表评论').show();
+            return;
+        }
+        
+        // 确保有当前文章ID
+        if (!currentArticleId) {
+            commentError.text('无法确定评论的文章，请刷新页面重试').show();
+            return;
+        }
+        
+        try {
+            // 禁用提交按钮防止重复提交
+            submitCommentBtn.prop('disabled', true).text('提交中...');
+            commentError.hide();
+            
+            // 创建评论对象
+            const Comment = AV.Object.extend('Comment');
+            const newComment = new Comment();
+            
+            // 设置评论内容
+            newComment.set('articleId', currentArticleId);
+            newComment.set('content', content);
+            
+            // 存储用户名而不是用户对象
+            const username = currentUser.get('nickname') || currentUser.getUsername();
+            newComment.set('author', username);
+            
+            // 保存评论
+            await newComment.save();
+            
+            // 清空输入框
+            $('#commentInput').val('');
+            
+            // 重新加载评论列表
+            await loadComments(currentArticleId);
+            
+            // 显示成功消息
+            commentSuccess.text('评论提交成功！').show();
+            setTimeout(() => commentSuccess.hide(), 3000);
+        } catch (err) {
+            console.error('评论提交失败:', err);
+            commentError.text('评论提交失败: ' + err.message).show();
+        } finally {
+            // 重新启用提交按钮
+            submitCommentBtn.prop('disabled', false).text('提交评论');
+        }
+    }
+    
+    // 创建/编辑文章
+    async function saveArticle() {
+        const title = $('#articleTitle').val().trim();
+        const content = $('#articleContent').val().trim();
+        
+        if (!title || !content) {
+            alert('请填写标题和内容');
+            return;
+        }
+        
+        try {
+            saveArticleBtn.prop('disabled', true).text('保存中...');
+            
+            const Article = AV.Object.extend('Article');
+            let article;
+            
+            if (currentArticleId) {
                 // 编辑现有文章
-                $('#editModalTitle').text('编辑文章');
-                
-                try {
-                    const article = await (new AV.Query('Article')).get(articleId);
-                    $('#articleTitle').val(article.get('title'));
-                    $('#articleContent').val(article.get('content'));
-                } catch (err) {
-                    console.error('加载文章失败:', err);
-                    alert('加载文章失败');
-                    return;
-                }
+                article = AV.Object.createWithoutData('Article', currentArticleId);
             } else {
                 // 创建新文章
-                $('#editModalTitle').text('发布新文章');
-                $('#articleTitle').val('');
-                $('#articleContent').val('');
+                article = new Article();
+                article.set('author', currentUser);
             }
             
-            editArticleModal.show();
+            article.set('title', title);
+            article.set('content', content);
+            
+            await article.save();
+            
+            // 关闭编辑弹窗并刷新列表
+            editArticleModal.hide();
+            await loadArticles();
+        } catch (err) {
+            console.error('保存文章失败:', err);
+            alert('保存文章失败，请稍后重试');
+        } finally {
+            saveArticleBtn.prop('disabled', false).text('保存文章');
+        }
+    }
+    
+    // 删除文章
+    async function deleteArticle(articleId) {
+        if (!confirm('确定永久删除这篇文章吗？此操作不可恢复！')) {
+            return;
         }
         
-        // 页面初始化
-        $(document).ready(() => {
-            init();
+        try {
+            const article = AV.Object.createWithoutData('Article', articleId);
+            await article.destroy();
+            
+            // 刷新文章列表
+            await loadArticles();
+        } catch (err) {
+            console.error('删除文章失败:', err);
+            alert('删除文章失败，请稍后重试');
+        }
+    }
+    
+    // 绑定事件
+    function bindEvents() {
+        // 打开文章详情
+        $(document).on('click', '.read-btn', function() {
+            const articleId = $(this).data('id');
+            currentArticleId = articleId;
+            loadArticle(articleId);
         });
-    </script>
-
-    <!-- 页脚部分 -->
-    <footer>
-        <p>笃行致远 事必尽善</p>
-        <div class="contact-info">
-            <p>微信: FreedomOfSpace</p>
-            <p>电子邮件: CHNbaizijun@163.com</p>
-        </div>
-        <div class="social-icons">
-            <a href="#"><i class="fab fa-weixin"></i></a>
-            <a href="#"><i class="fab fa-weibo"></i></a>
-            <a href="#"><i class="fab fa-qq"></i></a>
-            <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
-        </div>
-        <div class="beian">
-            <a href="https://beian.miit.gov.cn">京ICP备2020236654号-9</a>
-        </div>
-    </footer>
+        
+        // 编辑文章
+        $(document).on('click', '.edit-btn', function() {
+            const articleId = $(this).data('id');
+            editArticle(articleId);
+        });
+        
+        // 删除文章
+        $(document).on('click', '.delete-btn', function() {
+            const articleId = $(this).data('id');
+            deleteArticle(articleId);
+        });
+        
+        // 关闭详情弹窗
+        $('#closeModal').click(() => {
+            articleModal.hide();
+            commentError.hide();
+            commentSuccess.hide();
+        });
+        
+        // 关闭编辑弹窗
+        $('#closeEditModal, #cancelEdit').click(() => {
+            editArticleModal.hide();
+        });
+        
+        // 打开新文章表单
+        $('#newArticleBtn').click(() => {
+            editArticle(null);
+        });
+        
+        // 保存文章
+        $('#saveArticle').click(saveArticle);
+        
+        // 提交评论
+        $('#submitComment').click(submitComment);
+        
+        // 回车键提交评论（Shift+Enter换行）
+        $('#commentInput').keypress(function(e) {
+            if (e.which === 13 && !e.shiftKey) {
+                e.preventDefault();
+                submitComment();
+            }
+        });
+        
+        // 评论输入时隐藏错误消息
+        $('#commentInput').on('input', function() {
+            commentError.hide();
+        });
+    }
+    
+    // 编辑文章
+    async function editArticle(articleId) {
+        currentArticleId = articleId;
+        
+        if (articleId) {
+            // 编辑现有文章
+            $('#editModalTitle').text('编辑文章');
+            
+            try {
+                const article = await (new AV.Query('Article')).get(articleId);
+                $('#articleTitle').val(article.get('title'));
+                $('#articleContent').val(article.get('content'));
+            } catch (err) {
+                console.error('加载文章失败:', err);
+                alert('加载文章失败');
+                return;
+            }
+        } else {
+            // 创建新文章
+            $('#editModalTitle').text('发布新文章');
+            $('#articleTitle').val('');
+            $('#articleContent').val('');
+        }
+        
+        editArticleModal.show();
+    }
+    
+    // 页面初始化
+    $(document).ready(() => {
+        init();
+    });
+  </script>
 </body>
 </html>
