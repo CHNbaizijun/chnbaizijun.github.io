@@ -1,324 +1,1410 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ByteMelody</title>
-  
-  <!-- 引入样式表 -->
-  <link rel="stylesheet" href="styles.css" />
-  
-  <!-- 引入Font Awesome图标库 -->
-  <link rel="stylesheet" href="assets/font-awesome/css/all.min.css" />
-  
-  <!-- 引入阿里巴巴普惠体字体 -->
-  <link href="https://fonts.alibabausercontent.com/icon?family=AlibabaPuHuiTi&display=swap" rel="stylesheet" />
-  
-  <!-- 引入AVOSCloud SDK -->
-  <script src="assets/js/av-min.js"></script>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>白子俊 | 钢琴艺术家</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --light: #f8f9fa;
+            --dark: #121212;
+            --text-light: #e6e6e6;
+            --text-dark: #333;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 15px 50px rgba(0, 0, 0, 0.2);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-accent: linear-gradient(135deg, var(--accent), var(--highlight));
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text-light);
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(26, 26, 46, 0.8) 0%, rgba(22, 33, 62, 0.1) 30%),
+                radial-gradient(circle at 90% 80%, rgba(15, 52, 96, 0.6) 0%, rgba(22, 33, 62, 0.1) 50%);
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, transparent 49.9%, rgba(233, 69, 96, 0.05) 50%),
+                linear-gradient(135deg, rgba(233, 69, 96, 0.05) 50%, transparent 50.1%);
+            background-size: 80px 80px;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 15px 5%;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--highlight);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            position: relative;
+            padding: 8px 0;
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            opacity: 1;
+            color: var(--highlight);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--highlight);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .auth-btn {
+            padding: 10px 25px;
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.4);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        /* 登录遮罩层 */
+        #authOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        #authOverlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #authMessage {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.4;
+        }
+
+        #overlayLoginButton {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.3);
+        }
+
+        #overlayLoginButton:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(233, 69, 96, 0.4);
+        }
+
+        /* 英雄区域 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: fadeUp 1s forwards 0.3s;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #e94560);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .cta-button {
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-primary {
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .cta-outline {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-light);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+        }
+
+        .cta-primary:hover {
+            box-shadow: 0 8px 30px rgba(233, 69, 96, 0.4);
+        }
+
+        .cta-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--highlight);
+        }
+
+        .hero-pattern {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40%;
+            max-width: 600px;
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        /* 内容区域 */
+        .section {
+            padding: 120px 10%;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--highlight);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 4rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+        }
+
+        .card {
+            background: rgba(30, 30, 46, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 2.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(233, 69, 96, 0.2);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--highlight);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .card-content {
+            opacity: 0.8;
+            line-height: 1.7;
+        }
+
+        /* 个人简介特殊样式 */
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .profile-photo {
+            flex: 1;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            max-width: 400px;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .profile-content {
+            flex: 1;
+        }
+
+        .profile-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-icon {
+            font-size: 1.5rem;
+            color: var(--highlight);
+            margin-right: 1rem;
+            min-width: 30px;
+        }
+
+        .profile-text {
+            flex: 1;
+        }
+
+        /* 时间线 */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            width: 50%;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 4rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 4rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--gradient-accent);
+            box-shadow: 0 0 0 6px rgba(233, 69, 96, 0.2);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+
+        .timeline-year {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--highlight);
+            margin-bottom: 0.5rem;
+        }
+
+        /* 导师卡片 */
+        .teacher-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(30, 30, 46, 0.6);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .teacher-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            border: 3px solid var(--highlight);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .teacher-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .teacher-title {
+            color: var(--highlight);
+            margin-bottom: 0.5rem;
+        }
+
+        /* 页脚 */
+        footer {
+            background: rgba(10, 10, 20, 0.9);
+            padding: 80px 10% 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-about {
+            max-width: 400px;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--highlight);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--highlight);
+            transform: translateX(5px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background: var(--highlight);
+            transform: translateY(-5px);
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* 登录弹窗 */
+        .login-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%;
+            max-width: 500px;
+            background: rgba(30, 30, 46, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .login-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: var(--text-light);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        .login-close:hover {
+            opacity: 1;
+            color: var(--highlight);
+        }
+
+        .form-tabs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tab.active {
+            background: var(--highlight);
+            color: white;
+        }
+
+        .tab-page {
+            display: none;
+        }
+
+        .tab-page.active {
+            display: block;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--highlight);
+            box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
+        }
+
+        .error-message {
+            color: var(--highlight);
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* 视频弹窗 */
+        #videoModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10001;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        #videoModal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .video-modal-content {
+            position: relative;
+            width: 80%;
+            max-width: 1000px;
+        }
+
+        .video-modal-content video {
+            width: 100%;
+            border-radius: var(--radius-md);
+        }
+
+        .close-video {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: white;
+            font-size: 36px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        .close-video:hover {
+            opacity: 1;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 0;
+                left: 0 !important;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: 20px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .profile-container {
+                flex-direction: column;
+            }
+            
+            .profile-photo {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .hero {
+                padding: 0 5%;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 80px 5%;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 动画 */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
 <body>
-  <!-- 页面首页锚点标识 -->
-  <div id="home"></div>
-  
-  <!-- 邮箱验证提示框 -->
-  <div class="email-verify-tip" id="emailVerifyTip">
-    验证邮件已发送至您的邮箱，请查收后完成验证
-    <!-- 验证邮件重新发送按钮 -->
-    <button onclick="resendVerifyEmail()" class="resend-btn">重新发送</button>
-  </div>
-  
-  <!-- 登录遮罩层 -->
-  <div id="authOverlay">
-    <!-- 登录提示信息 -->
-    <div id="authMessage">欢迎访问ByteMelody, 请登录后使用</div>
-    <!-- 登录按钮 -->
-    <button class="cta-button" id="overlayLoginButton">
-        立即登录
-    </button>
-  </div>
-  
-  <!-- 导航栏组件 -->
-  <nav class="navbar">
-    <div class="nav-brand">
-        <!-- 网站标志 -->
-        <div class="logo">白子俊</div>
-        <!-- 新增下拉菜单 -->
-        <div class="dropdown-menu">
-            <a href="#home" class="dropdown-toggle">首页导航 <i class="fas fa-chevron-down"></i></a>
-            <div class="dropdown-content">
-                <a href="#home">首页</a>
-                <a href="#about" data-auth>个人简介</a>
-                <a href="#achievements" data-auth>获奖情况</a>
-                <a href="#teachers" data-auth>学习经历</a>
-                <a href="#tools" data-auth>工具站点</a>
-                <a href="#contact" data-auth>联系方式</a>
+    <!-- 登录遮罩层 -->
+    <div id="authOverlay">
+        <div id="authMessage">欢迎访问ByteMelody, 请登录后使用</div>
+        <button class="cta-button cta-primary" id="overlayLoginButton">
+            立即登录
+        </button>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            Bai<span>ZiJun</span>
+        </div>
+        
+        <div class="nav-links">
+            <a href="#home" class="active">首页</a>
+            <a href="#about">个人简介</a>
+            <a href="#achievements">获奖情况</a>
+            <a href="#teachers">学习经历</a>
+            <a href="#contact">联系方式</a>
+        </div>
+        
+        <div class="nav-controls">
+            <button class="auth-btn" id="loginButton">
+                <i class="fas fa-user"></i> 登录
+            </button>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
             </div>
         </div>
-    </div>
-    
-    <div class="nav-controls">
-      <!-- 用户信息显示区域 -->
-      <div class="user-info" id="userInfo"></div>
-      <!-- 移动端菜单按钮 -->
-      <div class="hamburger">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-      </div>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- 悬浮登录按钮 -->
-  <div class="login-float-button" id="loginButton">
-    <i class="fas fa-user-lock"></i>
-  </div>
+    <!-- 英雄区域 -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">白子俊</h1>
+            <p class="hero-subtitle">中央音乐学院钢琴系学生 | 浙江音乐学院附中学生会主席 | 李叔同学院"拔尖人才培养计划"成员</p>
+            
+            <div class="hero-buttons">
+                <button class="cta-button cta-primary" id="watch-performance">
+                    <i class="fas fa-play-circle"></i> 观看演奏视频
+                </button>
+                <button class="cta-button cta-outline" onclick="window.location.href='more.html'">
+                    <i class="fas fa-arrow-right"></i> 更多内容
+                </button>
+            </div>
+        </div>
+        
+        <svg class="hero-pattern" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+            <path fill="none" stroke="rgba(233, 69, 96, 0.2)" stroke-width="2" d="M0,0 Q300,150 600,0 T600,600 Q300,450 0,600 Z" />
+            <circle cx="300" cy="300" r="150" fill="none" stroke="rgba(233, 69, 96, 0.1)" stroke-width="2" />
+            <path fill="none" stroke="rgba(233, 69, 96, 0.15)" stroke-width="1" d="M150,150 Q300,50 450,150 T450,450 Q300,550 150,450 Z" />
+        </svg>
+    </section>
 
-  <!-- 登录弹窗 -->
-  <div class="login-modal" id="loginModal">
-    <div class="login-box">
-        <!-- 关闭按钮 -->
+    <!-- 个人简介 -->
+    <section class="section" id="about">
+        <h2 class="section-title">个人简介</h2>
+        <p class="section-subtitle">用音符谱写人生，用琴键演绎梦想</p>
+        
+        <div class="profile-container">
+            <div class="profile-photo">
+                <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2070&auto=format&fit=crop" alt="白子俊">
+            </div>
+            
+            <div class="profile-content">
+                <div class="profile-item">
+                    <div class="profile-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="profile-text">
+                        <p>白子俊，现为浙江音乐学院附中高三钢琴专业学生，2025年考入中央音乐学院钢琴系。</p>
+                    </div>
+                </div>
+                
+                <div class="profile-item">
+                    <div class="profile-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="profile-text">
+                        <p>2022年以专业和文化课第一的成绩升入高中部，连续五年评为校级三好学生并获得奖学金，现任浙音附中学生会主席。</p>
+                    </div>
+                </div>
+                
+                <div class="profile-item">
+                    <div class="profile-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="profile-text">
+                        <p>2021年入选浙江音乐学院李叔同学院"拔尖人才培养计划"。</p>
+                    </div>
+                </div>
+                
+                <div class="profile-item">
+                    <div class="profile-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="profile-text">
+                        <p>曾与浙江交响乐团、台北国际联合青年交响乐团合作演出，指挥家孙舒彦、韦丹文等合作演出钢琴协奏曲。成功举办了三场个人独奏音乐会。</p>
+                    </div>
+                </div>
+                
+                <div class="profile-item">
+                    <div class="profile-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="profile-text">
+                        <p>入学以来参加了近40场学院和附中组织的社会实践活动演出，2021年获得浙江音乐学院暑期社会实践先进个人称号，2023年度浙江音乐学院优秀团员。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 获奖情况 -->
+    <section class="section" id="achievements" style="background: rgba(10, 15, 30, 0.5);">
+        <h2 class="section-title">获奖情况</h2>
+        <p class="section-subtitle">荣誉是努力的证明，每一次比赛都是成长的里程碑</p>
+        
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <h3 class="card-title">2024年</h3>
+                <p class="card-content">
+                    入围中国音乐家协会"中国音乐小金钟"全国展演
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-award"></i>
+                </div>
+                <h3 class="card-title">2023年</h3>
+                <p class="card-content">
+                    第十二届鼓浪屿青少年钢琴比赛少年组第一名
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="card-title">2022年</h3>
+                <p class="card-content">
+                    第十届施坦威全国青少年钢琴比赛华东一区专业B组第一名和全国总决赛第三名
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 class="card-title">2021年</h3>
+                <p class="card-content">
+                    浙江音乐学院"尽善奖"钢琴系中国作品钢琴比赛附中组第一名
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-music"></i>
+                </div>
+                <h3 class="card-title">2020年</h3>
+                <p class="card-content">
+                    "贝多芬钢琴协奏曲"比赛第二名
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-piano"></i>
+                </div>
+                <h3 class="card-title">2019年</h3>
+                <p class="card-content">
+                    第九届施坦威全国青少年钢琴比赛华东一区专业A组第一名<br>
+                    雅马哈亚洲音乐奖学金
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 学习经历 -->
+    <section class="section" id="teachers">
+        <h2 class="section-title">学习经历</h2>
+        <p class="section-subtitle">每一位导师都是艺术道路上的明灯，指引着前进的方向</p>
+        
+        <div class="grid-3">
+            <div class="teacher-card">
+                <img src="https://images.unsplash.com/photo-1590086782957-93c06ef21604?q=80&w=1887&auto=format&fit=crop" alt="陈小雨博士" class="teacher-photo">
+                <div class="teacher-name">陈小雨 博士</div>
+                <div class="teacher-title">现任导师</div>
+                <p>浙江音乐学院</p>
+            </div>
+            
+            <div class="teacher-card">
+                <img src="https://images.unsplash.com/photo-1518577915332-c2a19f149a75?q=80&w=1935&auto=format&fit=crop" alt="吴晓副教授" class="teacher-photo">
+                <div class="teacher-name">吴晓 副教授</div>
+                <div class="teacher-title">前任导师</div>
+                <p>浙江音乐学院</p>
+            </div>
+            
+            <div class="teacher-card">
+                <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2071&auto=format&fit=crop" alt="姚镁老师" class="teacher-photo">
+                <div class="teacher-name">姚镁 老师</div>
+                <div class="teacher-title">启蒙导师</div>
+                <p>资深钢琴教育家</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer id="contact">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo">白子俊</div>
+                <p class="footer-about">
+                    笃行致远，事必尽善。用音符表达情感，用琴键传递思想。
+                    在艺术的道路上不断探索，追求卓越。
+                </p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-weixin"></i></a>
+                    <a href="#"><i class="fab fa-weibo"></i></a>
+                    <a href="#"><i class="fab fa-qq"></i></a>
+                    <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="footer-title">快速链接</h3>
+                <ul class="footer-links">
+                    <li><a href="#home"><i class="fas fa-chevron-right"></i> 首页</a></li>
+                    <li><a href="#about"><i class="fas fa-chevron-right"></i> 个人简介</a></li>
+                    <li><a href="#achievements"><i class="fas fa-chevron-right"></i> 获奖情况</a></li>
+                    <li><a href="#teachers"><i class="fas fa-chevron-right"></i> 学习经历</a></li>
+                    <li><a href="more.html"><i class="fas fa-chevron-right"></i> 更多内容</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="footer-title">联系方式</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-comment"></i> WeChat: FreedomOfSpace</a></li>
+                    <li><a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i> CHNbaizijun@163.com</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> 浙江音乐学院</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2025 白子俊个人网站 | 京ICP备2020236654号-9 | 笃行致远 事必尽善
+        </div>
+    </footer>
+
+    <!-- 登录弹窗 -->
+    <div class="login-modal" id="loginModal">
         <span class="login-close" id="closeLogin">&times;</span>
         
-        <!-- 登录选项卡 -->
         <div class="form-tabs">
             <button class="tab active" data-tab="login">登录</button>
             <button class="tab" data-tab="signup">注册</button>
             <button class="tab" data-tab="forgot">找回密码</button>
         </div>
 
-        <!-- 登录页面内容 -->
         <div class="tab-page active" id="loginPage">
             <div class="error-message"></div>
-            <input type="email" id="loginEmail" placeholder="注册邮箱">
-            <input type="password" id="loginPassword" placeholder="密码">
-            <button id="loginBtn">立即登录</button>
+            <input type="email" class="login-input" id="loginEmail" placeholder="注册邮箱">
+            <input type="password" class="login-input" id="loginPassword" placeholder="密码">
+            <button class="login-btn" id="loginBtn">立即登录</button>
         </div>
 
-        <!-- 注册页面内容 -->
         <div class="tab-page" id="signupPage">
             <div class="error-message"></div>
-            <input type="text" id="signupNickname" placeholder="昵称（2-16位字符）">
-            <input type="email" id="signupEmail" placeholder="邮箱">
-            <input type="password" id="signupPassword" placeholder="密码（至少8位）" class="pwd-strength">
-            <!-- 密码强度提示 -->
-            <div class="password-strength"></div>
-            <input type="password" id="signupPasswordConfirm" placeholder="确认密码">
-            <button id="signupBtn">立即注册</button>
+            <input type="text" class="login-input" id="signupNickname" placeholder="昵称（2-16位字符）">
+            <input type="email" class="login-input" id="signupEmail" placeholder="邮箱">
+            <input type="password" class="login-input" id="signupPassword" placeholder="密码（至少8位）">
+            <input type="password" class="login-input" id="signupPasswordConfirm" placeholder="确认密码">
+            <button class="login-btn" id="signupBtn">立即注册</button>
         </div>
 
-        <!-- 找回密码页面内容 -->
         <div class="tab-page" id="forgotPage">
             <div class="error-message"></div>
-            <input type="email" id="forgotEmail" placeholder="输入注册邮箱">
-            <button id="forgotBtn">发送重置邮件</button>
-        </div>
-
-        <!-- 用户协议勾选框 -->
-        <div class="terms-box">
-            <input type="checkbox" id="agreeTerms" checked />
-            <label for="agreeTerms">我已阅读并同意<a href="/privacy.html" target="_blank">隐私政策</a></label>
+            <input type="email" class="login-input" id="forgotEmail" placeholder="输入注册邮箱">
+            <button class="login-btn" id="forgotBtn">发送重置邮件</button>
         </div>
     </div>
-  </div>
 
-  <!-- 首页内容区域 -->
-  <section class="hero" id="home">
-      <div class="hero-content">
-          <h1>Zijun Bai</h1>
-          <p>Central Conservatory Of Music</p>
-          <div class="hero-buttons">
-              <!-- 播放视频按钮 -->
-              <button class="cta-button" id="watch-performance">观看演奏视频</button>
-              <!-- 更多内容按钮 -->
-              <button class="cta-button outline" onclick="window.location.href='more.html'" data-auth>更多</button>
-          </div>
-      </div>
-      <!-- 滚动提示箭头 -->
-      <div class="scroll-down">
-          <i class="fas fa-chevron-down"></i>
-      </div>
-  </section>
-
-  <!-- 个人简介部分 -->
-  <section class="about" id="about">
-      <h2 class="section-title">个人简介</h2>
-      <div class="about-content">
-          <div class="about-text">
-              <p>白子俊，现为浙江音乐学院附中高三钢琴专业学生，2025年考入中央音乐学院钢琴系。</p>
-              <p>2022年以专业和文化课第一的成绩升入高中部，连续五年评为校级三好学生并获得奖学金，现任浙音附中学生会主席。</p>
-              <p>2021年入选浙江音乐学院李叔同学院"拔尖人才培养计划"。</p>
-              <p>曾与浙江交响乐团、台北国际联合青年交响乐团合作演出，指挥家孙舒彦、韦丹文等合作演出钢琴协奏曲。成功举办了三场个人独奏音乐会。</p>
-              <p>入学以来参加了近40场学院和附中组织的社会实践活动演出，2021年获得浙江音乐学院暑期社会实践先进个人称号，2023年度浙江音乐学院优秀团员。</p>
-          </div>
-          <div class="about-image">
-              <img src="../library/personalphoto.jpg" alt="白子俊">
-          </div>
-      </div>
-  </section>
-
-  <!-- 获奖情况部分 -->
-  <section class="achievements" id="achievements">
-    <h2 class="section-title">获奖情况</h2>
-    <div class="achievements-container">
-        <div class="achievements-scroll">
-            <!-- 原有achievement-card内容保持不变 -->
-            <div class="achievement-card">
-                <span class="year-badge">2024年</span>
-                <h3>中国音乐小金钟全国展演</h3>
-                <p>入围中国音乐家协会"中国音乐小金钟"全国展演</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2023年</span>
-                <h3>鼓浪屿青少年钢琴比赛</h3>
-                <p>第十二届鼓浪屿青少年钢琴比赛少年组第一名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2022年</span>
-                <h3>施坦威全国青少年钢琴比赛</h3>
-                <p>第十届施坦威全国青少年钢琴比赛华东一区专业B组第一名和全国总决赛第三名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2021年</span>
-                <h3>浙江音乐学院"尽善奖"</h3>
-                <p>钢琴系中国作品钢琴比赛附中组第一名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2020年</span>
-                <h3>浙江音乐学院比赛</h3>
-                <p>"贝多芬钢琴协奏曲"比赛第二名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2019年</span>
-                <h3>施坦威全国青少年钢琴比赛</h3>
-                <p>第九届施坦威全国青少年钢琴比赛华东一区专业A组第一名</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2019年</span>
-                <h3>雅马哈亚洲音乐奖学金</h3>
-                <p>2019年和2021年分别获得雅马哈亚洲音乐奖学金</p>
-            </div>
-            <div class="achievement-card">
-                <span class="year-badge">2013年</span>
-                <h3>嘉德威杯国际青少年钢琴大赛</h3>
-                <p>第三届嘉德威杯国际青少年钢琴大赛总决赛第一名</p>
-            </div>
+    <!-- 视频弹窗 -->
+    <div id="videoModal">
+        <div class="video-modal-content">
+            <span class="close-video">&times;</span>
+            <video controls>
+                <source src="../library/performance.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
         </div>
     </div>
-  </section>
 
-  <!-- 学习经历部分 -->
-  <section class="teachers" id="teachers">
-      <h2 class="section-title">学习经历</h2>
-      <div class="teachers-container">
-          <div class="current-teacher">
-              <img src="../library/cxy.jpg" alt="陈小雨博士" class="teacher-photo current-photo">
-              <h3>现任导师</h3>
-              <p>陈小雨 博士</p>
-              <p>浙江音乐学院</p>
-          </div>
-          <div class="other-teachers">
-              <div class="teacher-card">
-                  <img src="../library/wx.jpg" alt="吴晓副教授" class="teacher-photo">
-                  <h3>前任导师</h3>
-                  <p>吴晓 副教授</p>
-                  <p>浙江音乐学院</p>
-              </div>
-              <div class="teacher-card">
-                  <img src="../library/ym.jpg" alt="姚镁老师" class="teacher-photo">
-                  <h3>启蒙导师</h3>
-                  <p>姚镁 老师</p>
-              </div>
-          </div>
-      </div>
-  </section>
+    <script>
+        // 初始化登录遮罩层
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = null; // 实际应用中应检查用户登录状态
+            const authOverlay = document.getElementById('authOverlay');
+            
+            if (!user) {
+                setTimeout(() => {
+                    authOverlay.classList.add('active');
+                }, 1000);
+            }
+            
+            // 关闭遮罩层
+            document.getElementById('overlayLoginButton').addEventListener('click', function() {
+                authOverlay.classList.remove('active');
+                document.getElementById('loginModal').classList.add('active');
+            });
+            
+            // 登录按钮事件
+            document.getElementById('loginButton').addEventListener('click', function() {
+                document.getElementById('loginModal').classList.add('active');
+            });
+            
+            // 关闭登录弹窗
+            document.getElementById('closeLogin').addEventListener('click', function() {
+                document.getElementById('loginModal').classList.remove('active');
+            });
+            
+            // 选项卡切换
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // 更新活动选项卡
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 显示对应页面
+                    document.querySelectorAll('.tab-page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    document.getElementById(`${tabId}Page`).classList.add('active');
+                });
+            });
+            
+            // 导航栏滚动效果
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
 
-  <!-- 工具站点部分 -->
-  <section class="tools-section" id="tools">
-      <h2 class="section-title">工具站点 <i class="fas fa-chevron-down toggle-icon"></i></h2>
-      <div class="tools-container">
-          <div class="tools-grid">
-              <a href="https://www.musicnotes.com" target="_blank" class="tool-card">
-                  <i class="fas fa-music"></i>
-                  <h3>Musicnotes</h3>
-                  <p>乐谱下载平台</p>
-              </a>
-              <a href="https://imslp.org" target="_blank" class="tool-card">
-                  <i class="fas fa-book-open"></i>
-                  <h3>IMSLP</h3>
-                  <p>公共版权乐谱库</p>
-              </a>
-              <a href="https://www.metronomeonline.com" target="_blank" class="tool-card">
-                  <i class="fas fa-clock"></i>
-                  <h3>在线节拍器</h3>
-                  <p>免费节拍器工具</p>
-              </a>
-              <a href="https://www.pianoworld.com" target="_blank" class="tool-card">
-                  <i class="fas fa-piano-keyboard"></i>
-                  <h3>Piano World</h3>
-                  <p>钢琴爱好者论坛</p>
-              </a>
-          </div>
-      </div>
-  </section>
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
 
-  <!-- 页脚部分 -->
-  <footer id="contact">
-      <p>笃行致远  事必尽善</p>
-      <div class="contact-info">
-          <p>WeChat: FreedomOfSpace</p>
-          <p>电子邮件: CHNbaizijun@163.com</p>
-      </div>
-      <div class="social-icons">
-          <a href="#"><i class="fab fa-weixin"></i></a>
-          <a href="#"><i class="fab fa-weibo"></i></a>
-          <a href="#"><i class="fab fa-qq"></i></a>
-          <a href="mailto:CHNbaizijun@163.com"><i class="fas fa-envelope"></i></a>
-      </div>
-      <div class="beian">
-          <a href="https://beian.miit.gov.cn">京ICP备2020236654号-9</a>
-      </div>
-  </footer>
+            // 卡片动画效果
+            const cards = document.querySelectorAll('.card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
 
-  <!-- 悬浮个人中心面板 -->
-  <div class="floating-panel" id="floatingUserPanel">
-      <h3>个人中心</h3>
-      <p><strong>昵称：</strong><span id="pc-username">--</span></p>
-      <p><strong>邮箱：</strong><span id="pc-email">--</span></p>
-      <p><strong>ID：</strong><span id="pc-userid">--</span></p>
-      <p><strong>注册时间：</strong><span id="pc-created">--</span></p>
-      <p><strong>登录时间：</strong><span id="pc-login">--</span></p>
-  </div>
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+            
+            // 视频弹窗
+            const videoModal = document.getElementById('videoModal');
+            const video = videoModal.querySelector('video');
+            
+            document.getElementById('watch-performance').addEventListener('click', function() {
+                videoModal.classList.add('active');
+                video.play().catch(error => console.log('视频播放失败:', error));
+            });
+            
+            document.querySelector('.close-video').addEventListener('click', function() {
+                videoModal.classList.remove('active');
+                video.pause();
+            });
+            
+            videoModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    videoModal.classList.remove('active');
+                    video.pause();
+                }
+            });
+            
+            // LeanCloud初始化
+            AV.init({
+                appId: '0lpjg6Zgwua9jqUZDeJMVxpr-gzGzoHsz',
+                appKey: 'gV34QMHiVXzzDiS4GdyXtZt9',
+                serverURL: 'https://0lpjzgw.lc-cn-n1-shared.com'
+            });
+            
+            // 登录功能
+            document.getElementById('loginBtn').addEventListener('click', async function() {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                try {
+                    const user = await AV.User.logIn(email, password);
+                    
+                    if (!user.get('emailVerified')) {
+                        await AV.User.logOut(); 
+                        alert("安全提示：请到您的电子邮箱验证账户后再登录！");
+                        return;
+                    }
 
-  <!-- 悬浮面板展开/收起按钮 -->
-  <div class="floating-toggle" id="toggleUserPanel">收起</div>
+                    alert("登录成功！");
+                    document.getElementById('loginModal').classList.remove('active');
+                    updateUserStatus();
+                    
+                } catch (err) {
+                    if (err.message.includes("Email address isn't verified")) {
+                        alert("安全提示：请到您的电子邮箱验证账户后再登录！");
+                    } else {
+                        alert("登录失败：" + err.message);
+                    }
+                }
+            });
+            
+            // 注册功能
+            document.getElementById('signupBtn').addEventListener('click', async function() {
+                const nickname = document.getElementById('signupNickname').value.trim();
+                const email = document.getElementById('signupEmail').value.trim();
+                const password = document.getElementById('signupPassword').value;
+                const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
 
-  <!-- 悬浮未登录提示 -->
-  <div class="login-float-tip" id="loginFloatTip">请先登录以查看个人中心</div>
-  
-  <!-- 视频播放弹窗 -->
-  <div id="videoModal" class="video-modal">
-      <div class="video-modal-content">
-          <span class="close-video">&times;</span>
-          <video controls autoplay>
-              <source src="../library/performance.mp4" type="video/mp4">
-              您的浏览器不支持视频播放
-          </video>
-      </div>
-  </div>
+                if (!nickname || nickname.length < 2 || nickname.length > 16) {
+                    return alert('昵称为2-16位必填内容');
+                }
+                if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                    return alert('请输入有效的邮箱地址');
+                }
+                if (password.length < 8) {
+                    return alert('密码长度至少8位');
+                }
+                if (password !== passwordConfirm) {
+                    return alert('两次输入的密码不一致');
+                }
 
-  <!-- 注册验证提示弹窗 -->
-  <div id="regVerifyAlert" class="registration-alert">
-    <span class="alert-text">重要：验证邮件已发送，请前往您的电子邮箱对此账号进行验证，否则您以后将无法登录！（人机识别系统）</span>
-    <button class="close-alert">&times;</button>
-  </div>
-
-  <!-- 引入jQuery库 -->
-  <script src="assets/js/jquery.min.js"></script>
-  
-  <!-- 引入主脚本文件 -->
-  <script src="script.js"></script>
+                try {
+                    const user = new AV.User();
+                    user.setUsername(nickname);
+                    user.setPassword(password);
+                    user.setEmail(email);
+                    user.set('nickname', nickname);
+                    
+                    await user.signUp();
+                    await AV.User.requestEmailVerify(email);
+                    
+                    alert('注册成功！请检查您的注册邮箱完成验证后再登录');
+                    document.getElementById('loginModal').classList.remove('active');
+                    
+                } catch (err) {
+                    alert('注册失败：' + err.message);
+                }
+            });
+            
+            // 找回密码
+            document.getElementById('forgotBtn').addEventListener('click', async function() {
+                const email = document.getElementById('forgotEmail').value.trim();
+                if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) 
+                    return alert('请输入有效邮箱地址');
+                
+                try {
+                    await AV.User.requestPasswordReset(email);
+                    alert('密码重置邮件已发送至您的邮箱');
+                    document.getElementById('loginModal').classList.remove('active');
+                } catch (err) {
+                    alert('操作失败：' + err.message);
+                }
+            });
+            
+            // 更新用户状态
+            function updateUserStatus() {
+                const user = AV.User.current();
+                const overlay = document.getElementById('authOverlay');
+                
+                if (user) {
+                    overlay.classList.remove('active');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
