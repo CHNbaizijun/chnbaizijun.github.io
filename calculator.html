@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #d4af37; /* 金色 */
-            --dark-bg: #1a1a1a; /* 深色背景 */
-            --darker-bg: #121212;
+            --primary-color: #d4af37;
+            --secondary-color: #8B4513;
+            --dark-bg: #2c2c2c;
+            --darker-bg: #1e1e1e;
             --light-text: #f5f5f5;
             --medium-text: #cccccc;
-            --card-bg: #242424;
-            --border-color: #444;
+            --card-bg: #3a3a3a;
+            --border-color: #555;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --danger-color: #F44336;
         }
         
         * {
@@ -24,7 +28,7 @@
         }
         
         body {
-            background: linear-gradient(to bottom, #0c0c0c, var(--dark-bg));
+            background: linear-gradient(to bottom, var(--secondary-color), var(--dark-bg));
             color: var(--light-text);
             min-height: 100vh;
             padding: 20px;
@@ -99,7 +103,7 @@
             font-weight: 500;
         }
         
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px;
             border-radius: 6px;
@@ -107,6 +111,11 @@
             background-color: var(--darker-bg);
             color: var(--light-text);
             font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 80px;
+            resize: vertical;
         }
         
         button {
@@ -140,12 +149,26 @@
             padding: 10px;
             border-radius: 6px;
             text-align: center;
+            position: relative;
         }
         
         .part-time {
             font-size: 1.2rem;
             font-weight: bold;
             color: var(--primary-color);
+            margin: 5px 0;
+        }
+        
+        .remove-part {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 2px;
         }
         
         .history-list {
@@ -164,6 +187,7 @@
         .history-date {
             font-weight: bold;
             color: var(--primary-color);
+            min-width: 60px;
         }
         
         .history-details {
@@ -174,6 +198,25 @@
         .history-total {
             font-weight: bold;
             font-size: 1.1rem;
+            min-width: 70px;
+            text-align: right;
+        }
+        
+        .history-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: 15px;
+        }
+        
+        .btn-icon {
+            padding: 8px;
+            background: transparent;
+            color: var(--medium-text);
+        }
+        
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: none;
         }
         
         .actions {
@@ -219,7 +262,68 @@
             border-top: 1px solid var(--border-color);
         }
         
-        /* 钢琴键装饰 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--medium-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .part-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .part-input-group input {
+            flex-grow: 1;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1001;
+        }
+        
         .piano-keys {
             display: flex;
             height: 40px;
@@ -272,15 +376,15 @@
         
         <div class="stats">
             <div class="stat-item">
-                <div class="stat-value">28</div>
+                <div class="stat-value" id="total-days">0</div>
                 <div class="stat-label">练习天数</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">64</div>
+                <div class="stat-value" id="total-hours">0</div>
                 <div class="stat-label">练习小时</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">18</div>
+                <div class="stat-value" id="total-pieces">0</div>
                 <div class="stat-label">练习曲目</div>
             </div>
         </div>
@@ -291,7 +395,7 @@
                 
                 <div class="input-group">
                     <label for="practice-date">练习日期</label>
-                    <input type="date" id="practice-date" value="2023-10-15">
+                    <input type="date" id="practice-date">
                 </div>
                 
                 <div class="input-group">
@@ -314,39 +418,23 @@
                 
                 <div id="suite-times" style="display: none;">
                     <label>组曲各部分练习时间</label>
-                    <div class="suite-parts">
-                        <div class="suite-part">
-                            <div>部分 1</div>
-                            <div class="part-time">15 min</div>
-                        </div>
-                        <div class="suite-part">
-                            <div>部分 2</div>
-                            <div class="part-time">12 min</div>
-                        </div>
-                        <div class="suite-part">
-                            <div>部分 3</div>
-                            <div class="part-time">18 min</div>
-                        </div>
-                        <div class="suite-part">
-                            <div>部分 4</div>
-                            <div class="part-time">10 min</div>
-                        </div>
-                        <div class="suite-part">
-                            <div>部分 5</div>
-                            <div class="part-time">14 min</div>
-                        </div>
+                    <div id="suite-parts-container" class="suite-parts">
+                        <!-- 动态添加的部分 -->
                     </div>
-                    <button class="btn-secondary" style="margin-top: 15px;">
+                    <button id="add-part-btn" class="btn-secondary" style="margin-top: 15px;">
+                        <i class="fas fa-plus"></i> 添加部分
+                    </button>
+                    <button id="edit-parts-btn" class="btn-secondary" style="margin-top: 15px;">
                         <i class="fas fa-edit"></i> 编辑各部分时间
                     </button>
                 </div>
                 
                 <div class="input-group">
                     <label for="notes">备注</label>
-                    <input type="text" id="notes" placeholder="可添加练习心得或难点记录">
+                    <textarea id="notes" placeholder="可添加练习心得或难点记录"></textarea>
                 </div>
                 
-                <button style="width: 100%; margin-top: 10px;">
+                <button id="save-record-btn" style="width: 100%; margin-top: 10px;">
                     <i class="fas fa-save"></i> 保存记录
                 </button>
             </div>
@@ -354,58 +442,24 @@
             <div class="card">
                 <h2 class="card-title"><i class="fas fa-history"></i> 练习历史</h2>
                 
-                <div class="history-list">
-                    <div class="history-item">
-                        <div class="history-date">10/15</div>
-                        <div class="history-details">贝多芬 - 月光奏鸣曲</div>
-                        <div class="history-total">45 min</div>
-                    </div>
-                    <div class="history-item">
-                        <div class="history-date">10/14</div>
-                        <div class="history-details">巴赫 - 平均律 BWV 846</div>
-                        <div class="history-total">60 min</div>
-                    </div>
-                    <div class="history-item">
-                        <div class="history-date">10/13</div>
-                        <div class="history-details">肖邦 - 夜曲 Op.9 No.2</div>
-                        <div class="history-total">50 min</div>
-                    </div>
-                    <div class="history-item">
-                        <div class="history-date">10/12</div>
-                        <div class="history-details">莫扎特 - 土耳其进行曲</div>
-                        <div class="history-total">40 min</div>
-                    </div>
-                    <div class="history-item">
-                        <div class="history-date">10/11</div>
-                        <div class="history-details">巴赫 - 法国组曲 No.5 (各部分: 12+15+10+18)</div>
-                        <div class="history-total">55 min</div>
-                    </div>
-                    <div class="history-item">
-                        <div class="history-date">10/10</div>
-                        <div class="history-details">车尔尼 - 练习曲 Op.299 No.5</div>
-                        <div class="history-total">35 min</div>
-                    </div>
-                    <div class="history-item">
-                        <div class="history-date">10/09</div>
-                        <div class="history-details">德彪西 - 月光</div>
-                        <div class="history-total">48 min</div>
-                    </div>
+                <div id="history-list" class="history-list">
+                    <!-- 动态添加的历史记录 -->
                 </div>
                 
-                <button class="btn-secondary" style="width: 100%; margin-top: 15px;">
+                <button id="view-stats-btn" class="btn-secondary" style="width: 100%; margin-top: 15px;">
                     <i class="fas fa-chart-line"></i> 查看统计图表
                 </button>
             </div>
         </div>
         
         <div class="actions">
-            <button class="btn-secondary">
+            <button id="export-btn" class="btn-secondary">
                 <i class="fas fa-file-export"></i> 导出数据
             </button>
-            <button class="btn-secondary">
-                <i class="fas fa-cog"></i> 设置
+            <button id="clear-data-btn" class="btn-secondary">
+                <i class="fas fa-trash"></i> 清除数据
             </button>
-            <button class="btn-secondary">
+            <button id="help-btn" class="btn-secondary">
                 <i class="fas fa-question-circle"></i> 帮助
             </button>
         </div>
@@ -415,21 +469,454 @@
         </footer>
     </div>
 
+    <!-- 编辑组曲部分的模态框 -->
+    <div id="edit-parts-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>编辑组曲部分</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="parts-edit-container">
+                <!-- 动态添加的部分编辑框 -->
+            </div>
+            <button id="add-part-edit-btn" class="btn-secondary" style="margin-top: 15px;">
+                <i class="fas fa-plus"></i> 添加新部分
+            </button>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="save-parts-btn" style="flex: 1;">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+                <button id="cancel-parts-btn" class="btn-secondary" style="flex: 1;">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 统计图表模态框 -->
+    <div id="stats-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>练习统计</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="stats-content">
+                <canvas id="stats-chart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示信息 -->
+    <div id="toast" class="toast"></div>
+
     <script>
-        // 切换单曲/组曲输入界面
-        document.getElementById('piece-type').addEventListener('change', function() {
-            const isSuite = this.value === 'suite';
-            document.getElementById('single-time').style.display = isSuite ? 'none' : 'block';
-            document.getElementById('suite-times').style.display = isSuite ? 'block' : 'none';
-        });
+        // 数据管理
+        let practiceRecords = JSON.parse(localStorage.getItem('practiceRecords')) || [];
+        let suiteParts = [];
         
-        // 模拟数据加载
-        document.addEventListener('DOMContentLoaded', function() {
+        // DOM元素
+        const practiceDateEl = document.getElementById('practice-date');
+        const pieceTypeEl = document.getElementById('piece-type');
+        const pieceNameEl = document.getElementById('piece-name');
+        const practiceTimeEl = document.getElementById('practice-time');
+        const notesEl = document.getElementById('notes');
+        const singleTimeSection = document.getElementById('single-time');
+        const suiteTimesSection = document.getElementById('suite-times');
+        const suitePartsContainer = document.getElementById('suite-parts-container');
+        const addPartBtn = document.getElementById('add-part-btn');
+        const editPartsBtn = document.getElementById('edit-parts-btn');
+        const saveRecordBtn = document.getElementById('save-record-btn');
+        const historyListEl = document.getElementById('history-list');
+        const viewStatsBtn = document.getElementById('view-stats-btn');
+        const exportBtn = document.getElementById('export-btn');
+        const clearDataBtn = document.getElementById('clear-data-btn');
+        const helpBtn = document.getElementById('help-btn');
+        const editPartsModal = document.getElementById('edit-parts-modal');
+        const partsEditContainer = document.getElementById('parts-edit-container');
+        const addPartEditBtn = document.getElementById('add-part-edit-btn');
+        const savePartsBtn = document.getElementById('save-parts-btn');
+        const cancelPartsBtn = document.getElementById('cancel-parts-btn');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const statsModal = document.getElementById('stats-modal');
+        const toastEl = document.getElementById('toast');
+        const totalDaysEl = document.getElementById('total-days');
+        const totalHoursEl = document.getElementById('total-hours');
+        const totalPiecesEl = document.getElementById('total-pieces');
+        
+        // 初始化
+        function init() {
             // 设置默认日期为今天
             const today = new Date();
             const formattedDate = today.toISOString().substr(0, 10);
-            document.getElementById('practice-date').value = formattedDate;
-        });
+            practiceDateEl.value = formattedDate;
+            
+            // 添加事件监听器
+            pieceTypeEl.addEventListener('change', togglePieceType);
+            addPartBtn.addEventListener('click', addSuitePart);
+            editPartsBtn.addEventListener('click', openEditPartsModal);
+            saveRecordBtn.addEventListener('click', saveRecord);
+            viewStatsBtn.addEventListener('click', openStatsModal);
+            exportBtn.addEventListener('click', exportData);
+            clearDataBtn.addEventListener('click', clearData);
+            helpBtn.addEventListener('click', showHelp);
+            addPartEditBtn.addEventListener('click', addPartEditField);
+            savePartsBtn.addEventListener('click', saveEditedParts);
+            cancelPartsBtn.addEventListener('click', closeEditPartsModal);
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    editPartsModal.style.display = 'none';
+                    statsModal.style.display = 'none';
+                });
+            });
+            
+            // 加载历史记录
+            loadHistory();
+            updateStats();
+            
+            // 初始添加一个组曲部分
+            addSuitePart();
+        }
+        
+        // 切换曲目类型
+        function togglePieceType() {
+            const isSuite = pieceTypeEl.value === 'suite';
+            singleTimeSection.style.display = isSuite ? 'none' : 'block';
+            suiteTimesSection.style.display = isSuite ? 'block' : 'none';
+        }
+        
+        // 添加组曲部分
+        function addSuitePart(time = 5) {
+            const partId = Date.now();
+            suiteParts.push({ id: partId, time: time });
+            renderSuiteParts();
+        }
+        
+        // 渲染组曲部分
+        function renderSuiteParts() {
+            suitePartsContainer.innerHTML = '';
+            let totalTime = 0;
+            
+            suiteParts.forEach((part, index) => {
+                totalTime += part.time;
+                
+                const partEl = document.createElement('div');
+                partEl.className = 'suite-part';
+                partEl.innerHTML = `
+                    <div>部分 ${index + 1}</div>
+                    <div class="part-time">${part.time} min</div>
+                    <button class="remove-part" data-id="${part.id}">&times;</button>
+                `;
+                suitePartsContainer.appendChild(partEl);
+            });
+            
+            // 添加总计
+            if (suiteParts.length > 0) {
+                const totalEl = document.createElement('div');
+                totalEl.className = 'suite-part';
+                totalEl.style.backgroundColor = 'var(--secondary-color)';
+                totalEl.innerHTML = `
+                    <div>总计</div>
+                    <div class="part-time">${totalTime} min</div>
+                `;
+                suitePartsContainer.appendChild(totalEl);
+            }
+            
+            // 添加删除事件
+            const removeButtons = document.querySelectorAll('.remove-part');
+            removeButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.dataset.id);
+                    suiteParts = suiteParts.filter(part => part.id !== id);
+                    renderSuiteParts();
+                });
+            });
+        }
+        
+        // 打开编辑组曲部分模态框
+        function openEditPartsModal() {
+            partsEditContainer.innerHTML = '';
+            
+            suiteParts.forEach((part, index) => {
+                const partInputGroup = document.createElement('div');
+                partInputGroup.className = 'part-input-group';
+                partInputGroup.innerHTML = `
+                    <label>部分 ${index + 1}</label>
+                    <input type="number" class="part-time-edit" value="${part.time}" min="1" data-id="${part.id}">
+                    <button class="btn-icon remove-part-edit" data-id="${part.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                partsEditContainer.appendChild(partInputGroup);
+            });
+            
+            // 添加删除事件
+            const removeButtons = document.querySelectorAll('.remove-part-edit');
+            removeButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.closest('button').dataset.id);
+                    suiteParts = suiteParts.filter(part => part.id !== id);
+                    openEditPartsModal(); // 重新打开模态框以刷新列表
+                });
+            });
+            
+            editPartsModal.style.display = 'flex';
+        }
+        
+        // 添加部分编辑字段
+        function addPartEditField() {
+            const partInputGroup = document.createElement('div');
+            partInputGroup.className = 'part-input-group';
+            partInputGroup.innerHTML = `
+                <label>新部分</label>
+                <input type="number" class="part-time-edit" value="5" min="1" data-id="new">
+                <button class="btn-icon remove-part-edit" data-id="new">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            partsEditContainer.appendChild(partInputGroup);
+            
+            // 添加删除事件
+            const removeButton = partInputGroup.querySelector('.remove-part-edit');
+            removeButton.addEventListener('click', (e) => {
+                partInputGroup.remove();
+            });
+        }
+        
+        // 保存编辑的部分
+        function saveEditedParts() {
+            const partInputs = document.querySelectorAll('.part-time-edit');
+            const newParts = [];
+            
+            partInputs.forEach(input => {
+                const time = parseInt(input.value) || 5;
+                if (input.dataset.id === 'new') {
+                    newParts.push({ id: Date.now() + Math.random(), time: time });
+                } else {
+                    const id = parseInt(input.dataset.id);
+                    const existingPart = suiteParts.find(part => part.id === id);
+                    if (existingPart) {
+                        existingPart.time = time;
+                        newParts.push(existingPart);
+                    }
+                }
+            });
+            
+            suiteParts = newParts;
+            renderSuiteParts();
+            closeEditPartsModal();
+            showToast('组曲部分已更新');
+        }
+        
+        // 关闭编辑部分模态框
+        function closeEditPartsModal() {
+            editPartsModal.style.display = 'none';
+        }
+        
+        // 保存记录
+        function saveRecord() {
+            // 验证输入
+            if (!pieceNameEl.value.trim()) {
+                showToast('请输入曲目名称', 'error');
+                return;
+            }
+            
+            const isSuite = pieceTypeEl.value === 'suite';
+            let totalTime = 0;
+            
+            if (isSuite) {
+                if (suiteParts.length === 0) {
+                    showToast('请添加至少一个组曲部分', 'error');
+                    return;
+                }
+                totalTime = suiteParts.reduce((sum, part) => sum + part.time, 0);
+            } else {
+                totalTime = parseInt(practiceTimeEl.value) || 0;
+                if (totalTime <= 0) {
+                    showToast('请输入有效的练习时间', 'error');
+                    return;
+                }
+            }
+            
+            // 创建记录对象
+            const record = {
+                id: Date.now(),
+                date: practiceDateEl.value,
+                type: pieceTypeEl.value,
+                pieceName: pieceNameEl.value,
+                totalTime: totalTime,
+                parts: isSuite ? suiteParts : [],
+                notes: notesEl.value
+            };
+            
+            // 添加到记录列表
+            practiceRecords.unshift(record);
+            saveToLocalStorage();
+            loadHistory();
+            updateStats();
+            
+            // 重置表单
+            pieceNameEl.value = '';
+            practiceTimeEl.value = '';
+            notesEl.value = '';
+            suiteParts = [];
+            addSuitePart();
+            
+            showToast('记录已保存');
+        }
+        
+        // 加载历史记录
+        function loadHistory() {
+            historyListEl.innerHTML = '';
+            
+            if (practiceRecords.length === 0) {
+                historyListEl.innerHTML = '<div class="history-item"><div>暂无记录</div></div>';
+                return;
+            }
+            
+            practiceRecords.forEach(record => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                
+                let detailsHtml = record.pieceName;
+                if (record.type === 'suite' && record.parts.length > 0) {
+                    const partsText = record.parts.map((part, index) => `部分${index + 1}: ${part.time}min`).join(', ');
+                    detailsHtml += ` (${partsText})`;
+                }
+                
+                historyItem.innerHTML = `
+                    <div class="history-date">${formatDate(record.date)}</div>
+                    <div class="history-details">${detailsHtml}</div>
+                    <div class="history-total">${record.totalTime} min</div>
+                    <div class="history-actions">
+                        <button class="btn-icon view-record" data-id="${record.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-icon delete-record" data-id="${record.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                historyListEl.appendChild(historyItem);
+            });
+            
+            // 添加查看和删除事件
+            document.querySelectorAll('.view-record').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.dataset.id);
+                    viewRecord(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-record').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.dataset.id);
+                    deleteRecord(id);
+                });
+            });
+        }
+        
+        // 查看记录详情
+        function viewRecord(id) {
+            const record = practiceRecords.find(r => r.id === id);
+            if (!record) return;
+            
+            alert(`曲目: ${record.pieceName}\n日期: ${record.date}\n类型: ${record.type === 'single' ? '单曲' : '组曲'}\n总时间: ${record.totalTime}分钟\n备注: ${record.notes}`);
+        }
+        
+        // 删除记录
+        function deleteRecord(id) {
+            if (confirm('确定要删除这条记录吗？')) {
+                practiceRecords = practiceRecords.filter(record => record.id !== id);
+                saveToLocalStorage();
+                loadHistory();
+                updateStats();
+                showToast('记录已删除');
+            }
+        }
+        
+        // 打开统计模态框
+        function openStatsModal() {
+            // 这里可以添加图表绘制代码
+            statsModal.style.display = 'flex';
+        }
+        
+        // 导出数据
+        function exportData() {
+            if (practiceRecords.length === 0) {
+                showToast('没有数据可导出', 'error');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(practiceRecords, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `钢琴练习记录_${new Date().toISOString().slice(0, 10)}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showToast('数据已导出');
+        }
+        
+        // 清除数据
+        function clearData() {
+            if (confirm('确定要清除所有数据吗？此操作不可恢复。')) {
+                practiceRecords = [];
+                saveToLocalStorage();
+                loadHistory();
+                updateStats();
+                showToast('数据已清除');
+            }
+        }
+        
+        // 显示帮助
+        function showHelp() {
+            alert('使用说明：\n1. 选择日期和曲目类型\n2. 输入曲目名称\n3. 对于单曲，输入练习时间；对于组曲，添加各部分时间\n4. 可添加备注\n5. 点击保存记录\n6. 在历史记录中查看和管理过往练习');
+        }
+        
+        // 更新统计信息
+        function updateStats() {
+            // 练习天数
+            const uniqueDays = new Set(practiceRecords.map(record => record.date)).size;
+            totalDaysEl.textContent = uniqueDays;
+            
+            // 总练习小时
+            const totalMinutes = practiceRecords.reduce((sum, record) => sum + record.totalTime, 0);
+            const totalHours = (totalMinutes / 60).toFixed(1);
+            totalHoursEl.textContent = totalHours;
+            
+            // 练习曲目数
+            const uniquePieces = new Set(practiceRecords.map(record => record.pieceName)).size;
+            totalPiecesEl.textContent = uniquePieces;
+        }
+        
+        // 保存到本地存储
+        function saveToLocalStorage() {
+            localStorage.setItem('practiceRecords', JSON.stringify(practiceRecords));
+        }
+        
+        // 显示提示信息
+        function showToast(message, type = 'success') {
+            toastEl.textContent = message;
+            toastEl.style.backgroundColor = type === 'error' ? 'var(--danger-color)' : 'var(--success-color)';
+            toastEl.style.display = 'block';
+            
+            setTimeout(() => {
+                toastEl.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+        }
+        
+        // 初始化应用
+        init();
     </script>
 </body>
 </html>
