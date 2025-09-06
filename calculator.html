@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>钢琴练习时间记录</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #d4af37; /* 金色 */
+            --dark-bg: #1a1a1a; /* 深色背景 */
+            --darker-bg: #121212;
+            --light-text: #f5f5f5;
+            --medium-text: #cccccc;
+            --card-bg: #242424;
+            --border-color: #444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #0c0c0c, var(--dark-bg));
+            color: var(--light-text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--medium-text);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--darker-bg);
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background-color: #e6c44e;
+            transform: translateY(-2px);
+        }
+        
+        .suite-parts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .suite-part {
+            background-color: var(--darker-bg);
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .part-time {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .history-date {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .history-details {
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+        
+        .history-total {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 15px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--medium-text);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: var(--medium-text);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* 钢琴键装饰 */
+        .piano-keys {
+            display: flex;
+            height: 40px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .piano-key {
+            width: 30px;
+            height: 40px;
+            background: linear-gradient(to bottom, #fff, #eee);
+            border: 1px solid #ccc;
+            border-radius: 0 0 4px 4px;
+            margin: 0 1px;
+        }
+        
+        .piano-key.black {
+            width: 20px;
+            height: 25px;
+            background: linear-gradient(to bottom, #000, #333);
+            margin: 0 -10px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-music"></i>
+            </div>
+            <h1>钢琴练习时间记录</h1>
+            <p class="subtitle">记录您的每一次进步，感受音乐的魅力</p>
+            
+            <div class="piano-keys">
+                <div class="piano-key"></div>
+                <div class="piano-key black"></div>
+                <div class="piano-key"></div>
+                <div class="piano-key black"></div>
+                <div class="piano-key"></div>
+                <div class="piano-key"></div>
+                <div class="piano-key black"></div>
+                <div class="piano-key"></div>
+                <div class="piano-key black"></div>
+                <div class="piano-key"></div>
+                <div class="piano-key black"></div>
+                <div class="piano-key"></div>
+            </div>
+        </header>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value">28</div>
+                <div class="stat-label">练习天数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">64</div>
+                <div class="stat-label">练习小时</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">18</div>
+                <div class="stat-label">练习曲目</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-plus-circle"></i> 新增练习记录</h2>
+                
+                <div class="input-group">
+                    <label for="practice-date">练习日期</label>
+                    <input type="date" id="practice-date" value="2023-10-15">
+                </div>
+                
+                <div class="input-group">
+                    <label for="piece-type">曲目类型</label>
+                    <select id="piece-type">
+                        <option value="single">单曲</option>
+                        <option value="suite">组曲</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="piece-name">曲目名称</label>
+                    <input type="text" id="piece-name" placeholder="请输入曲目名称">
+                </div>
+                
+                <div id="single-time" class="input-group">
+                    <label for="practice-time">练习时间（分钟）</label>
+                    <input type="number" id="practice-time" min="1" placeholder="请输入练习时间">
+                </div>
+                
+                <div id="suite-times" style="display: none;">
+                    <label>组曲各部分练习时间</label>
+                    <div class="suite-parts">
+                        <div class="suite-part">
+                            <div>部分 1</div>
+                            <div class="part-time">15 min</div>
+                        </div>
+                        <div class="suite-part">
+                            <div>部分 2</div>
+                            <div class="part-time">12 min</div>
+                        </div>
+                        <div class="suite-part">
+                            <div>部分 3</div>
+                            <div class="part-time">18 min</div>
+                        </div>
+                        <div class="suite-part">
+                            <div>部分 4</div>
+                            <div class="part-time">10 min</div>
+                        </div>
+                        <div class="suite-part">
+                            <div>部分 5</div>
+                            <div class="part-time">14 min</div>
+                        </div>
+                    </div>
+                    <button class="btn-secondary" style="margin-top: 15px;">
+                        <i class="fas fa-edit"></i> 编辑各部分时间
+                    </button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="notes">备注</label>
+                    <input type="text" id="notes" placeholder="可添加练习心得或难点记录">
+                </div>
+                
+                <button style="width: 100%; margin-top: 10px;">
+                    <i class="fas fa-save"></i> 保存记录
+                </button>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-history"></i> 练习历史</h2>
+                
+                <div class="history-list">
+                    <div class="history-item">
+                        <div class="history-date">10/15</div>
+                        <div class="history-details">贝多芬 - 月光奏鸣曲</div>
+                        <div class="history-total">45 min</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-date">10/14</div>
+                        <div class="history-details">巴赫 - 平均律 BWV 846</div>
+                        <div class="history-total">60 min</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-date">10/13</div>
+                        <div class="history-details">肖邦 - 夜曲 Op.9 No.2</div>
+                        <div class="history-total">50 min</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-date">10/12</div>
+                        <div class="history-details">莫扎特 - 土耳其进行曲</div>
+                        <div class="history-total">40 min</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-date">10/11</div>
+                        <div class="history-details">巴赫 - 法国组曲 No.5 (各部分: 12+15+10+18)</div>
+                        <div class="history-total">55 min</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-date">10/10</div>
+                        <div class="history-details">车尔尼 - 练习曲 Op.299 No.5</div>
+                        <div class="history-total">35 min</div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-date">10/09</div>
+                        <div class="history-details">德彪西 - 月光</div>
+                        <div class="history-total">48 min</div>
+                    </div>
+                </div>
+                
+                <button class="btn-secondary" style="width: 100%; margin-top: 15px;">
+                    <i class="fas fa-chart-line"></i> 查看统计图表
+                </button>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn-secondary">
+                <i class="fas fa-file-export"></i> 导出数据
+            </button>
+            <button class="btn-secondary">
+                <i class="fas fa-cog"></i> 设置
+            </button>
+            <button class="btn-secondary">
+                <i class="fas fa-question-circle"></i> 帮助
+            </button>
+        </div>
+        
+        <footer>
+            <p>钢琴练习时间记录系统 &copy; 2023 | 设计用于记录您的音乐之旅</p>
+        </footer>
+    </div>
+
+    <script>
+        // 切换单曲/组曲输入界面
+        document.getElementById('piece-type').addEventListener('change', function() {
+            const isSuite = this.value === 'suite';
+            document.getElementById('single-time').style.display = isSuite ? 'none' : 'block';
+            document.getElementById('suite-times').style.display = isSuite ? 'block' : 'none';
+        });
+        
+        // 模拟数据加载
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置默认日期为今天
+            const today = new Date();
+            const formattedDate = today.toISOString().substr(0, 10);
+            document.getElementById('practice-date').value = formattedDate;
+        });
+    </script>
+</body>
+</html>
