@@ -35,7 +35,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
@@ -64,6 +64,38 @@
             margin-bottom: 20px;
         }
         
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .view-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .view-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            background-color: var(--darker-bg);
+            color: var(--light-text);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-btn.active {
+            background-color: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+        
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -71,7 +103,7 @@
             margin-bottom: 30px;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
@@ -171,28 +203,58 @@
             padding: 2px;
         }
         
-        .history-list {
-            max-height: 400px;
+        .history-container {
+            max-height: 500px;
             overflow-y: auto;
+        }
+        
+        .history-list {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .daily-records {
+            margin-bottom: 20px;
+        }
+        
+        .daily-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: var(--darker-bg);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        
+        .daily-date {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .daily-total {
+            font-weight: bold;
+        }
+        
+        .daily-records-list {
+            display: grid;
+            gap: 10px;
+            padding: 0 10px;
         }
         
         .history-item {
             padding: 15px;
-            border-bottom: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--darker-bg);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .history-date {
-            font-weight: bold;
-            color: var(--primary-color);
-            min-width: 60px;
-        }
-        
         .history-details {
             flex-grow: 1;
-            margin-left: 20px;
+            margin-left: 15px;
         }
         
         .history-total {
@@ -224,6 +286,7 @@
             gap: 10px;
             margin-top: 30px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         
         .btn-secondary {
@@ -237,10 +300,12 @@
             justify-content: space-around;
             margin: 30px 0;
             text-align: center;
+            flex-wrap: wrap;
         }
         
         .stat-item {
             padding: 15px;
+            min-width: 150px;
         }
         
         .stat-value {
@@ -273,13 +338,14 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
         
         .modal-content {
             background-color: var(--card-bg);
             border-radius: 10px;
             padding: 25px;
-            width: 90%;
+            width: 100%;
             max-width: 500px;
             max-height: 80vh;
             overflow-y: auto;
@@ -347,6 +413,50 @@
             margin: 0 -10px;
             z-index: 1;
         }
+        
+        .date-filter {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--medium-text);
+        }
+        
+        @media (max-width: 576px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .view-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .view-btn {
+                width: 100%;
+            }
+            
+            .stat-item {
+                min-width: 100%;
+            }
+            
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .history-actions {
+                align-self: flex-end;
+            }
+        }
     </style>
 </head>
 <body>
@@ -374,6 +484,28 @@
             </div>
         </header>
         
+        <div class="controls">
+            <div class="date-filter">
+                <label for="filter-date">按日期查看：</label>
+                <input type="date" id="filter-date">
+                <button id="clear-filter-btn" class="btn-secondary">
+                    <i class="fas fa-times"></i> 清除筛选
+                </button>
+            </div>
+        </div>
+        
+        <div class="view-controls">
+            <button class="view-btn active" data-view="all">
+                <i class="fas fa-list"></i> 所有记录
+            </button>
+            <button class="view-btn" data-view="daily">
+                <i class="fas fa-calendar-day"></i> 每日视图
+            </button>
+            <button class="view-btn" data-view="stats">
+                <i class="fas fa-chart-bar"></i> 统计视图
+            </button>
+        </div>
+        
         <div class="stats">
             <div class="stat-item">
                 <div class="stat-value" id="total-days">0</div>
@@ -389,7 +521,7 @@
             </div>
         </div>
         
-        <div class="main-content">
+        <div id="all-view" class="main-content">
             <div class="card">
                 <h2 class="card-title"><i class="fas fa-plus-circle"></i> 新增练习记录</h2>
                 
@@ -442,17 +574,54 @@
             <div class="card">
                 <h2 class="card-title"><i class="fas fa-history"></i> 练习历史</h2>
                 
-                <div id="history-list" class="history-list">
-                    <!-- 动态添加的历史记录 -->
+                <div id="history-container" class="history-container">
+                    <div id="history-list" class="history-list">
+                        <!-- 动态添加的历史记录 -->
+                    </div>
                 </div>
+            </div>
+        </div>
+        
+        <div id="daily-view" class="main-content" style="display: none;">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-calendar-day"></i> 每日练习记录</h2>
                 
-                <button id="view-stats-btn" class="btn-secondary" style="width: 100%; margin-top: 15px;">
-                    <i class="fas fa-chart-line"></i> 查看统计图表
-                </button>
+                <div id="daily-records-container" class="history-container">
+                    <!-- 动态添加的每日记录 -->
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-chart-pie"></i> 每日统计</h2>
+                
+                <div id="daily-stats">
+                    <!-- 动态添加的每日统计 -->
+                </div>
+            </div>
+        </div>
+        
+        <div id="stats-view" class="main-content" style="display: none;">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-chart-line"></i> 练习统计</h2>
+                
+                <div id="stats-content">
+                    <canvas id="stats-chart" width="400" height="300"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-trophy"></i> 练习成就</h2>
+                
+                <div id="achievements">
+                    <!-- 动态添加的成就 -->
+                </div>
             </div>
         </div>
         
         <div class="actions">
+            <button id="import-btn" class="btn-secondary">
+                <i class="fas fa-file-import"></i> 导入数据
+            </button>
             <button id="export-btn" class="btn-secondary">
                 <i class="fas fa-file-export"></i> 导出数据
             </button>
@@ -493,15 +662,24 @@
         </div>
     </div>
 
-    <!-- 统计图表模态框 -->
-    <div id="stats-modal" class="modal">
+    <!-- 导入数据模态框 -->
+    <div id="import-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>练习统计</h2>
+                <h2>导入数据</h2>
                 <button class="close-modal">&times;</button>
             </div>
-            <div id="stats-content">
-                <canvas id="stats-chart" width="400" height="300"></canvas>
+            <div class="input-group">
+                <label for="import-file">选择JSON文件</label>
+                <input type="file" id="import-file" accept=".json">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="confirm-import-btn" style="flex: 1;">
+                    <i class="fas fa-file-import"></i> 导入
+                </button>
+                <button id="cancel-import-btn" class="btn-secondary" style="flex: 1;">
+                    <i class="fas fa-times"></i> 取消
+                </button>
             </div>
         </div>
     </div>
@@ -513,6 +691,7 @@
         // 数据管理
         let practiceRecords = JSON.parse(localStorage.getItem('practiceRecords')) || [];
         let suiteParts = [];
+        let currentView = 'all';
         
         // DOM元素
         const practiceDateEl = document.getElementById('practice-date');
@@ -527,8 +706,9 @@
         const editPartsBtn = document.getElementById('edit-parts-btn');
         const saveRecordBtn = document.getElementById('save-record-btn');
         const historyListEl = document.getElementById('history-list');
-        const viewStatsBtn = document.getElementById('view-stats-btn');
+        const historyContainerEl = document.getElementById('history-container');
         const exportBtn = document.getElementById('export-btn');
+        const importBtn = document.getElementById('import-btn');
         const clearDataBtn = document.getElementById('clear-data-btn');
         const helpBtn = document.getElementById('help-btn');
         const editPartsModal = document.getElementById('edit-parts-modal');
@@ -537,11 +717,21 @@
         const savePartsBtn = document.getElementById('save-parts-btn');
         const cancelPartsBtn = document.getElementById('cancel-parts-btn');
         const closeModalBtns = document.querySelectorAll('.close-modal');
-        const statsModal = document.getElementById('stats-modal');
         const toastEl = document.getElementById('toast');
         const totalDaysEl = document.getElementById('total-days');
         const totalHoursEl = document.getElementById('total-hours');
         const totalPiecesEl = document.getElementById('total-pieces');
+        const filterDateEl = document.getElementById('filter-date');
+        const clearFilterBtn = document.getElementById('clear-filter-btn');
+        const viewBtns = document.querySelectorAll('.view-btn');
+        const allViewEl = document.getElementById('all-view');
+        const dailyViewEl = document.getElementById('daily-view');
+        const statsViewEl = document.getElementById('stats-view');
+        const dailyRecordsContainer = document.getElementById('daily-records-container');
+        const importModal = document.getElementById('import-modal');
+        const importFileEl = document.getElementById('import-file');
+        const confirmImportBtn = document.getElementById('confirm-import-btn');
+        const cancelImportBtn = document.getElementById('cancel-import-btn');
         
         // 初始化
         function init() {
@@ -549,14 +739,15 @@
             const today = new Date();
             const formattedDate = today.toISOString().substr(0, 10);
             practiceDateEl.value = formattedDate;
+            filterDateEl.value = formattedDate;
             
             // 添加事件监听器
             pieceTypeEl.addEventListener('change', togglePieceType);
             addPartBtn.addEventListener('click', addSuitePart);
             editPartsBtn.addEventListener('click', openEditPartsModal);
             saveRecordBtn.addEventListener('click', saveRecord);
-            viewStatsBtn.addEventListener('click', openStatsModal);
             exportBtn.addEventListener('click', exportData);
+            importBtn.addEventListener('click', () => importModal.style.display = 'flex');
             clearDataBtn.addEventListener('click', clearData);
             helpBtn.addEventListener('click', showHelp);
             addPartEditBtn.addEventListener('click', addPartEditField);
@@ -565,16 +756,124 @@
             closeModalBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     editPartsModal.style.display = 'none';
-                    statsModal.style.display = 'none';
+                    importModal.style.display = 'none';
                 });
             });
+            filterDateEl.addEventListener('change', filterByDate);
+            clearFilterBtn.addEventListener('click', clearDateFilter);
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    switchView(e.currentTarget.dataset.view);
+                });
+            });
+            confirmImportBtn.addEventListener('click', importData);
+            cancelImportBtn.addEventListener('click', () => importModal.style.display = 'none');
+            
+            // 初始添加一个组曲部分
+            addSuitePart();
             
             // 加载历史记录
             loadHistory();
             updateStats();
+        }
+        
+        // 切换视图
+        function switchView(view) {
+            currentView = view;
             
-            // 初始添加一个组曲部分
-            addSuitePart();
+            // 更新按钮状态
+            viewBtns.forEach(btn => {
+                if (btn.dataset.view === view) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // 切换视图显示
+            allViewEl.style.display = view === 'all' ? 'grid' : 'none';
+            dailyViewEl.style.display = view === 'daily' ? 'grid' : 'none';
+            statsViewEl.style.display = view === 'stats' ? 'grid' : 'none';
+            
+            // 加载特定视图内容
+            if (view === 'daily') {
+                loadDailyView();
+            } else if (view === 'stats') {
+                loadStatsView();
+            }
+        }
+        
+        // 加载每日视图
+        function loadDailyView() {
+            dailyRecordsContainer.innerHTML = '';
+            
+            if (practiceRecords.length === 0) {
+                dailyRecordsContainer.innerHTML = '<div class="empty-state">暂无记录</div>';
+                return;
+            }
+            
+            // 按日期分组记录
+            const recordsByDate = {};
+            practiceRecords.forEach(record => {
+                if (!recordsByDate[record.date]) {
+                    recordsByDate[record.date] = [];
+                }
+                recordsByDate[record.date].push(record);
+            });
+            
+            // 按日期排序（最新的在前面）
+            const sortedDates = Object.keys(recordsByDate).sort((a, b) => {
+                return new Date(b) - new Date(a);
+            });
+            
+            // 生成每日记录
+            sortedDates.forEach(date => {
+                const dailyRecords = recordsByDate[date];
+                const totalTime = dailyRecords.reduce((sum, record) => sum + record.totalTime, 0);
+                
+                const dailyEl = document.createElement('div');
+                dailyEl.className = 'daily-records';
+                
+                dailyEl.innerHTML = `
+                    <div class="daily-header">
+                        <div class="daily-date">${formatDateFull(date)}</div>
+                        <div class="daily-total">总计: ${totalTime} 分钟</div>
+                    </div>
+                    <div class="daily-records-list">
+                        ${dailyRecords.map(record => `
+                            <div class="history-item">
+                                <div class="history-details">
+                                    <div><strong>${record.pieceName}</strong> (${record.type === 'single' ? '单曲' : '组曲'})</div>
+                                    ${record.notes ? `<div class="notes">${record.notes}</div>` : ''}
+                                </div>
+                                <div class="history-total">${record.totalTime} min</div>
+                                <div class="history-actions">
+                                    <button class="btn-icon delete-record" data-id="${record.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                dailyRecordsContainer.appendChild(dailyEl);
+            });
+            
+            // 添加删除事件
+            document.querySelectorAll('.delete-record').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.dataset.id);
+                    deleteRecord(id);
+                });
+            });
+        }
+        
+        // 加载统计视图
+        function loadStatsView() {
+            // 这里可以添加统计图表的实现
+            document.getElementById('stats-content').innerHTML = '<div class="empty-state">统计图表功能开发中</div>';
+            document.getElementById('achievements').innerHTML = '<div class="empty-state">成就系统开发中</div>';
         }
         
         // 切换曲目类型
@@ -764,23 +1063,48 @@
             showToast('记录已保存');
         }
         
+        // 按日期筛选记录
+        function filterByDate() {
+            const selectedDate = filterDateEl.value;
+            if (!selectedDate) return;
+            
+            loadHistory(selectedDate);
+        }
+        
+        // 清除日期筛选
+        function clearDateFilter() {
+            filterDateEl.value = '';
+            loadHistory();
+        }
+        
         // 加载历史记录
-        function loadHistory() {
+        function loadHistory(filterDate = null) {
             historyListEl.innerHTML = '';
             
-            if (practiceRecords.length === 0) {
-                historyListEl.innerHTML = '<div class="history-item"><div>暂无记录</div></div>';
+            let filteredRecords = practiceRecords;
+            if (filterDate) {
+                filteredRecords = practiceRecords.filter(record => record.date === filterDate);
+            }
+            
+            if (filteredRecords.length === 0) {
+                const emptyMessage = filterDate ? 
+                    `${formatDateFull(filterDate)} 暂无记录` : 
+                    '暂无记录';
+                historyListEl.innerHTML = `<div class="empty-state">${emptyMessage}</div>`;
                 return;
             }
             
-            practiceRecords.forEach(record => {
+            filteredRecords.forEach(record => {
                 const historyItem = document.createElement('div');
                 historyItem.className = 'history-item';
                 
-                let detailsHtml = record.pieceName;
+                let detailsHtml = `<div><strong>${record.pieceName}</strong> (${record.type === 'single' ? '单曲' : '组曲'})</div>`;
                 if (record.type === 'suite' && record.parts.length > 0) {
                     const partsText = record.parts.map((part, index) => `部分${index + 1}: ${part.time}min`).join(', ');
-                    detailsHtml += ` (${partsText})`;
+                    detailsHtml += `<div>${partsText}</div>`;
+                }
+                if (record.notes) {
+                    detailsHtml += `<div class="notes">${record.notes}</div>`;
                 }
                 
                 historyItem.innerHTML = `
@@ -831,14 +1155,13 @@
                 saveToLocalStorage();
                 loadHistory();
                 updateStats();
+                
+                if (currentView === 'daily') {
+                    loadDailyView();
+                }
+                
                 showToast('记录已删除');
             }
-        }
-        
-        // 打开统计模态框
-        function openStatsModal() {
-            // 这里可以添加图表绘制代码
-            statsModal.style.display = 'flex';
         }
         
         // 导出数据
@@ -861,6 +1184,60 @@
             showToast('数据已导出');
         }
         
+        // 导入数据
+        function importData() {
+            const file = importFileEl.files[0];
+            if (!file) {
+                showToast('请选择文件', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (!Array.isArray(importedData)) {
+                        showToast('无效的数据格式', 'error');
+                        return;
+                    }
+                    
+                    // 验证数据格式
+                    const isValid = importedData.every(item => {
+                        return item.hasOwnProperty('id') && 
+                               item.hasOwnProperty('date') && 
+                               item.hasOwnProperty('pieceName') && 
+                               item.hasOwnProperty('totalTime');
+                    });
+                    
+                    if (!isValid) {
+                        showToast('数据格式不正确', 'error');
+                        return;
+                    }
+                    
+                    // 合并数据（避免重复ID）
+                    const existingIds = practiceRecords.map(r => r.id);
+                    const newRecords = importedData.filter(r => !existingIds.includes(r.id));
+                    
+                    if (newRecords.length === 0) {
+                        showToast('没有新数据可导入', 'error');
+                        return;
+                    }
+                    
+                    practiceRecords = [...newRecords, ...practiceRecords];
+                    saveToLocalStorage();
+                    loadHistory();
+                    updateStats();
+                    
+                    importModal.style.display = 'none';
+                    showToast(`成功导入 ${newRecords.length} 条记录`);
+                } catch (error) {
+                    showToast('导入失败: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+        
         // 清除数据
         function clearData() {
             if (confirm('确定要清除所有数据吗？此操作不可恢复。')) {
@@ -868,13 +1245,18 @@
                 saveToLocalStorage();
                 loadHistory();
                 updateStats();
+                
+                if (currentView === 'daily') {
+                    loadDailyView();
+                }
+                
                 showToast('数据已清除');
             }
         }
         
         // 显示帮助
         function showHelp() {
-            alert('使用说明：\n1. 选择日期和曲目类型\n2. 输入曲目名称\n3. 对于单曲，输入练习时间；对于组曲，添加各部分时间\n4. 可添加备注\n5. 点击保存记录\n6. 在历史记录中查看和管理过往练习');
+            alert('使用说明：\n\n1. 选择日期和曲目类型\n2. 输入曲目名称\n3. 对于单曲，输入练习时间；对于组曲，添加各部分时间\n4. 可添加备注\n5. 点击保存记录\n6. 在历史记录中查看和管理过往练习\n\n其他功能：\n- 顶部可按日期筛选记录\n- 支持三种视图模式：所有记录、每日视图、统计视图\n- 可以导入导出数据');
         }
         
         // 更新统计信息
@@ -909,10 +1291,16 @@
             }, 3000);
         }
         
-        // 格式化日期
+        // 格式化日期 (MM/DD)
         function formatDate(dateString) {
             const date = new Date(dateString);
             return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+        }
+        
+        // 格式化完整日期 (YYYY年MM月DD日)
+        function formatDateFull(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}年${(date.getMonth() + 1).toString().padStart(2, '0')}月${date.getDate().toString().padStart(2, '0')}日`;
         }
         
         // 初始化应用
