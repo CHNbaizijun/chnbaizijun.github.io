@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>钢琴练习时间记录</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-color: #d4af37;
@@ -18,6 +19,7 @@
             --success-color: #4CAF50;
             --warning-color: #FFC107;
             --danger-color: #F44336;
+            --info-color: #2196F3;
         }
         
         * {
@@ -346,7 +348,7 @@
             border-radius: 10px;
             padding: 25px;
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             max-height: 80vh;
             overflow-y: auto;
         }
@@ -429,6 +431,68 @@
             color: var(--medium-text);
         }
         
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .achievement-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .achievement-item {
+            background-color: var(--darker-bg);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .achievement-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-desc {
+            font-size: 0.9rem;
+            color: var(--medium-text);
+        }
+        
+        .achievement-progress {
+            width: 100%;
+            height: 6px;
+            background-color: var(--card-bg);
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .achievement-progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        .achievement-locked {
+            opacity: 0.6;
+        }
+        
+        .achievement-locked .achievement-icon {
+            color: var(--medium-text);
+        }
+        
         @media (max-width: 576px) {
             .controls {
                 flex-direction: column;
@@ -455,6 +519,10 @@
             
             .history-actions {
                 align-self: flex-end;
+            }
+            
+            .achievement-list {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -595,7 +663,9 @@
                 <h2 class="card-title"><i class="fas fa-chart-pie"></i> 每日统计</h2>
                 
                 <div id="daily-stats">
-                    <!-- 动态添加的每日统计 -->
+                    <div class="chart-container">
+                        <canvas id="daily-chart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -605,14 +675,19 @@
                 <h2 class="card-title"><i class="fas fa-chart-line"></i> 练习统计</h2>
                 
                 <div id="stats-content">
-                    <canvas id="stats-chart" width="400" height="300"></canvas>
+                    <div class="chart-container">
+                        <canvas id="time-trend-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="piece-distribution-chart"></canvas>
+                    </div>
                 </div>
             </div>
             
             <div class="card">
                 <h2 class="card-title"><i class="fas fa-trophy"></i> 练习成就</h2>
                 
-                <div id="achievements">
+                <div id="achievements" class="achievement-list">
                     <!-- 动态添加的成就 -->
                 </div>
             </div>
@@ -662,6 +737,65 @@
         </div>
     </div>
 
+    <!-- 编辑记录的模态框 -->
+    <div id="edit-record-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>编辑练习记录</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="input-group">
+                <label for="edit-practice-date">练习日期</label>
+                <input type="date" id="edit-practice-date">
+            </div>
+            
+            <div class="input-group">
+                <label for="edit-piece-type">曲目类型</label>
+                <select id="edit-piece-type">
+                    <option value="single">单曲</option>
+                    <option value="suite">组曲</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="edit-piece-name">曲目名称</label>
+                <input type="text" id="edit-piece-name" placeholder="请输入曲目名称">
+            </div>
+            
+            <div id="edit-single-time" class="input-group">
+                <label for="edit-practice-time">练习时间（分钟）</label>
+                <input type="number" id="edit-practice-time" min="1" placeholder="请输入练习时间">
+            </div>
+            
+            <div id="edit-suite-times" style="display: none;">
+                <label>组曲各部分练习时间</label>
+                <div id="edit-suite-parts-container" class="suite-parts">
+                    <!-- 动态添加的部分 -->
+                </div>
+                <button id="edit-add-part-btn" class="btn-secondary" style="margin-top: 15px;">
+                    <i class="fas fa-plus"></i> 添加部分
+                </button>
+                <button id="edit-edit-parts-btn" class="btn-secondary" style="margin-top: 15px;">
+                    <i class="fas fa-edit"></i> 编辑各部分时间
+                </button>
+            </div>
+            
+            <div class="input-group">
+                <label for="edit-notes">备注</label>
+                <textarea id="edit-notes" placeholder="可添加练习心得或难点记录"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="update-record-btn" style="flex: 1;">
+                    <i class="fas fa-save"></i> 更新记录
+                </button>
+                <button id="cancel-edit-btn" class="btn-secondary" style="flex: 1;">
+                    <i class="fas fa-times"></i> 取消
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 导入数据模态框 -->
     <div id="import-modal" class="modal">
         <div class="modal-content">
@@ -691,7 +825,10 @@
         // 数据管理
         let practiceRecords = JSON.parse(localStorage.getItem('practiceRecords')) || [];
         let suiteParts = [];
+        let editSuiteParts = [];
         let currentView = 'all';
+        let editingRecordId = null;
+        let charts = {};
         
         // DOM元素
         const practiceDateEl = document.getElementById('practice-date');
@@ -732,6 +869,19 @@
         const importFileEl = document.getElementById('import-file');
         const confirmImportBtn = document.getElementById('confirm-import-btn');
         const cancelImportBtn = document.getElementById('cancel-import-btn');
+        const editRecordModal = document.getElementById('edit-record-modal');
+        const editPracticeDateEl = document.getElementById('edit-practice-date');
+        const editPieceTypeEl = document.getElementById('edit-piece-type');
+        const editPieceNameEl = document.getElementById('edit-piece-name');
+        const editPracticeTimeEl = document.getElementById('edit-practice-time');
+        const editNotesEl = document.getElementById('edit-notes');
+        const editSingleTimeSection = document.getElementById('edit-single-time');
+        const editSuiteTimesSection = document.getElementById('edit-suite-times');
+        const editSuitePartsContainer = document.getElementById('edit-suite-parts-container');
+        const editAddPartBtn = document.getElementById('edit-add-part-btn');
+        const editEditPartsBtn = document.getElementById('edit-edit-parts-btn');
+        const updateRecordBtn = document.getElementById('update-record-btn');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
         
         // 初始化
         function init() {
@@ -757,6 +907,7 @@
                 btn.addEventListener('click', () => {
                     editPartsModal.style.display = 'none';
                     importModal.style.display = 'none';
+                    editRecordModal.style.display = 'none';
                 });
             });
             filterDateEl.addEventListener('change', filterByDate);
@@ -768,6 +919,11 @@
             });
             confirmImportBtn.addEventListener('click', importData);
             cancelImportBtn.addEventListener('click', () => importModal.style.display = 'none');
+            editPieceTypeEl.addEventListener('change', toggleEditPieceType);
+            editAddPartBtn.addEventListener('click', addEditSuitePart);
+            editEditPartsBtn.addEventListener('click', openEditPartsModalForEdit);
+            updateRecordBtn.addEventListener('click', updateRecord);
+            cancelEditBtn.addEventListener('click', () => editRecordModal.style.display = 'none');
             
             // 初始添加一个组曲部分
             addSuitePart();
@@ -848,6 +1004,9 @@
                                 </div>
                                 <div class="history-total">${record.totalTime} min</div>
                                 <div class="history-actions">
+                                    <button class="btn-icon edit-record" data-id="${record.id}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
                                     <button class="btn-icon delete-record" data-id="${record.id}">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -860,20 +1019,352 @@
                 dailyRecordsContainer.appendChild(dailyEl);
             });
             
-            // 添加删除事件
+            // 添加编辑和删除事件
+            document.querySelectorAll('.edit-record').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.dataset.id);
+                    openEditRecordModal(id);
+                });
+            });
+            
             document.querySelectorAll('.delete-record').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = parseInt(e.currentTarget.dataset.id);
                     deleteRecord(id);
                 });
             });
+            
+            // 更新每日统计图表
+            updateDailyChart(sortedDates, recordsByDate);
+        }
+        
+        // 更新每日统计图表
+        function updateDailyChart(dates, recordsByDate) {
+            const ctx = document.getElementById('daily-chart').getContext('2d');
+            
+            // 准备数据
+            const dailyTimes = dates.map(date => {
+                return recordsByDate[date].reduce((sum, record) => sum + record.totalTime, 0);
+            });
+            
+            // 如果已有图表，先销毁
+            if (charts.dailyChart) {
+                charts.dailyChart.destroy();
+            }
+            
+            // 创建新图表
+            charts.dailyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dates.map(date => formatDate(date)),
+                    datasets: [{
+                        label: '每日练习时间（分钟）',
+                        data: dailyTimes,
+                        backgroundColor: 'rgba(212, 175, 55, 0.7)',
+                        borderColor: 'rgba(212, 175, 55, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '练习时间（分钟）'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '日期'
+                            }
+                        }
+                    }
+                }
+            });
         }
         
         // 加载统计视图
         function loadStatsView() {
-            // 这里可以添加统计图表的实现
-            document.getElementById('stats-content').innerHTML = '<div class="empty-state">统计图表功能开发中</div>';
-            document.getElementById('achievements').innerHTML = '<div class="empty-state">成就系统开发中</div>';
+            // 更新统计图表
+            updateStatsCharts();
+            
+            // 更新成就系统
+            updateAchievements();
+        }
+        
+        // 更新统计图表
+        function updateStatsCharts() {
+            // 时间趋势图表
+            const timeTrendCtx = document.getElementById('time-trend-chart').getContext('2d');
+            
+            // 按日期分组并计算每日总时间
+            const dailyTotals = {};
+            practiceRecords.forEach(record => {
+                if (!dailyTotals[record.date]) {
+                    dailyTotals[record.date] = 0;
+                }
+                dailyTotals[record.date] += record.totalTime;
+            });
+            
+            // 获取日期并排序
+            const dates = Object.keys(dailyTotals).sort();
+            const dailyTimes = dates.map(date => dailyTotals[date]);
+            
+            // 如果已有图表，先销毁
+            if (charts.timeTrendChart) {
+                charts.timeTrendChart.destroy();
+            }
+            
+            // 创建时间趋势图表
+            charts.timeTrendChart = new Chart(timeTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: dates.map(date => formatDate(date)),
+                    datasets: [{
+                        label: '每日练习时间趋势',
+                        data: dailyTimes,
+                        backgroundColor: 'rgba(33, 150, 243, 0.2)',
+                        borderColor: 'rgba(33, 150, 243, 1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '练习时间（分钟）'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '日期'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 曲目分布图表
+            const pieceDistCtx = document.getElementById('piece-distribution-chart').getContext('2d');
+            
+            // 计算每个曲目的总练习时间
+            const pieceTimes = {};
+            practiceRecords.forEach(record => {
+                if (!pieceTimes[record.pieceName]) {
+                    pieceTimes[record.pieceName] = 0;
+                }
+                pieceTimes[record.pieceName] += record.totalTime;
+            });
+            
+            // 获取曲目名称和时间
+            const pieceNames = Object.keys(pieceTimes);
+            const pieceTotalTimes = pieceNames.map(name => pieceTimes[name]);
+            
+            // 如果已有图表，先销毁
+            if (charts.pieceDistChart) {
+                charts.pieceDistChart.destroy();
+            }
+            
+            // 创建曲目分布图表
+            charts.pieceDistChart = new Chart(pieceDistCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: pieceNames,
+                    datasets: [{
+                        data: pieceTotalTimes,
+                        backgroundColor: [
+                            'rgba(212, 175, 55, 0.7)',
+                            'rgba(76, 175, 80, 0.7)',
+                            'rgba(33, 150, 243, 0.7)',
+                            'rgba(255, 193, 7, 0.7)',
+                            'rgba(156, 39, 176, 0.7)',
+                            'rgba(244, 67, 54, 0.7)',
+                            'rgba(255, 152, 0, 0.7)',
+                            'rgba(0, 188, 212, 0.7)',
+                            'rgba(96, 125, 139, 0.7)',
+                            'rgba(233, 30, 99, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '曲目练习时间分布'
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 更新成就系统
+        function updateAchievements() {
+            const achievementsContainer = document.getElementById('achievements');
+            achievementsContainer.innerHTML = '';
+            
+            // 成就定义
+            const achievements = [
+                {
+                    id: 'first_step',
+                    title: '初学乍练',
+                    description: '完成第一次练习记录',
+                    icon: 'fas fa-baby',
+                    condition: (records) => records.length >= 1,
+                    progress: (records) => records.length >= 1 ? 100 : 0
+                },
+                {
+                    id: 'regular_practicer',
+                    title: '持之以恒',
+                    description: '连续7天练习',
+                    icon: 'fas fa-calendar-check',
+                    condition: (records) => {
+                        if (records.length < 7) return false;
+                        
+                        const dates = [...new Set(records.map(r => r.date))].sort();
+                        let consecutiveDays = 1;
+                        
+                        for (let i = 1; i < dates.length; i++) {
+                            const prevDate = new Date(dates[i-1]);
+                            const currDate = new Date(dates[i]);
+                            const diffTime = Math.abs(currDate - prevDate);
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            
+                            if (diffDays === 1) {
+                                consecutiveDays++;
+                                if (consecutiveDays >= 7) return true;
+                            } else {
+                                consecutiveDays = 1;
+                            }
+                        }
+                        
+                        return false;
+                    },
+                    progress: (records) => {
+                        if (records.length < 2) return 0;
+                        
+                        const dates = [...new Set(records.map(r => r.date))].sort();
+                        let maxConsecutive = 1;
+                        let consecutiveDays = 1;
+                        
+                        for (let i = 1; i < dates.length; i++) {
+                            const prevDate = new Date(dates[i-1]);
+                            const currDate = new Date(dates[i]);
+                            const diffTime = Math.abs(currDate - prevDate);
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            
+                            if (diffDays === 1) {
+                                consecutiveDays++;
+                                maxConsecutive = Math.max(maxConsecutive, consecutiveDays);
+                            } else {
+                                consecutiveDays = 1;
+                            }
+                        }
+                        
+                        return Math.min(100, Math.round((maxConsecutive / 7) * 100));
+                    }
+                },
+                {
+                    id: 'time_investor',
+                    title: '时间投资者',
+                    description: '总练习时间达到10小时',
+                    icon: 'fas fa-clock',
+                    condition: (records) => {
+                        const totalMinutes = records.reduce((sum, record) => sum + record.totalTime, 0);
+                        return totalMinutes >= 600; // 10小时
+                    },
+                    progress: (records) => {
+                        const totalMinutes = records.reduce((sum, record) => sum + record.totalTime, 0);
+                        return Math.min(100, Math.round((totalMinutes / 600) * 100));
+                    }
+                },
+                {
+                    id: 'repertoire_builder',
+                    title: '曲目积累者',
+                    description: '练习过5首不同曲目',
+                    icon: 'fas fa-music',
+                    condition: (records) => {
+                        const uniquePieces = new Set(records.map(record => record.pieceName));
+                        return uniquePieces.size >= 5;
+                    },
+                    progress: (records) => {
+                        const uniquePieces = new Set(records.map(record => record.pieceName));
+                        return Math.min(100, Math.round((uniquePieces.size / 5) * 100));
+                    }
+                },
+                {
+                    id: 'marathon_practicer',
+                    title: '马拉松练习者',
+                    description: '单次练习超过2小时',
+                    icon: 'fas fa-running',
+                    condition: (records) => {
+                        return records.some(record => record.totalTime >= 120);
+                    },
+                    progress: (records) => {
+                        const hasLongSession = records.some(record => record.totalTime >= 120);
+                        return hasLongSession ? 100 : 0;
+                    }
+                },
+                {
+                    id: 'versatile_musician',
+                    title: '多面手',
+                    description: '既练习单曲也练习组曲',
+                    icon: 'fas fa-globe',
+                    condition: (records) => {
+                        const hasSingle = records.some(record => record.type === 'single');
+                        const hasSuite = records.some(record => record.type === 'suite');
+                        return hasSingle && hasSuite;
+                    },
+                    progress: (records) => {
+                        const hasSingle = records.some(record => record.type === 'single');
+                        const hasSuite = records.some(record => record.type === 'suite');
+                        return (hasSingle && hasSuite) ? 100 : 50;
+                    }
+                }
+            ];
+            
+            // 生成成就元素
+            achievements.forEach(achievement => {
+                const achieved = achievement.condition(practiceRecords);
+                const progress = achievement.progress(practiceRecords);
+                
+                const achievementEl = document.createElement('div');
+                achievementEl.className = `achievement-item ${achieved ? '' : 'achievement-locked'}`;
+                
+                achievementEl.innerHTML = `
+                    <div class="achievement-icon">
+                        <i class="${achievement.icon}"></i>
+                    </div>
+                    <div class="achievement-title">${achievement.title}</div>
+                    <div class="achievement-desc">${achievement.description}</div>
+                    <div class="achievement-progress">
+                        <div class="achievement-progress-bar" style="width: ${progress}%"></div>
+                    </div>
+                    ${achieved ? '<div style="margin-top: 10px; color: var(--primary-color);"><i class="fas fa-check-circle"></i> 已达成</div>' : ''}
+                `;
+                
+                achievementsContainer.appendChild(achievementEl);
+            });
+            
+            if (achievements.length === 0) {
+                achievementsContainer.innerHTML = '<div class="empty-state">暂无成就</div>';
+            }
         }
         
         // 切换曲目类型
@@ -883,11 +1374,25 @@
             suiteTimesSection.style.display = isSuite ? 'block' : 'none';
         }
         
+        // 切换编辑曲目类型
+        function toggleEditPieceType() {
+            const isSuite = editPieceTypeEl.value === 'suite';
+            editSingleTimeSection.style.display = isSuite ? 'none' : 'block';
+            editSuiteTimesSection.style.display = isSuite ? 'block' : 'none';
+        }
+        
         // 添加组曲部分
         function addSuitePart(time = 5) {
             const partId = Date.now();
             suiteParts.push({ id: partId, time: time });
             renderSuiteParts();
+        }
+        
+        // 添加编辑组曲部分
+        function addEditSuitePart(time = 5) {
+            const partId = Date.now();
+            editSuiteParts.push({ id: partId, time: time });
+            renderEditSuiteParts();
         }
         
         // 渲染组曲部分
@@ -931,6 +1436,47 @@
             });
         }
         
+        // 渲染编辑组曲部分
+        function renderEditSuiteParts() {
+            editSuitePartsContainer.innerHTML = '';
+            let totalTime = 0;
+            
+            editSuiteParts.forEach((part, index) => {
+                totalTime += part.time;
+                
+                const partEl = document.createElement('div');
+                partEl.className = 'suite-part';
+                partEl.innerHTML = `
+                    <div>部分 ${index + 1}</div>
+                    <div class="part-time">${part.time} min</div>
+                    <button class="remove-part" data-id="${part.id}">&times;</button>
+                `;
+                editSuitePartsContainer.appendChild(partEl);
+            });
+            
+            // 添加总计
+            if (editSuiteParts.length > 0) {
+                const totalEl = document.createElement('div');
+                totalEl.className = 'suite-part';
+                totalEl.style.backgroundColor = 'var(--secondary-color)';
+                totalEl.innerHTML = `
+                    <div>总计</div>
+                    <div class="part-time">${totalTime} min</div>
+                `;
+                editSuitePartsContainer.appendChild(totalEl);
+            }
+            
+            // 添加删除事件
+            const removeButtons = document.querySelectorAll('.remove-part');
+            removeButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.dataset.id);
+                    editSuiteParts = editSuiteParts.filter(part => part.id !== id);
+                    renderEditSuiteParts();
+                });
+            });
+        }
+        
         // 打开编辑组曲部分模态框
         function openEditPartsModal() {
             partsEditContainer.innerHTML = '';
@@ -955,6 +1501,36 @@
                     const id = parseInt(e.target.closest('button').dataset.id);
                     suiteParts = suiteParts.filter(part => part.id !== id);
                     openEditPartsModal(); // 重新打开模态框以刷新列表
+                });
+            });
+            
+            editPartsModal.style.display = 'flex';
+        }
+        
+        // 为编辑记录打开编辑组曲部分模态框
+        function openEditPartsModalForEdit() {
+            partsEditContainer.innerHTML = '';
+            
+            editSuiteParts.forEach((part, index) => {
+                const partInputGroup = document.createElement('div');
+                partInputGroup.className = 'part-input-group';
+                partInputGroup.innerHTML = `
+                    <label>部分 ${index + 1}</label>
+                    <input type="number" class="part-time-edit" value="${part.time}" min="1" data-id="${part.id}">
+                    <button class="btn-icon remove-part-edit" data-id="${part.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                partsEditContainer.appendChild(partInputGroup);
+            });
+            
+            // 添加删除事件
+            const removeButtons = document.querySelectorAll('.remove-part-edit');
+            removeButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.closest('button').dataset.id);
+                    editSuiteParts = editSuiteParts.filter(part => part.id !== id);
+                    openEditPartsModalForEdit(); // 重新打开模态框以刷新列表
                 });
             });
             
@@ -992,7 +1568,7 @@
                     newParts.push({ id: Date.now() + Math.random(), time: time });
                 } else {
                     const id = parseInt(input.dataset.id);
-                    const existingPart = suiteParts.find(part => part.id === id);
+                    const existingPart = suiteParts.find(part => part.id === id) || editSuiteParts.find(part => part.id === id);
                     if (existingPart) {
                         existingPart.time = time;
                         newParts.push(existingPart);
@@ -1000,8 +1576,14 @@
                 }
             });
             
-            suiteParts = newParts;
-            renderSuiteParts();
+            if (editingRecordId) {
+                editSuiteParts = newParts;
+                renderEditSuiteParts();
+            } else {
+                suiteParts = newParts;
+                renderSuiteParts();
+            }
+            
             closeEditPartsModal();
             showToast('组曲部分已更新');
         }
@@ -1009,6 +1591,91 @@
         // 关闭编辑部分模态框
         function closeEditPartsModal() {
             editPartsModal.style.display = 'none';
+        }
+        
+        // 打开编辑记录模态框
+        function openEditRecordModal(id) {
+            const record = practiceRecords.find(r => r.id === id);
+            if (!record) return;
+            
+            editingRecordId = id;
+            
+            // 填充表单数据
+            editPracticeDateEl.value = record.date;
+            editPieceTypeEl.value = record.type;
+            editPieceNameEl.value = record.pieceName;
+            editNotesEl.value = record.notes || '';
+            
+            // 设置单曲或组曲界面
+            if (record.type === 'single') {
+                editPracticeTimeEl.value = record.totalTime;
+                editSingleTimeSection.style.display = 'block';
+                editSuiteTimesSection.style.display = 'none';
+            } else {
+                editSuiteParts = record.parts || [];
+                renderEditSuiteParts();
+                editSingleTimeSection.style.display = 'none';
+                editSuiteTimesSection.style.display = 'block';
+            }
+            
+            editRecordModal.style.display = 'flex';
+        }
+        
+        // 更新记录
+        function updateRecord() {
+            // 验证输入
+            if (!editPieceNameEl.value.trim()) {
+                showToast('请输入曲目名称', 'error');
+                return;
+            }
+            
+            const isSuite = editPieceTypeEl.value === 'suite';
+            let totalTime = 0;
+            
+            if (isSuite) {
+                if (editSuiteParts.length === 0) {
+                    showToast('请添加至少一个组曲部分', 'error');
+                    return;
+                }
+                totalTime = editSuiteParts.reduce((sum, part) => sum + part.time, 0);
+            } else {
+                totalTime = parseInt(editPracticeTimeEl.value) || 0;
+                if (totalTime <= 0) {
+                    showToast('请输入有效的练习时间', 'error');
+                    return;
+                }
+            }
+            
+            // 更新记录对象
+            const recordIndex = practiceRecords.findIndex(r => r.id === editingRecordId);
+            if (recordIndex === -1) {
+                showToast('记录未找到', 'error');
+                return;
+            }
+            
+            practiceRecords[recordIndex] = {
+                id: editingRecordId,
+                date: editPracticeDateEl.value,
+                type: editPieceTypeEl.value,
+                pieceName: editPieceNameEl.value,
+                totalTime: totalTime,
+                parts: isSuite ? editSuiteParts : [],
+                notes: editNotesEl.value
+            };
+            
+            saveToLocalStorage();
+            loadHistory();
+            updateStats();
+            
+            if (currentView === 'daily') {
+                loadDailyView();
+            }
+            
+            editRecordModal.style.display = 'none';
+            editingRecordId = null;
+            editSuiteParts = [];
+            
+            showToast('记录已更新');
         }
         
         // 保存记录
@@ -1112,8 +1779,8 @@
                     <div class="history-details">${detailsHtml}</div>
                     <div class="history-total">${record.totalTime} min</div>
                     <div class="history-actions">
-                        <button class="btn-icon view-record" data-id="${record.id}">
-                            <i class="fas fa-eye"></i>
+                        <button class="btn-icon edit-record" data-id="${record.id}">
+                            <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn-icon delete-record" data-id="${record.id}">
                             <i class="fas fa-trash"></i>
@@ -1124,11 +1791,11 @@
                 historyListEl.appendChild(historyItem);
             });
             
-            // 添加查看和删除事件
-            document.querySelectorAll('.view-record').forEach(btn => {
+            // 添加编辑和删除事件
+            document.querySelectorAll('.edit-record').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = parseInt(e.currentTarget.dataset.id);
-                    viewRecord(id);
+                    openEditRecordModal(id);
                 });
             });
             
@@ -1138,14 +1805,6 @@
                     deleteRecord(id);
                 });
             });
-        }
-        
-        // 查看记录详情
-        function viewRecord(id) {
-            const record = practiceRecords.find(r => r.id === id);
-            if (!record) return;
-            
-            alert(`曲目: ${record.pieceName}\n日期: ${record.date}\n类型: ${record.type === 'single' ? '单曲' : '组曲'}\n总时间: ${record.totalTime}分钟\n备注: ${record.notes}`);
         }
         
         // 删除记录
@@ -1158,6 +1817,8 @@
                 
                 if (currentView === 'daily') {
                     loadDailyView();
+                } else if (currentView === 'stats') {
+                    loadStatsView();
                 }
                 
                 showToast('记录已删除');
@@ -1229,6 +1890,12 @@
                     loadHistory();
                     updateStats();
                     
+                    if (currentView === 'daily') {
+                        loadDailyView();
+                    } else if (currentView === 'stats') {
+                        loadStatsView();
+                    }
+                    
                     importModal.style.display = 'none';
                     showToast(`成功导入 ${newRecords.length} 条记录`);
                 } catch (error) {
@@ -1248,6 +1915,8 @@
                 
                 if (currentView === 'daily') {
                     loadDailyView();
+                } else if (currentView === 'stats') {
+                    loadStatsView();
                 }
                 
                 showToast('数据已清除');
@@ -1256,7 +1925,7 @@
         
         // 显示帮助
         function showHelp() {
-            alert('使用说明：\n\n1. 选择日期和曲目类型\n2. 输入曲目名称\n3. 对于单曲，输入练习时间；对于组曲，添加各部分时间\n4. 可添加备注\n5. 点击保存记录\n6. 在历史记录中查看和管理过往练习\n\n其他功能：\n- 顶部可按日期筛选记录\n- 支持三种视图模式：所有记录、每日视图、统计视图\n- 可以导入导出数据');
+            alert('使用说明：\n\n1. 选择日期和曲目类型\n2. 输入曲目名称\n3. 对于单曲，输入练习时间；对于组曲，添加各部分时间\n4. 可添加备注\n5. 点击保存记录\n6. 在历史记录中查看和管理过往练习\n\n其他功能：\n- 顶部可按日期筛选记录\n- 支持三种视图模式：所有记录、每日视图、统计视图\n- 可以导入导出数据\n- 可以编辑已保存的记录');
         }
         
         // 更新统计信息
