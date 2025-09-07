@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>琴房钢琴管理系统</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .list-section {
+            flex: 2;
+            min-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .photo-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            max-height: 200px;
+            display: none;
+            border-radius: 4px;
+        }
+        
+        .room-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+            transition: transform 0.2s;
+        }
+        
+        .room-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .room-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .room-model {
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        .room-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-good {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .status-normal {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .status-bad {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .room-notes {
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .room-image {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        
+        .card-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-edit {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-delete {
+            background-color: var(--danger-color);
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: #777;
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .form-section, .list-section {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>琴房钢琴管理系统</h1>
+        </header>
+        
+        <div class="app-container">
+            <section class="form-section">
+                <h2>添加/编辑琴房信息</h2>
+                <form id="pianoForm">
+                    <div class="form-group">
+                        <label for="roomNumber">琴房号</label>
+                        <input type="text" id="roomNumber" required placeholder="例如: A101">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pianoModel">钢琴型号</label>
+                        <input type="text" id="pianoModel" required placeholder="例如: 雅马哈 C3X">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pianoStatus">钢琴状态</label>
+                        <select id="pianoStatus" required>
+                            <option value="">请选择状态</option>
+                            <option value="良好">良好 - 音准正常，无损坏</option>
+                            <option value="一般">一般 - 需要调音，有小问题</option>
+                            <option value="需维修">需维修 - 有明显问题，需要修理</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pianoNotes">备注信息</label>
+                        <textarea id="pianoNotes" placeholder="记录钢琴的特殊情况或其他信息"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roomPhoto">上传照片</label>
+                        <input type="file" id="roomPhoto" accept="image/*">
+                        <img id="photoPreview" class="photo-preview" alt="照片预览">
+                    </div>
+                    
+                    <button type="submit" id="saveButton">保存信息</button>
+                    <button type="button" id="cancelButton" style="display:none; background-color: #95a5a6;">取消编辑</button>
+                </form>
+            </section>
+            
+            <section class="list-section">
+                <h2>琴房列表</h2>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="搜索琴房号或钢琴型号...">
+                    <button id="searchButton">搜索</button>
+                </div>
+                
+                <div id="roomsList">
+                    <!-- 琴房信息将在这里动态生成 -->
+                    <div class="empty-state">
+                        <p>尚未添加任何琴房信息</p>
+                        <p>请使用左侧表单添加琴房</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const pianoForm = document.getElementById('pianoForm');
+            const roomNumberInput = document.getElementById('roomNumber');
+            const pianoModelInput = document.getElementById('pianoModel');
+            const pianoStatusSelect = document.getElementById('pianoStatus');
+            const pianoNotesTextarea = document.getElementById('pianoNotes');
+            const roomPhotoInput = document.getElementById('roomPhoto');
+            const photoPreview = document.getElementById('photoPreview');
+            const saveButton = document.getElementById('saveButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const roomsList = document.getElementById('roomsList');
+            
+            // 当前编辑状态
+            let isEditing = false;
+            let currentEditId = null;
+            
+            // 初始化 - 从本地存储加载数据
+            loadRooms();
+            
+            // 照片预览
+            roomPhotoInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        photoPreview.src = e.target.result;
+                        photoPreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // 表单提交
+            pianoForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const roomData = {
+                    id: isEditing ? currentEditId : Date.now().toString(),
+                    roomNumber: roomNumberInput.value,
+                    pianoModel: pianoModelInput.value,
+                    status: pianoStatusSelect.value,
+                    notes: pianoNotesTextarea.value,
+                    photo: photoPreview.style.display === 'block' ? photoPreview.src : null,
+                    lastUpdated: new Date().toLocaleString()
+                };
+                
+                saveRoom(roomData);
+                resetForm();
+                loadRooms();
+            });
+            
+            // 取消编辑
+            cancelButton.addEventListener('click', function() {
+                resetForm();
+            });
+            
+            // 搜索功能
+            searchButton.addEventListener('click', function() {
+                loadRooms(searchInput.value);
+            });
+            
+            searchInput.addEventListener('keyup', function() {
+                loadRooms(searchInput.value);
+            });
+            
+            // 保存琴房信息到本地存储
+            function saveRoom(roomData) {
+                const rooms = getStoredRooms();
+                
+                if (isEditing) {
+                    // 更新现有房间
+                    const index = rooms.findIndex(room => room.id === roomData.id);
+                    if (index !== -1) {
+                        rooms[index] = roomData;
+                    }
+                } else {
+                    // 添加新房间
+                    rooms.push(roomData);
+                }
+                
+                localStorage.setItem('pianoRooms', JSON.stringify(rooms));
+            }
+            
+            // 从本地存储获取所有琴房信息
+            function getStoredRooms() {
+                const roomsJSON = localStorage.getItem('pianoRooms');
+                return roomsJSON ? JSON.parse(roomsJSON) : [];
+            }
+            
+            // 加载并显示琴房列表
+            function loadRooms(searchTerm = '') {
+                const rooms = getStoredRooms();
+                
+                // 清空当前列表
+                roomsList.innerHTML = '';
+                
+                // 过滤房间（如果有搜索词）
+                const filteredRooms = searchTerm 
+                    ? rooms.filter(room => 
+                          room.roomNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          room.pianoModel.toLowerCase().includes(searchTerm.toLowerCase()))
+                    : rooms;
+                
+                if (filteredRooms.length === 0) {
+                    roomsList.innerHTML = `
+                        <div class="empty-state">
+                            <p>没有找到匹配的琴房</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 按琴房号排序
+                filteredRooms.sort((a, b) => a.roomNumber.localeCompare(b.roomNumber));
+                
+                // 生成房间卡片
+                filteredRooms.forEach(room => {
+                    const statusClass = 
+                        room.status === '良好' ? 'status-good' :
+                        room.status === '一般' ? 'status-normal' : 'status-bad';
+                    
+                    const roomCard = document.createElement('div');
+                    roomCard.className = 'room-card';
+                    roomCard.innerHTML = `
+                        <div class="room-header">
+                            <span class="room-number">${room.roomNumber}</span>
+                            <span class="room-status ${statusClass}">${room.status}</span>
+                        </div>
+                        <div class="room-model">${room.pianoModel}</div>
+                        ${room.notes ? `<div class="room-notes">${room.notes}</div>` : ''}
+                        ${room.photo ? `<img src="${room.photo}" class="room-image" alt="${room.roomNumber}照片">` : ''}
+                        <div class="last-updated">最后更新: ${room.lastUpdated}</div>
+                        <div class="card-actions">
+                            <button class="btn-edit" data-id="${room.id}">编辑</button>
+                            <button class="btn-delete" data-id="${room.id}">删除</button>
+                        </div>
+                    `;
+                    
+                    roomsList.appendChild(roomCard);
+                });
+                
+                // 添加编辑和删除事件监听器
+                document.querySelectorAll('.btn-edit').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const roomId = this.getAttribute('data-id');
+                        editRoom(roomId);
+                    });
+                });
+                
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const roomId = this.getAttribute('data-id');
+                        deleteRoom(roomId);
+                    });
+                });
+            }
+            
+            // 编辑琴房信息
+            function editRoom(roomId) {
+                const rooms = getStoredRooms();
+                const room = rooms.find(r => r.id === roomId);
+                
+                if (room) {
+                    // 填充表单
+                    roomNumberInput.value = room.roomNumber;
+                    pianoModelInput.value = room.pianoModel;
+                    pianoStatusSelect.value = room.status;
+                    pianoNotesTextarea.value = room.notes || '';
+                    
+                    if (room.photo) {
+                        photoPreview.src = room.photo;
+                        photoPreview.style.display = 'block';
+                    } else {
+                        photoPreview.style.display = 'none';
+                    }
+                    
+                    // 更新编辑状态
+                    isEditing = true;
+                    currentEditId = roomId;
+                    saveButton.textContent = '更新信息';
+                    cancelButton.style.display = 'inline-block';
+                    
+                    // 滚动到表单
+                    document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            
+            // 删除琴房信息
+            function deleteRoom(roomId) {
+                if (confirm('确定要删除这个琴房记录吗？')) {
+                    const rooms = getStoredRooms();
+                    const updatedRooms = rooms.filter(room => room.id !== roomId);
+                    localStorage.setItem('pianoRooms', JSON.stringify(updatedRooms));
+                    loadRooms();
+                    
+                    // 如果正在编辑被删除的房间，重置表单
+                    if (isEditing && currentEditId === roomId) {
+                        resetForm();
+                    }
+                }
+            }
+            
+            // 重置表单
+            function resetForm() {
+                pianoForm.reset();
+                photoPreview.style.display = 'none';
+                isEditing = false;
+                currentEditId = null;
+                saveButton.textContent = '保存信息';
+                cancelButton.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
