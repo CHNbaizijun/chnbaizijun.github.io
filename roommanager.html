@@ -6,12 +6,12 @@
     <title>琴房钢琴管理系统</title>
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2980b9;
-            --light-color: #ecf0f1;
-            --dark-color: #34495e;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
+            --primary-color: #4a6fa5;
+            --secondary-color: #6e9cd2;
+            --light-color: #f5f7fa;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #e67e22;
             --danger-color: #e74c3c;
         }
         
@@ -26,60 +26,62 @@
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
+            padding: 20px;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
         
         header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 25px 0;
+            padding: 25px;
             text-align: center;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 10px;
         }
         
-        .app-container {
+        .app-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .app-content {
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
+            padding: 20px;
+            gap: 20px;
         }
         
         .form-section {
             flex: 1;
             min-width: 350px;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            background: var(--light-color);
+            padding: 20px;
+            border-radius: 8px;
         }
         
         .list-section {
             flex: 2;
             min-width: 500px;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: bold;
             color: var(--dark-color);
         }
@@ -90,16 +92,10 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary-color);
-            outline: none;
         }
         
         textarea {
-            height: 100px;
+            min-height: 100px;
             resize: vertical;
         }
         
@@ -107,56 +103,48 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 14px 25px;
+            padding: 12px 20px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
         }
         
         button:hover {
             background-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
         
         .photo-preview {
-            margin-top: 15px;
+            margin-top: 10px;
             max-width: 100%;
-            max-height: 220px;
+            max-height: 200px;
             display: none;
             border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
         }
         
         .room-card {
-            border: 1px solid #eaeaea;
-            border-radius: 10px;
+            background: white;
+            border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
-            background: white;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        
-        .room-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary-color);
         }
         
         .room-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
         }
         
         .room-number {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: bold;
             color: var(--primary-color);
         }
@@ -164,16 +152,16 @@
         .room-model {
             font-weight: bold;
             color: var(--dark-color);
-            font-size: 1.2rem;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
         
         .room-status {
             display: inline-block;
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 20px;
             font-size: 0.9rem;
             font-weight: bold;
+            margin-top: 5px;
         }
         
         .status-good {
@@ -192,23 +180,25 @@
         }
         
         .room-notes {
-            margin-top: 12px;
-            color: #666;
-            line-height: 1.5;
+            margin-top: 10px;
+            color: #555;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 6px;
         }
         
         .room-image {
             max-width: 100%;
-            max-height: 220px;
+            max-height: 200px;
             margin-top: 15px;
             border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .card-actions {
-            margin-top: 20px;
+            margin-top: 15px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
         .btn-edit {
@@ -220,32 +210,33 @@
         }
         
         .search-box {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .search-box input {
+            flex: 1;
+            min-width: 200px;
         }
         
         .empty-state {
             text-align: center;
-            padding: 50px 0;
+            padding: 40px 0;
             color: #777;
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            color: #ccc;
-            margin-bottom: 15px;
         }
         
         .file-input-label {
             display: block;
             padding: 12px;
             background-color: #f8f9fa;
-            border: 1px dashed #ccc;
+            border: 2px dashed #ccc;
             border-radius: 6px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+            margin-bottom: 10px;
         }
         
         .file-input-label:hover {
@@ -253,18 +244,32 @@
             border-color: var(--primary-color);
         }
         
-        .conversion-notice {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #fff3cd;
-            border-left: 4px solid var(--warning-color);
-            border-radius: 4px;
-            font-size: 0.9rem;
-            display: none;
+        .data-actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: var(--success-color);
+            color: white;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
         }
         
         @media (max-width: 768px) {
-            .app-container {
+            .app-content {
                 flex-direction: column;
             }
             
@@ -272,8 +277,9 @@
                 min-width: 100%;
             }
             
-            .search-box {
+            .room-header {
                 flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -282,25 +288,25 @@
     <div class="container">
         <header>
             <h1>琴房钢琴管理系统</h1>
-            <p>轻松管理钢琴信息，支持所有照片格式</p>
+            <p class="app-description">轻松管理钢琴信息，挑选最适合的琴房</p>
         </header>
         
-        <div class="app-container">
+        <div class="app-content">
             <section class="form-section">
                 <h2>添加/编辑琴房信息</h2>
                 <form id="pianoForm">
                     <div class="form-group">
-                        <label for="roomNumber">琴房号</label>
+                        <label for="roomNumber">琴房号 *</label>
                         <input type="text" id="roomNumber" required placeholder="例如: A101">
                     </div>
                     
                     <div class="form-group">
-                        <label for="pianoModel">钢琴型号</label>
+                        <label for="pianoModel">钢琴型号 *</label>
                         <input type="text" id="pianoModel" required placeholder="例如: 雅马哈 C3X">
                     </div>
                     
                     <div class="form-group">
-                        <label for="pianoStatus">钢琴状态</label>
+                        <label for="pianoStatus">钢琴状态 *</label>
                         <select id="pianoStatus" required>
                             <option value="">请选择状态</option>
                             <option value="良好">良好 - 音准正常，无损坏</option>
@@ -317,18 +323,21 @@
                     <div class="form-group">
                         <label for="roomPhoto">上传照片</label>
                         <label class="file-input-label">
-                            <input type="file" id="roomPhoto" accept="image/*" style="display: none;">
-                            <span>点击选择照片或拖拽到此处</span>
+                            <input type="file" id="roomPhoto" accept="image/jpeg,image/png,image/gif" style="display: none;">
+                            <span>点击选择照片 (JPEG, PNG, GIF)</span>
                         </label>
-                        <div class="conversion-notice" id="conversionNotice">
-                            检测到HEIC/HEIF格式，正在自动转换...
-                        </div>
                         <img id="photoPreview" class="photo-preview" alt="照片预览">
                     </div>
                     
                     <button type="submit" id="saveButton">保存信息</button>
                     <button type="button" id="cancelButton" style="display:none; background-color: #95a5a6;">取消编辑</button>
                 </form>
+                
+                <div class="data-actions">
+                    <button id="exportButton">导出数据</button>
+                    <button id="importButton">导入数据</button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                </div>
             </section>
             
             <section class="list-section">
@@ -337,12 +346,11 @@
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="搜索琴房号或钢琴型号...">
                     <button id="searchButton">搜索</button>
-                    <button id="resetButton" style="background-color: #95a5a6;">重置</button>
+                    <button id="resetButton" style="background-color: #95a5a6;">显示全部</button>
                 </div>
                 
                 <div id="roomsList">
                     <div class="empty-state">
-                        <div>🎹</div>
                         <p>尚未添加任何琴房信息</p>
                         <p>请使用左侧表单添加琴房</p>
                     </div>
@@ -351,9 +359,8 @@
         </div>
     </div>
 
-    <!-- 引入heic2any库用于HEIF/HEIC格式转换 -->
-    <script src="https://cdn.jsdelivr.net/npm/heic2any@2.0.2/dist/heic2any.min.js"></script>
-    
+    <div class="notification" id="notification">操作成功！</div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 获取DOM元素
@@ -370,8 +377,10 @@
             const searchButton = document.getElementById('searchButton');
             const resetButton = document.getElementById('resetButton');
             const roomsList = document.getElementById('roomsList');
-            const conversionNotice = document.getElementById('conversionNotice');
-            const fileInputLabel = document.querySelector('.file-input-label');
+            const exportButton = document.getElementById('exportButton');
+            const importButton = document.getElementById('importButton');
+            const importFileInput = document.getElementById('importFile');
+            const notification = document.getElementById('notification');
             
             // 当前编辑状态
             let isEditing = false;
@@ -380,73 +389,18 @@
             // 初始化 - 从本地存储加载数据
             loadRooms();
             
-            // 拖放功能
-            fileInputLabel.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.style.borderColor = var(--primary-color);
-                this.style.backgroundColor = '#e3f2fd';
-            });
-            
-            fileInputLabel.addEventListener('dragleave', function() {
-                this.style.borderColor = '#ccc';
-                this.style.backgroundColor = '#f8f9fa';
-            });
-            
-            fileInputLabel.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.style.borderColor = '#ccc';
-                this.style.backgroundColor = '#f8f9fa';
-                
-                if (e.dataTransfer.files.length) {
-                    roomPhotoInput.files = e.dataTransfer.files;
-                    handleImageUpload(roomPhotoInput.files[0]);
-                }
-            });
-            
-            // 照片上传处理（支持HEIC/HEIF）
+            // 照片预览
             roomPhotoInput.addEventListener('change', function(e) {
-                if (e.target.files.length) {
-                    handleImageUpload(e.target.files[0]);
-                }
-            });
-            
-            // 处理图片上传，包括HEIC/HEIF格式转换
-            function handleImageUpload(file) {
-                conversionNotice.style.display = 'none';
-                
-                // 检查是否为HEIC/HEIF格式
-                if (file.name.toLowerCase().endsWith('.heic') || 
-                    file.name.toLowerCase().endsWith('.heif') ||
-                    file.type === 'image/heic' || 
-                    file.type === 'image/heif') {
+                const file = e.target.files[0];
+                if (file) {
+                    // 检查文件类型
+                    if (!file.type.match('image/jpeg') && 
+                        !file.type.match('image/png') && 
+                        !file.type.match('image/gif')) {
+                        showNotification('请选择JPEG、PNG或GIF格式的图片', 'error');
+                        return;
+                    }
                     
-                    conversionNotice.style.display = 'block';
-                    
-                    // 转换HEIC/HEIF为JPEG
-                    heic2any({
-                        blob: file,
-                        toType: 'image/jpeg',
-                        quality: 0.8
-                    })
-                    .then(convertedBlob => {
-                        // 创建新文件对象
-                        const newFile = new File([convertedBlob], file.name.split('.')[0] + '.jpg', {
-                            type: 'image/jpeg',
-                            lastModified: new Date().getTime()
-                        });
-                        
-                        // 创建URL并显示预览
-                        const url = URL.createObjectURL(newFile);
-                        photoPreview.src = url;
-                        photoPreview.style.display = 'block';
-                        conversionNotice.style.display = 'none';
-                    })
-                    .catch(error => {
-                        console.error('HEIC转换失败:', error);
-                        conversionNotice.textContent = '转换失败，请尝试使用其他格式图片';
-                    });
-                } else {
-                    // 普通图片格式直接预览
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         photoPreview.src = e.target.result;
@@ -454,7 +408,7 @@
                     };
                     reader.readAsDataURL(file);
                 }
-            }
+            });
             
             // 表单提交
             pianoForm.addEventListener('submit', function(e) {
@@ -473,6 +427,8 @@
                 saveRoom(roomData);
                 resetForm();
                 loadRooms();
+                
+                showNotification(`琴房 ${roomData.roomNumber} 信息已${isEditing ? '更新' : '添加'}`);
             });
             
             // 取消编辑
@@ -495,6 +451,68 @@
                 loadRooms(searchInput.value);
             });
             
+            // 导出数据
+            exportButton.addEventListener('click', function() {
+                const rooms = getStoredRooms();
+                if (rooms.length === 0) {
+                    showNotification('没有数据可导出', 'error');
+                    return;
+                }
+                
+                const dataStr = JSON.stringify(rooms, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `琴房数据_${new Date().toLocaleDateString()}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showNotification('数据导出成功');
+            });
+            
+            // 导入数据
+            importButton.addEventListener('click', function() {
+                importFileInput.click();
+            });
+            
+            importFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const rooms = JSON.parse(e.target.result);
+                        if (Array.isArray(rooms)) {
+                            localStorage.setItem('pianoRooms', JSON.stringify(rooms));
+                            loadRooms();
+                            showNotification('数据导入成功');
+                        } else {
+                            throw new Error('Invalid data format');
+                        }
+                    } catch (error) {
+                        showNotification('导入失败：文件格式不正确', 'error');
+                    }
+                };
+                reader.readAsText(file);
+                
+                // 重置文件输入，允许再次选择同一文件
+                importFileInput.value = '';
+            });
+            
+            // 显示通知
+            function showNotification(message, type = 'success') {
+                notification.textContent = message;
+                notification.style.backgroundColor = type === 'success' ? '#27ae60' : '#e74c3c';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
             // 保存琴房信息到本地存储
             function saveRoom(roomData) {
                 const rooms = getStoredRooms();
@@ -511,7 +529,6 @@
                 }
                 
                 localStorage.setItem('pianoRooms', JSON.stringify(rooms));
-                alert(`琴房 ${roomData.roomNumber} 信息已成功${isEditing ? '更新' : '添加'}！`);
             }
             
             // 从本地存储获取所有琴房信息
@@ -537,9 +554,8 @@
                 if (filteredRooms.length === 0) {
                     roomsList.innerHTML = `
                         <div class="empty-state">
-                            <div>🔍</div>
-                            <p>没有找到匹配的琴房</p>
-                            <p>尝试调整搜索条件或添加新琴房</p>
+                            <p>${searchTerm ? '没有找到匹配的琴房' : '尚未添加任何琴房信息'}</p>
+                            <p>${searchTerm ? '尝试调整搜索条件或添加新琴房' : '请使用左侧表单添加琴房'}</p>
                         </div>
                     `;
                     return;
@@ -564,7 +580,7 @@
                         <div class="room-model">${room.pianoModel}</div>
                         ${room.notes ? `<div class="room-notes">${room.notes}</div>` : ''}
                         ${room.photo ? `<img src="${room.photo}" class="room-image" alt="${room.roomNumber}照片">` : ''}
-                        <div class="last-updated">最后更新: ${room.lastUpdated}</div>
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: #777;">最后更新: ${room.lastUpdated}</div>
                         <div class="card-actions">
                             <button class="btn-edit" data-id="${room.id}">编辑</button>
                             <button class="btn-delete" data-id="${room.id}">删除</button>
@@ -624,7 +640,9 @@
             function deleteRoom(roomId) {
                 if (confirm('确定要删除这个琴房记录吗？此操作不可恢复。')) {
                     const rooms = getStoredRooms();
+                    const roomToDelete = rooms.find(room => room.id === roomId);
                     const updatedRooms = rooms.filter(room => room.id !== roomId);
+                    
                     localStorage.setItem('pianoRooms', JSON.stringify(updatedRooms));
                     loadRooms();
                     
@@ -632,6 +650,8 @@
                     if (isEditing && currentEditId === roomId) {
                         resetForm();
                     }
+                    
+                    showNotification(`琴房 ${roomToDelete.roomNumber} 已删除`);
                 }
             }
             
@@ -643,7 +663,6 @@
                 currentEditId = null;
                 saveButton.textContent = '保存信息';
                 cancelButton.style.display = 'none';
-                conversionNotice.style.display = 'none';
             }
         });
     </script>
