@@ -209,16 +209,51 @@
             background-color: var(--danger-color);
         }
         
-        .search-box {
-            margin-bottom: 20px;
+        .search-sort-container {
             display: flex;
-            gap: 10px;
             flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 200px;
         }
         
         .search-box input {
-            flex: 1;
-            min-width: 200px;
+            width: 100%;
+        }
+        
+        .sort-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .sort-option {
+            display: flex;
+            align-items: center;
+            background: #f0f4f8;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .sort-option:hover {
+            background: #e1e8f0;
+        }
+        
+        .sort-option.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .sort-order {
+            margin-left: 5px;
+            font-size: 0.9rem;
         }
         
         .empty-state {
@@ -280,6 +315,10 @@
             .room-header {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            
+            .search-sort-container {
+                flex-direction: column;
             }
         }
     </style>
@@ -343,10 +382,28 @@
             <section class="list-section">
                 <h2>琴房列表</h2>
                 
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="搜索琴房号或钢琴型号...">
-                    <button id="searchButton">搜索</button>
-                    <button id="resetButton" style="background-color: #95a5a6;">显示全部</button>
+                <div class="search-sort-container">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="搜索琴房号或钢琴型号...">
+                    </div>
+                    
+                    <div class="sort-box">
+                        <span>排序方式:</span>
+                        <div class="sort-option" data-sort="roomNumber" data-order="asc">
+                            琴房号 <span class="sort-order">↑</span>
+                        </div>
+                        <div class="sort-option" data-sort="status" data-order="desc">
+                            状态 <span class="sort-order">↓</span>
+                        </div>
+                        <div class="sort-option" data-sort="pianoModel" data-order="asc">
+                            型号 <span class="sort-order">↑</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <button id="searchButton">搜索</button>
+                        <button id="resetButton" style="background-color: #95a5a6;">重置</button>
+                    </div>
                 </div>
                 
                 <div id="roomsList">
@@ -381,13 +438,21 @@
             const importButton = document.getElementById('importButton');
             const importFileInput = document.getElementById('importFile');
             const notification = document.getElementById('notification');
+            const sortOptions = document.querySelectorAll('.sort-option');
             
             // 当前编辑状态
             let isEditing = false;
             let currentEditId = null;
             
+            // 当前排序设置
+            let currentSort = 'roomNumber';
+            let currentOrder = 'asc';
+            
             // 初始化 - 从本地存储加载数据
             loadRooms();
+            
+            // 设置初始排序选项为活动状态
+            setActiveSortOption('roomNumber', 'asc');
             
             // 照片预览
             roomPhotoInput.addEventListener('change', function(e) {
@@ -450,6 +515,50 @@
             searchInput.addEventListener('keyup', function() {
                 loadRooms(searchInput.value);
             });
+            
+            // 排序功能
+            sortOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const sortBy = this.getAttribute('data-sort');
+                    let order = this.getAttribute('data-order');
+                    
+                    // 如果点击的是当前激活的排序选项，切换排序顺序
+                    if (sortBy === currentSort) {
+                        order = order === 'asc' ? 'desc' : 'asc';
+                        this.setAttribute('data-order', order);
+                        this.querySelector('.sort-order').textContent = order === 'asc' ? '↑' : '↓';
+                    } else {
+                        // 如果点击的是其他排序选项，重置所有选项
+                        sortOptions.forEach(opt => {
+                            if (opt !== this) {
+                                opt.classList.remove('active');
+                            }
+                        });
+                    }
+                    
+                    currentSort = sortBy;
+                    currentOrder = order;
+                    
+                    // 更新UI
+                    setActiveSortOption(sortBy, order);
+                    
+                    // 重新加载房间列表
+                    loadRooms(searchInput.value);
+                });
+            });
+            
+            // 设置活动排序选项
+            function setActiveSortOption(sortBy, order) {
+                sortOptions.forEach(option => {
+                    if (option.getAttribute('data-sort') === sortBy) {
+                        option.classList.add('active');
+                        option.setAttribute('data-order', order);
+                        option.querySelector('.sort-order').textContent = order === 'asc' ? '↑' : '↓';
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+            }
             
             // 导出数据
             exportButton.addEventListener('click', function() {
@@ -545,11 +654,14 @@
                 roomsList.innerHTML = '';
                 
                 // 过滤房间（如果有搜索词）
-                const filteredRooms = searchTerm 
+                let filteredRooms = searchTerm 
                     ? rooms.filter(room => 
                           room.roomNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           room.pianoModel.toLowerCase().includes(searchTerm.toLowerCase()))
                     : rooms;
+                
+                // 排序房间
+                filteredRooms = sortRooms(filteredRooms, currentSort, currentOrder);
                 
                 if (filteredRooms.length === 0) {
                     roomsList.innerHTML = `
@@ -560,9 +672,6 @@
                     `;
                     return;
                 }
-                
-                // 按琴房号排序
-                filteredRooms.sort((a, b) => a.roomNumber.localeCompare(b.roomNumber));
                 
                 // 生成房间卡片
                 filteredRooms.forEach(room => {
@@ -603,6 +712,56 @@
                         const roomId = this.getAttribute('data-id');
                         deleteRoom(roomId);
                     });
+                });
+            }
+            
+            // 排序房间
+            function sortRooms(rooms, sortBy, order) {
+                return rooms.sort((a, b) => {
+                    let valueA, valueB;
+                    
+                    switch(sortBy) {
+                        case 'roomNumber':
+                            // 处理琴房号排序（支持数字和字母混合）
+                            valueA = a.roomNumber.toLowerCase();
+                            valueB = b.roomNumber.toLowerCase();
+                            
+                            // 尝试提取数字部分进行排序
+                            const numA = valueA.match(/\d+/) ? parseInt(valueA.match(/\d+/)[0]) : 0;
+                            const numB = valueB.match(/\d+/) ? parseInt(valueB.match(/\d+/)[0]) : 0;
+                            
+                            // 如果数字部分不同，按数字排序
+                            if (numA !== numB) {
+                                return order === 'asc' ? numA - numB : numB - numA;
+                            }
+                            
+                            // 如果数字部分相同，按字母部分排序
+                            const strA = valueA.replace(/\d+/g, '');
+                            const strB = valueB.replace(/\d+/g, '');
+                            
+                            if (strA < strB) return order === 'asc' ? -1 : 1;
+                            if (strA > strB) return order === 'asc' ? 1 : -1;
+                            return 0;
+                            
+                        case 'status':
+                            // 处理状态排序（自定义顺序）
+                            const statusOrder = { '良好': 3, '一般': 2, '需维修': 1 };
+                            valueA = statusOrder[a.status] || 0;
+                            valueB = statusOrder[b.status] || 0;
+                            return order === 'asc' ? valueA - valueB : valueB - valueA;
+                            
+                        case 'pianoModel':
+                            // 处理型号排序
+                            valueA = a.pianoModel.toLowerCase();
+                            valueB = b.pianoModel.toLowerCase();
+                            
+                            if (valueA < valueB) return order === 'asc' ? -1 : 1;
+                            if (valueA > valueB) return order === 'asc' ? 1 : -1;
+                            return 0;
+                            
+                        default:
+                            return 0;
+                    }
                 });
             }
             
