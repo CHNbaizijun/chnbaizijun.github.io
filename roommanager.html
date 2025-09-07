@@ -35,60 +35,67 @@
         }
         
         header {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 20px 0;
+            padding: 25px 0;
             text-align: center;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
         
         .app-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 25px;
         }
         
         .form-section {
             flex: 1;
-            min-width: 300px;
+            min-width: 350px;
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
         
         .list-section {
             flex: 2;
             min-width: 500px;
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
             color: var(--dark-color);
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
         }
         
         textarea {
@@ -100,49 +107,56 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 4px;
+            padding: 14px 25px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         button:hover {
             background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
         
         .photo-preview {
-            margin-top: 10px;
+            margin-top: 15px;
             max-width: 100%;
-            max-height: 200px;
+            max-height: 220px;
             display: none;
-            border-radius: 4px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .room-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
             background: white;
-            transition: transform 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         
         .room-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
         
         .room-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
         }
         
         .room-number {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: bold;
             color: var(--primary-color);
         }
@@ -150,13 +164,15 @@
         .room-model {
             font-weight: bold;
             color: var(--dark-color);
+            font-size: 1.2rem;
+            margin-bottom: 8px;
         }
         
         .room-status {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: bold;
         }
         
@@ -176,21 +192,23 @@
         }
         
         .room-notes {
-            margin-top: 10px;
+            margin-top: 12px;
             color: #666;
+            line-height: 1.5;
         }
         
         .room-image {
             max-width: 100%;
-            max-height: 200px;
-            margin-top: 10px;
-            border-radius: 4px;
+            max-height: 220px;
+            margin-top: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .card-actions {
-            margin-top: 15px;
+            margin-top: 20px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
         
         .btn-edit {
@@ -202,15 +220,47 @@
         }
         
         .search-box {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
         
         .empty-state {
             text-align: center;
-            padding: 40px 0;
+            padding: 50px 0;
             color: #777;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+        
+        .file-input-label {
+            display: block;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border: 1px dashed #ccc;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-input-label:hover {
+            background-color: #e9ecef;
+            border-color: var(--primary-color);
+        }
+        
+        .conversion-notice {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff3cd;
+            border-left: 4px solid var(--warning-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: none;
         }
         
         @media (max-width: 768px) {
@@ -221,6 +271,10 @@
             .form-section, .list-section {
                 min-width: 100%;
             }
+            
+            .search-box {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -228,6 +282,7 @@
     <div class="container">
         <header>
             <h1>琴房钢琴管理系统</h1>
+            <p>轻松管理钢琴信息，支持所有照片格式</p>
         </header>
         
         <div class="app-container">
@@ -261,7 +316,13 @@
                     
                     <div class="form-group">
                         <label for="roomPhoto">上传照片</label>
-                        <input type="file" id="roomPhoto" accept="image/*">
+                        <label class="file-input-label">
+                            <input type="file" id="roomPhoto" accept="image/*" style="display: none;">
+                            <span>点击选择照片或拖拽到此处</span>
+                        </label>
+                        <div class="conversion-notice" id="conversionNotice">
+                            检测到HEIC/HEIF格式，正在自动转换...
+                        </div>
                         <img id="photoPreview" class="photo-preview" alt="照片预览">
                     </div>
                     
@@ -276,11 +337,12 @@
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="搜索琴房号或钢琴型号...">
                     <button id="searchButton">搜索</button>
+                    <button id="resetButton" style="background-color: #95a5a6;">重置</button>
                 </div>
                 
                 <div id="roomsList">
-                    <!-- 琴房信息将在这里动态生成 -->
                     <div class="empty-state">
+                        <div>🎹</div>
                         <p>尚未添加任何琴房信息</p>
                         <p>请使用左侧表单添加琴房</p>
                     </div>
@@ -289,6 +351,9 @@
         </div>
     </div>
 
+    <!-- 引入heic2any库用于HEIF/HEIC格式转换 -->
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@2.0.2/dist/heic2any.min.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 获取DOM元素
@@ -303,7 +368,10 @@
             const cancelButton = document.getElementById('cancelButton');
             const searchInput = document.getElementById('searchInput');
             const searchButton = document.getElementById('searchButton');
+            const resetButton = document.getElementById('resetButton');
             const roomsList = document.getElementById('roomsList');
+            const conversionNotice = document.getElementById('conversionNotice');
+            const fileInputLabel = document.querySelector('.file-input-label');
             
             // 当前编辑状态
             let isEditing = false;
@@ -312,10 +380,73 @@
             // 初始化 - 从本地存储加载数据
             loadRooms();
             
-            // 照片预览
+            // 拖放功能
+            fileInputLabel.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = var(--primary-color);
+                this.style.backgroundColor = '#e3f2fd';
+            });
+            
+            fileInputLabel.addEventListener('dragleave', function() {
+                this.style.borderColor = '#ccc';
+                this.style.backgroundColor = '#f8f9fa';
+            });
+            
+            fileInputLabel.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#ccc';
+                this.style.backgroundColor = '#f8f9fa';
+                
+                if (e.dataTransfer.files.length) {
+                    roomPhotoInput.files = e.dataTransfer.files;
+                    handleImageUpload(roomPhotoInput.files[0]);
+                }
+            });
+            
+            // 照片上传处理（支持HEIC/HEIF）
             roomPhotoInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
+                if (e.target.files.length) {
+                    handleImageUpload(e.target.files[0]);
+                }
+            });
+            
+            // 处理图片上传，包括HEIC/HEIF格式转换
+            function handleImageUpload(file) {
+                conversionNotice.style.display = 'none';
+                
+                // 检查是否为HEIC/HEIF格式
+                if (file.name.toLowerCase().endsWith('.heic') || 
+                    file.name.toLowerCase().endsWith('.heif') ||
+                    file.type === 'image/heic' || 
+                    file.type === 'image/heif') {
+                    
+                    conversionNotice.style.display = 'block';
+                    
+                    // 转换HEIC/HEIF为JPEG
+                    heic2any({
+                        blob: file,
+                        toType: 'image/jpeg',
+                        quality: 0.8
+                    })
+                    .then(convertedBlob => {
+                        // 创建新文件对象
+                        const newFile = new File([convertedBlob], file.name.split('.')[0] + '.jpg', {
+                            type: 'image/jpeg',
+                            lastModified: new Date().getTime()
+                        });
+                        
+                        // 创建URL并显示预览
+                        const url = URL.createObjectURL(newFile);
+                        photoPreview.src = url;
+                        photoPreview.style.display = 'block';
+                        conversionNotice.style.display = 'none';
+                    })
+                    .catch(error => {
+                        console.error('HEIC转换失败:', error);
+                        conversionNotice.textContent = '转换失败，请尝试使用其他格式图片';
+                    });
+                } else {
+                    // 普通图片格式直接预览
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         photoPreview.src = e.target.result;
@@ -323,7 +454,7 @@
                     };
                     reader.readAsDataURL(file);
                 }
-            });
+            }
             
             // 表单提交
             pianoForm.addEventListener('submit', function(e) {
@@ -354,6 +485,12 @@
                 loadRooms(searchInput.value);
             });
             
+            // 重置搜索
+            resetButton.addEventListener('click', function() {
+                searchInput.value = '';
+                loadRooms();
+            });
+            
             searchInput.addEventListener('keyup', function() {
                 loadRooms(searchInput.value);
             });
@@ -374,6 +511,7 @@
                 }
                 
                 localStorage.setItem('pianoRooms', JSON.stringify(rooms));
+                alert(`琴房 ${roomData.roomNumber} 信息已成功${isEditing ? '更新' : '添加'}！`);
             }
             
             // 从本地存储获取所有琴房信息
@@ -399,7 +537,9 @@
                 if (filteredRooms.length === 0) {
                     roomsList.innerHTML = `
                         <div class="empty-state">
+                            <div>🔍</div>
                             <p>没有找到匹配的琴房</p>
+                            <p>尝试调整搜索条件或添加新琴房</p>
                         </div>
                     `;
                     return;
@@ -482,7 +622,7 @@
             
             // 删除琴房信息
             function deleteRoom(roomId) {
-                if (confirm('确定要删除这个琴房记录吗？')) {
+                if (confirm('确定要删除这个琴房记录吗？此操作不可恢复。')) {
                     const rooms = getStoredRooms();
                     const updatedRooms = rooms.filter(room => room.id !== roomId);
                     localStorage.setItem('pianoRooms', JSON.stringify(updatedRooms));
@@ -503,6 +643,7 @@
                 currentEditId = null;
                 saveButton.textContent = '保存信息';
                 cancelButton.style.display = 'none';
+                conversionNotice.style.display = 'none';
             }
         });
     </script>
