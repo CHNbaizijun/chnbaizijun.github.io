@@ -493,6 +493,12 @@
             color: var(--medium-text);
         }
         
+        .record-time {
+            font-size: 0.8rem;
+            color: var(--medium-text);
+            margin-top: 5px;
+        }
+        
         @media (max-width: 576px) {
             .controls {
                 flex-direction: column;
@@ -1000,6 +1006,7 @@
                             <div class="history-item">
                                 <div class="history-details">
                                     <div><strong>${record.pieceName}</strong> (${record.type === 'single' ? '单曲' : '组曲'})</div>
+                                    <div class="record-time">登记时间: ${formatDateTime(record.createdAt)}</div>
                                     ${record.notes ? `<div class="notes">${record.notes}</div>` : ''}
                                 </div>
                                 <div class="history-total">${record.totalTime} min</div>
@@ -1654,13 +1661,14 @@
             }
             
             practiceRecords[recordIndex] = {
-                id: editingRecordId,
+                ...practiceRecords[recordIndex],
                 date: editPracticeDateEl.value,
                 type: editPieceTypeEl.value,
                 pieceName: editPieceNameEl.value,
                 totalTime: totalTime,
                 parts: isSuite ? editSuiteParts : [],
-                notes: editNotesEl.value
+                notes: editNotesEl.value,
+                updatedAt: new Date().toISOString()
             };
             
             saveToLocalStorage();
@@ -1704,6 +1712,7 @@
             }
             
             // 创建记录对象
+            const now = new Date().toISOString();
             const record = {
                 id: Date.now(),
                 date: practiceDateEl.value,
@@ -1711,7 +1720,9 @@
                 pieceName: pieceNameEl.value,
                 totalTime: totalTime,
                 parts: isSuite ? suiteParts : [],
-                notes: notesEl.value
+                notes: notesEl.value,
+                createdAt: now,
+                updatedAt: now
             };
             
             // 添加到记录列表
@@ -1766,6 +1777,8 @@
                 historyItem.className = 'history-item';
                 
                 let detailsHtml = `<div><strong>${record.pieceName}</strong> (${record.type === 'single' ? '单曲' : '组曲'})</div>`;
+                detailsHtml += `<div class="record-time">登记时间: ${formatDateTime(record.createdAt)}</div>`;
+                
                 if (record.type === 'suite' && record.parts.length > 0) {
                     const partsText = record.parts.map((part, index) => `部分${index + 1}: ${part.time}min`).join(', ');
                     detailsHtml += `<div>${partsText}</div>`;
@@ -1925,7 +1938,7 @@
         
         // 显示帮助
         function showHelp() {
-            alert('使用说明：\n\n1. 选择日期和曲目类型\n2. 输入曲目名称\n3. 对于单曲，输入练习时间；对于组曲，添加各部分时间\n4. 可添加备注\n5. 点击保存记录\n6. 在历史记录中查看和管理过往练习\n\n其他功能：\n- 顶部可按日期筛选记录\n- 支持三种视图模式：所有记录、每日视图、统计视图\n- 可以导入导出数据\n- 可以编辑已保存的记录');
+            alert('使用说明：\n\n1. 选择日期和曲目类型\n2. 输入曲目名称\n3. 对于单曲，输入练习时间；对于组曲，添加各部分时间\n4. 可添加备注\n5. 点击保存记录\n6. 在历史记录中查看和管理过往练习\n\n其他功能：\n- 顶部可按日期筛选记录\n- 支持三种视图模式：所有记录、每日视图、统计视图\n- 可以导入导出数据\n- 可以编辑已保存的记录\n- 每条记录下方显示登记时间');
         }
         
         // 更新统计信息
@@ -1970,6 +1983,12 @@
         function formatDateFull(dateString) {
             const date = new Date(dateString);
             return `${date.getFullYear()}年${(date.getMonth() + 1).toString().padStart(2, '0')}月${date.getDate().toString().padStart(2, '0')}日`;
+        }
+        
+        // 格式化日期时间 (YYYY-MM-DD HH:mm:ss)
+        function formatDateTime(dateTimeString) {
+            const date = new Date(dateTimeString);
+            return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
         }
         
         // 初始化应用
