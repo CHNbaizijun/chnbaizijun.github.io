@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>专注番茄钟</title>
+    <title>深度专注番茄钟</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,9 +15,20 @@
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
         }
         
+        :root {
+            --primary-color: #5e72e4;
+            --secondary-color: #7795f8;
+            --accent-color: #4cd964;
+            --background-color: #f7fafc;
+            --card-color: #ffffff;
+            --text-color: #525f7f;
+            --text-light: #8898aa;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
+            background: var(--background-color);
+            color: var(--text-color);
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -30,23 +41,26 @@
         .container {
             width: 100%;
             max-width: 500px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: var(--card-color);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
         }
         
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
             font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .subtitle {
             font-size: 1.2rem;
             margin-bottom: 30px;
-            opacity: 0.9;
+            color: var(--text-light);
         }
         
         .timer-container {
@@ -60,13 +74,13 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--card-color);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
         }
         
         .timer-progress {
@@ -74,7 +88,7 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: conic-gradient(#4cd964 transparent 0deg, transparent 0deg);
+            background: conic-gradient(var(--accent-color) 0deg, transparent 0deg);
             mask: radial-gradient(white 50%, transparent 51%);
             -webkit-mask: radial-gradient(white 50%, transparent 51%);
         }
@@ -83,11 +97,12 @@
             font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 5px;
+            color: var(--primary-color);
         }
         
         .timer-status {
             font-size: 1rem;
-            opacity: 0.8;
+            color: var(--text-light);
         }
         
         .controls {
@@ -112,23 +127,23 @@
         }
         
         .btn-primary {
-            background: #4cd964;
+            background: var(--primary-color);
             color: white;
-            box-shadow: 0 4px 10px rgba(76, 217, 100, 0.4);
+            box-shadow: 0 4px 10px rgba(94, 114, 228, 0.4);
         }
         
         .btn-primary:hover {
-            background: #3cb854;
+            background: var(--secondary-color);
             transform: translateY(-2px);
         }
         
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(136, 152, 170, 0.1);
+            color: var(--text-color);
         }
         
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(136, 152, 170, 0.2);
         }
         
         .settings {
@@ -148,21 +163,22 @@
             height: 40px;
             border-radius: 50%;
             border: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(136, 152, 170, 0.1);
+            color: var(--text-color);
             font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.2s ease;
         }
         
         .time-setter button:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(136, 152, 170, 0.2);
         }
         
         .time-setter span {
             font-size: 1.5rem;
             font-weight: 600;
             width: 60px;
+            color: var(--primary-color);
         }
         
         .stats {
@@ -172,7 +188,7 @@
         }
         
         .stat-box {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(136, 152, 170, 0.1);
             padding: 15px;
             border-radius: 15px;
             width: 45%;
@@ -182,26 +198,98 @@
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 5px;
+            color: var(--primary-color);
         }
         
         .stat-label {
             font-size: 0.9rem;
-            opacity: 0.8;
+            color: var(--text-light);
         }
         
         .motivation {
             font-style: italic;
             margin-top: 20px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(136, 152, 170, 0.1);
             border-radius: 15px;
             font-size: 1.1rem;
+            color: var(--text-light);
         }
         
         .warning {
-            color: #ffcc00;
+            color: #ff9500;
             margin-top: 10px;
             font-size: 0.9rem;
+        }
+        
+        .achievements {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(136, 152, 170, 0.2);
+        }
+        
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .achievement-item {
+            background: rgba(136, 152, 170, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .achievement-item.earned {
+            background: rgba(76, 217, 100, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+        
+        .achievement-item.earned .achievement-icon {
+            color: var(--accent-color);
+        }
+        
+        .achievement-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* 横屏布局 */
+        @media (orientation: landscape) {
+            .container {
+                max-width: 90%;
+                display: flex;
+                flex-wrap: wrap;
+            }
+            
+            .header-section {
+                width: 100%;
+            }
+            
+            .timer-section {
+                width: 50%;
+                padding-right: 20px;
+            }
+            
+            .stats-section {
+                width: 50%;
+                padding-left: 20px;
+            }
+            
+            .achievements {
+                width: 100%;
+            }
         }
         
         /* 响应式设计 */
@@ -227,54 +315,94 @@
                 padding: 12px 25px;
                 font-size: 1rem;
             }
+            
+            .achievement-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>专注番茄钟</h1>
-        <p class="subtitle">保持专注，收获回报</p>
+        <div class="header-section">
+            <h1>深度专注番茄钟</h1>
+            <p class="subtitle">保持专注，收获成就</p>
+        </div>
         
-        <div class="timer-container">
-            <div class="timer-progress" id="progress"></div>
-            <div class="timer-circle">
-                <div class="time-display" id="time">60:00</div>
-                <div class="timer-status" id="status">准备专注</div>
+        <div class="timer-section">
+            <div class="timer-container">
+                <div class="timer-progress" id="progress"></div>
+                <div class="timer-circle">
+                    <div class="time-display" id="time">60:00</div>
+                    <div class="timer-status" id="status">准备专注</div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-primary" id="startBtn">
+                    <i class="fas fa-play"></i> 开始专注
+                </button>
+                <button class="btn btn-secondary" id="resetBtn" disabled>
+                    <i class="fas fa-redo"></i> 重置
+                </button>
+            </div>
+            
+            <div class="settings">
+                <h2>专注时间设置</h2>
+                <div class="time-setter">
+                    <button id="decreaseTime"><i class="fas fa-minus"></i></button>
+                    <span id="focusTime">60</span>
+                    <button id="increaseTime"><i class="fas fa-plus"></i></button>
+                </div>
+                <p class="warning">注意：一旦开始不可暂停，退出应用将导致专注失败！</p>
             </div>
         </div>
         
-        <div class="controls">
-            <button class="btn btn-primary" id="startBtn">
-                <i class="fas fa-play"></i> 开始
-            </button>
-            <button class="btn btn-secondary" id="resetBtn">
-                <i class="fas fa-redo"></i> 重置
-            </button>
-        </div>
-        
-        <div class="settings">
-            <h2>专注时间设置</h2>
-            <div class="time-setter">
-                <button id="decreaseTime"><i class="fas fa-minus"></i></button>
-                <span id="focusTime">60</span>
-                <button id="increaseTime"><i class="fas fa-plus"></i></button>
+        <div class="stats-section">
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="streak">0</div>
+                    <div class="stat-label">连续打卡(小时)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="points">0</div>
+                    <div class="stat-label">成就积分</div>
+                </div>
             </div>
-            <p class="warning">注意：退出应用或切换到后台将导致专注失败！</p>
-        </div>
-        
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-value" id="streak">0</div>
-                <div class="stat-label">连续打卡(小时)</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value" id="points">0</div>
-                <div class="stat-label">奖励积分</div>
+            
+            <div class="motivation" id="motivation">
+                "每一次专注都是对自己的投资"
             </div>
         </div>
         
-        <div class="motivation" id="motivation">
-            "每一次专注都是对自己的投资"
+        <div class="achievements">
+            <h2>成就徽章</h2>
+            <div class="achievement-grid">
+                <div class="achievement-item" id="ach1">
+                    <div class="achievement-icon"><i class="fas fa-seedling"></i></div>
+                    <div class="achievement-title">初次专注</div>
+                </div>
+                <div class="achievement-item" id="ach5">
+                    <div class="achievement-icon"><i class="fas fa-fire"></i></div>
+                    <div class="achievement-title">5小时专注</div>
+                </div>
+                <div class="achievement-item" id="ach24">
+                    <div class="achievement-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="achievement-title">24小时专注</div>
+                </div>
+                <div class="achievement-item" id="ach7d">
+                    <div class="achievement-icon"><i class="fas fa-calendar"></i></div>
+                    <div class="achievement-title">7天连续</div>
+                </div>
+                <div class="achievement-item" id="ach30d">
+                    <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="achievement-title">30天连续</div>
+                </div>
+                <div class="achievement-item" id="ach100">
+                    <div class="achievement-icon"><i class="fas fa-gem"></i></div>
+                    <div class="achievement-title">100小时</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -286,6 +414,8 @@
         let timerInterval = null;
         let streak = 0;
         let points = 0;
+        let totalFocusTime = 0;
+        let wakeLock = null;
         
         // DOM元素
         const timeDisplay = document.getElementById('time');
@@ -300,6 +430,14 @@
         const pointsElement = document.getElementById('points');
         const motivationElement = document.getElementById('motivation');
         
+        // 成就元素
+        const ach1 = document.getElementById('ach1');
+        const ach5 = document.getElementById('ach5');
+        const ach24 = document.getElementById('ach24');
+        const ach7d = document.getElementById('ach7d');
+        const ach30d = document.getElementById('ach30d');
+        const ach100 = document.getElementById('ach100');
+        
         // 激励语句库
         const motivations = [
             "每一次专注都是对自己的投资",
@@ -309,7 +447,9 @@
             "专注是你超能力的源泉",
             "今天的一次专注，明天的十分收获",
             "成功来自于每一次的坚持",
-            "专注让简单的事情变得非凡"
+            "专注让简单的事情变得非凡",
+            "深度工作创造非凡价值",
+            "你的专注力是你最宝贵的资源"
         ];
         
         // 初始化
@@ -317,9 +457,10 @@
             updateTimeDisplay();
             loadFromStorage();
             updateStats();
+            updateAchievements();
             
             // 设置事件监听器
-            startBtn.addEventListener('click', toggleTimer);
+            startBtn.addEventListener('click', startTimer);
             resetBtn.addEventListener('click', resetTimer);
             decreaseTimeBtn.addEventListener('click', () => changeTime(-5));
             increaseTimeBtn.addEventListener('click', () => changeTime(5));
@@ -334,19 +475,64 @@
             showRandomMotivation();
         }
         
+        // 请求屏幕常亮
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('屏幕常亮已激活');
+                    
+                    wakeLock.addEventListener('release', () => {
+                        console.log('屏幕常亮已释放');
+                    });
+                }
+            } catch (err) {
+                console.error(`屏幕常亮错误: ${err.message}`);
+            }
+        }
+        
+        // 释放屏幕常亮
+        function releaseWakeLock() {
+            if (wakeLock !== null) {
+                wakeLock.release();
+                wakeLock = null;
+            }
+        }
+        
         // 加载本地存储数据
         function loadFromStorage() {
             const savedStreak = localStorage.getItem('focusStreak');
             const savedPoints = localStorage.getItem('focusPoints');
+            const savedTotalTime = localStorage.getItem('totalFocusTime');
+            const savedAchievements = localStorage.getItem('achievements');
             
             if (savedStreak) streak = parseInt(savedStreak);
             if (savedPoints) points = parseInt(savedPoints);
+            if (savedTotalTime) totalFocusTime = parseInt(savedTotalTime);
+            
+            // 加载成就数据
+            if (savedAchievements) {
+                const achievements = JSON.parse(savedAchievements);
+                updateAchievementsUI(achievements);
+            }
         }
         
         // 保存数据到本地存储
         function saveToStorage() {
             localStorage.setItem('focusStreak', streak);
             localStorage.setItem('focusPoints', points);
+            localStorage.setItem('totalFocusTime', totalFocusTime);
+            
+            // 保存成就数据
+            const achievements = {
+                first: totalFocusTime > 0,
+                five: totalFocusTime >= 5*60,
+                twentyfour: totalFocusTime >= 24*60,
+                sevenDays: streak >= 7,
+                thirtyDays: streak >= 30,
+                hundred: totalFocusTime >= 100*60
+            };
+            localStorage.setItem('achievements', JSON.stringify(achievements));
         }
         
         // 更新统计显示
@@ -355,23 +541,43 @@
             pointsElement.textContent = points;
         }
         
-        // 切换计时器状态
-        function toggleTimer() {
-            if (isRunning) {
-                pauseTimer();
-            } else {
-                startTimer();
-            }
+        // 更新成就显示
+        function updateAchievements() {
+            const achievements = {
+                first: totalFocusTime > 0,
+                five: totalFocusTime >= 5*60,
+                twentyfour: totalFocusTime >= 24*60,
+                sevenDays: streak >= 7,
+                thirtyDays: streak >= 30,
+                hundred: totalFocusTime >= 100*60
+            };
+            
+            updateAchievementsUI(achievements);
+        }
+        
+        // 更新成就UI
+        function updateAchievementsUI(achievements) {
+            if (achievements.first) ach1.classList.add('earned');
+            if (achievements.five) ach5.classList.add('earned');
+            if (achievements.twentyfour) ach24.classList.add('earned');
+            if (achievements.sevenDays) ach7d.classList.add('earned');
+            if (achievements.thirtyDays) ach30d.classList.add('earned');
+            if (achievements.hundred) ach100.classList.add('earned');
         }
         
         // 开始计时
-        function startTimer() {
+        async function startTimer() {
             if (isRunning) return;
             
+            // 请求屏幕常亮
+            await requestWakeLock();
+            
             isRunning = true;
-            startBtn.innerHTML = '<i class="fas fa-pause"></i> 暂停';
-            startBtn.classList.remove('btn-primary');
-            startBtn.classList.add('btn-secondary');
+            startBtn.disabled = true;
+            decreaseTimeBtn.disabled = true;
+            increaseTimeBtn.disabled = true;
+            resetBtn.disabled = true;
+            
             statusElement.textContent = '专注中...';
             
             timerInterval = setInterval(() => {
@@ -386,34 +592,24 @@
             }, 1000);
         }
         
-        // 暂停计时
-        function pauseTimer() {
-            if (!isRunning) return;
-            
-            isRunning = false;
-            clearInterval(timerInterval);
-            startBtn.innerHTML = '<i class="fas fa-play"></i> 继续';
-            startBtn.classList.remove('btn-secondary');
-            startBtn.classList.add('btn-primary');
-            statusElement.textContent = '已暂停';
-        }
-        
         // 重置计时器
         function resetTimer() {
             isRunning = false;
             clearInterval(timerInterval);
+            releaseWakeLock();
             remainingTime = focusTime * 60;
             updateTimeDisplay();
-            startBtn.innerHTML = '<i class="fas fa-play"></i> 开始';
-            startBtn.classList.remove('btn-secondary');
-            startBtn.classList.add('btn-primary');
+            startBtn.disabled = false;
+            decreaseTimeBtn.disabled = false;
+            increaseTimeBtn.disabled = false;
+            resetBtn.disabled = true;
             statusElement.textContent = '准备专注';
         }
         
         // 改变专注时间
         function changeTime(minutes) {
             if (isRunning) {
-                alert('请先停止当前计时！');
+                alert('请先完成或重置当前专注！');
                 return;
             }
             
@@ -437,7 +633,7 @@
             
             // 更新进度环
             const progressPercent = 100 - (remainingTime / (focusTime * 60)) * 100;
-            progressElement.style.background = `conic-gradient(#4cd964 ${progressPercent}%, transparent ${progressPercent}%)`;
+            progressElement.style.background = `conic-gradient(var(--accent-color) ${progressPercent}%, transparent ${progressPercent}%)`;
         }
         
         // 处理页面可见性变化
@@ -461,22 +657,29 @@
         function completeSession() {
             isRunning = false;
             clearInterval(timerInterval);
+            releaseWakeLock();
             
             // 更新统计
             streak++;
             points += focusTime; // 每分钟1点
+            totalFocusTime += focusTime;
             
             // 保存和更新显示
             saveToStorage();
             updateStats();
+            updateAchievements();
             
             // 显示成功消息
             statusElement.textContent = '专注完成！';
             timeDisplay.textContent = '完成！';
-            progressElement.style.background = 'conic-gradient(#4cd964 100%, transparent 100%)';
+            progressElement.style.background = 'conic-gradient(var(--accent-color) 100%, transparent 100%)';
+            startBtn.disabled = false;
+            decreaseTimeBtn.disabled = false;
+            increaseTimeBtn.disabled = false;
+            resetBtn.disabled = false;
             
             // 显示奖励通知
-            alert(`恭喜！你完成了${focusTime}分钟专注！\n获得${focusTime}点奖励积分！`);
+            alert(`恭喜！你完成了${focusTime}分钟专注！\n获得${focusTime}点成就积分！`);
             
             // 更换激励语句
             showRandomMotivation();
@@ -486,6 +689,7 @@
         function failSession(reason) {
             isRunning = false;
             clearInterval(timerInterval);
+            releaseWakeLock();
             
             // 应用惩罚
             streak = 0;
@@ -494,9 +698,14 @@
             // 保存和更新显示
             saveToStorage();
             updateStats();
+            updateAchievements();
             
             // 显示失败消息
             statusElement.textContent = `专注失败: ${reason}`;
+            startBtn.disabled = false;
+            decreaseTimeBtn.disabled = false;
+            increaseTimeBtn.disabled = false;
+            resetBtn.disabled = false;
             alert(`专注失败！${reason}导致中断。\n连续打卡已重置，积分-10。`);
             
             // 更换激励语句
