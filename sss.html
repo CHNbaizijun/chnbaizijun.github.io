@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大陈老师学生新年音乐会</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            height: 95vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 5px;
+        }
+        
+        .header h1 {
+            font-size: 1.2rem;
+            color: #e6c300;
+            margin-bottom: 2px;
+        }
+        
+        .header h2 {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .slide-container {
+            width: 100%;
+            height: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(10, 10, 10, 0.9);
+            border-radius: 5px;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            position: absolute;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        .number {
+            font-size: 4.5rem;
+            color: #e6c300;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .title {
+            font-size: 4.2rem;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            color: #fff;
+            padding: 0 10px;
+        }
+        
+        .composer {
+            font-size: 3.2rem;
+            color: #aaa;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .performer {
+            font-size: 2.8rem;
+            color: #4dabf7;
+            margin-top: auto;
+            padding: 10px 20px;
+            background-color: rgba(20, 20, 20, 0.7);
+            border-radius: 5px;
+        }
+        
+        .duplicate-warning {
+            color: #ff6b6b;
+            font-size: 3rem;
+            margin-top: 25px;
+            padding: 12px 24px;
+            border-radius: 5px;
+            border: 2px solid #ff6b6b;
+            font-weight: bold;
+            background-color: rgba(100, 0, 0, 0.15);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0 10px;
+            z-index: 10;
+        }
+        
+        .nav-btn {
+            background-color: rgba(30, 30, 30, 0.8);
+            color: #ccc;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-btn:hover {
+            background-color: #e6c300;
+            color: #000;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 5px;
+            width: 100%;
+            text-align: center;
+            color: #444;
+            font-size: 0.8rem;
+            padding-top: 5px;
+        }
+        
+        .progress {
+            display: flex;
+            justify-content: center;
+            margin-top: 5px;
+        }
+        
+        .progress-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #333;
+            margin: 0 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .progress-dot.active {
+            background-color: #e6c300;
+        }
+        
+        /* 红色字体标注重复曲目 - 加大 */
+        .duplicate {
+            color: #ff6b6b !important;
+            font-size: 4.4rem !important;
+            font-weight: bold !important;
+        }
+        
+        /* 小屏幕适配 */
+        @media (max-width: 1200px) {
+            .number {
+                font-size: 4rem;
+            }
+            
+            .title {
+                font-size: 3.8rem;
+            }
+            
+            .composer {
+                font-size: 2.8rem;
+            }
+            
+            .performer {
+                font-size: 2.4rem;
+            }
+            
+            .duplicate-warning {
+                font-size: 2.6rem;
+            }
+            
+            .duplicate {
+                font-size: 4rem !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .number {
+                font-size: 3.5rem;
+            }
+            
+            .title {
+                font-size: 3.2rem;
+            }
+            
+            .composer {
+                font-size: 2.4rem;
+            }
+            
+            .performer {
+                font-size: 2rem;
+            }
+            
+            .duplicate-warning {
+                font-size: 2.2rem;
+            }
+            
+            .duplicate {
+                font-size: 3.4rem !important;
+            }
+            
+            .nav-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .number {
+                font-size: 3rem;
+            }
+            
+            .title {
+                font-size: 2.6rem;
+            }
+            
+            .composer {
+                font-size: 2rem;
+            }
+            
+            .performer {
+                font-size: 1.7rem;
+            }
+            
+            .duplicate-warning {
+                font-size: 1.8rem;
+            }
+            
+            .duplicate {
+                font-size: 2.8rem !important;
+            }
+            
+            .header h1 {
+                font-size: 1rem;
+            }
+            
+            .header h2 {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>大陈老师学生新年音乐会</h1>
+            <h2>TEACHER DA CHIEN'S STUDENTS NEW YEAR CONCERT</h2>
+        </div>
+        
+        <div class="slide-container" id="slideContainer">
+            <!-- 幻灯片将通过JavaScript动态生成 -->
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        
+        <div class="footer">
+            <div class="progress" id="progressDots">
+                <!-- 进度点将通过JavaScript动态生成 -->
+            </div>
+            <p>钢琴伴奏专用 - 点击左右按钮翻页</p>
+        </div>
+    </div>
+
+    <script>
+        // 音乐会曲目数据 - 严格按照序号从小到大排序
+        const performances = [
+            { number: 1, title: "江南四重奏《死神与少女》", composer: "舒伯特", performer: "江南四重奏" },
+            { number: 2, title: "《第一号小步舞曲》", composer: "巴赫", performer: "罗楚晗" },
+            { number: 3, title: "《加沃特舞曲》", composer: "吕利", performer: "项无忧" },
+            { number: 4, title: "《C大调小协奏曲》", composer: "里丁", performer: "方羲和" },
+            { number: 5, title: "《C大调奏鸣曲》", composer: "布列瓦尔", performer: "张亦初" },
+            { number: 6, title: "《c小调加沃特舞曲》", composer: "巴赫", performer: "周宸韬" },
+            { number: 7, title: "《C大调奏鸣曲》", composer: "布列瓦尔", performer: "庄谨同" },
+            { number: 8, title: "《第一号小步舞曲》", composer: "巴赫", performer: "袁玥" },
+            { number: 9, title: "《乡村舞曲》", composer: "斯夸埃尔", performer: "毛子玥" },
+            { number: 10, title: "《红河的孩子》", composer: "田联韬", performer: "胡瑞雪" },
+            { number: 11, title: "《告诉罗姆阿姨》", composer: "民歌", performer: "项洋钰" },
+            { number: 12, title: "《乡间舞曲》", composer: "贝多芬", performer: "沈正潇" },
+            { number: 13, title: "《幽默曲》", composer: "德沃夏克", performer: "楼乐乐" },
+            { number: 14, title: "《第三号小步舞曲》", composer: "巴赫", performer: "邱欲惠" },
+            { number: 15, title: "《a小调小协奏曲第三乐章》", composer: "里丁", performer: "李玺麟" },
+            { number: 16, title: "《风笛舞曲》", composer: "巴赫", performer: "项无双" },
+            { number: 17, title: "《咏叹调》", composer: "巴赫", performer: "王宇昊" },
+            { number: 18, title: "《五十周年》", composer: "玛丽耶", performer: "林崇逸" },
+            { number: 19, title: "《c小调加沃特舞曲》", composer: "巴赫", performer: "郑家树" },
+            { number: 20, title: "《五十周年》", composer: "玛丽耶", performer: "陶逸弦" },
+            { number: 21, title: "《a小调第一大提琴协奏曲》", composer: "圣桑", performer: "潘子薇" },
+            { number: 22, title: "《C大调小协奏曲》", composer: "里丁", performer: "仪宸希" },
+            { number: 23, title: "《D大调协奏曲》", composer: "诺尔克", performer: "张杨钧媛" },
+            { number: 24, title: "《g小调小协奏曲》", composer: "巴克拉诺娃", performer: "陈思如" },
+            { number: 25, title: "OCT《比才第二组曲》", composer: "比才", performer: "OCT" },
+            { number: 26, title: "《乡村舞曲》", composer: "斯夸埃尔", performer: "刘佳沁" },
+            { number: 27, title: "《C大调大提琴协奏曲第一乐章》", composer: "海顿", performer: "周煜宸" },
+            { number: 28, title: "《音乐会波兰舞曲》", composer: "波珀尔", performer: "陈佩瑜" },
+            { number: 29, title: "《e小调大提琴协奏曲第四乐章》", composer: "埃尔加", performer: "范力文" },
+            { number: 30, title: "《热情的快板》", composer: "圣桑", performer: "朱星樾" },
+            { number: 31, title: "《a小调第一大提琴协奏曲》", composer: "圣桑", performer: "廖若懿" },
+            { number: 32, title: "《e小调大提琴协奏曲第四乐章》", composer: "埃尔加", performer: "邢蔚蔚" },
+            { number: 33, title: "《b小调协奏曲第一乐章》", composer: "德沃夏克", performer: "胡瑞希" },
+            { number: 34, title: "《e小调大提琴协奏曲第一乐章》", composer: "埃尔加", performer: "高晗" },
+            { number: 35, title: "《夜曲》", composer: "柴可夫斯基", performer: "郑骄洋" },
+            { number: 36, title: "《e小调大提琴协奏曲第一乐章》", composer: "埃尔加", performer: "何梓涵" },
+            { number: 37, title: "《匈牙利狂想曲》", composer: "波珀尔", performer: "纪瀚宇" },
+            { number: 38, title: "《d小调大提琴协奏曲》", composer: "拉罗", performer: "朱姜乐" }
+        ];
+
+        // 找出重复的曲目
+        function findDuplicates() {
+            const titleCount = {};
+            const duplicates = new Set();
+            
+            performances.forEach(performance => {
+                const key = performance.title + "|" + performance.composer;
+                if (titleCount[key]) {
+                    duplicates.add(key);
+                    titleCount[key].push(performance.number);
+                } else {
+                    titleCount[key] = [performance.number];
+                }
+            });
+            
+            // 转换为更方便查找的结构
+            const duplicateInfo = {};
+            duplicates.forEach(key => {
+                duplicateInfo[key] = titleCount[key];
+            });
+            
+            return duplicateInfo;
+        }
+
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', function() {
+            const slideContainer = document.getElementById('slideContainer');
+            const progressDots = document.getElementById('progressDots');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            const duplicates = findDuplicates();
+            let currentSlide = 0;
+            
+            // 创建幻灯片
+            performances.forEach((performance, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                if (index === 0) slide.classList.add('active');
+                
+                // 检查是否为重复曲目
+                const key = performance.title + "|" + performance.composer;
+                const isDuplicate = duplicates[key] && duplicates[key].length > 1;
+                const duplicateNumbers = duplicates[key];
+                
+                // 构建重复提示信息
+                let duplicateInfo = '';
+                if (isDuplicate) {
+                    // 找到当前曲目在重复列表中的位置
+                    const position = duplicateNumbers.indexOf(performance.number);
+                    const otherNumbers = duplicateNumbers.filter(num => num !== performance.number);
+                    
+                    if (position === 0) {
+                        duplicateInfo = `(第${otherNumbers.join('、')}首重复)`;
+                    } else {
+                        duplicateInfo = `(与第${duplicateNumbers[0]}首重复)`;
+                    }
+                }
+                
+                slide.innerHTML = `
+                    <div class="number">${performance.number}</div>
+                    <div class="title ${isDuplicate ? 'duplicate' : ''}">${performance.title}</div>
+                    <div class="composer ${isDuplicate ? 'duplicate' : ''}">${performance.composer}</div>
+                    <div class="performer">演奏者：${performance.performer}</div>
+                    ${isDuplicate ? `<div class="duplicate-warning">重复曲目 ${duplicateInfo}</div>` : ''}
+                `;
+                
+                slideContainer.appendChild(slide);
+                
+                // 创建进度点
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (index === 0) dot.classList.add('active');
+                dot.dataset.index = index;
+                
+                dot.addEventListener('click', function() {
+                    goToSlide(parseInt(this.dataset.index));
+                });
+                
+                progressDots.appendChild(dot);
+            });
+            
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.progress-dot');
+            
+            // 更新幻灯片显示
+            function updateSlide() {
+                slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === currentSlide);
+                });
+                
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+            
+            // 前往指定幻灯片
+            function goToSlide(index) {
+                currentSlide = index;
+                if (currentSlide < 0) currentSlide = slides.length - 1;
+                if (currentSlide >= slides.length) currentSlide = 0;
+                updateSlide();
+            }
+            
+            // 上一页
+            prevBtn.addEventListener('click', function() {
+                goToSlide(currentSlide - 1);
+            });
+            
+            // 下一页
+            nextBtn.addEventListener('click', function() {
+                goToSlide(currentSlide + 1);
+            });
+            
+            // 键盘控制
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'ArrowLeft') {
+                    goToSlide(currentSlide - 1);
+                } else if (event.key === 'ArrowRight' || event.key === ' ') {
+                    goToSlide(currentSlide + 1);
+                }
+            });
+            
+            // 触摸滑动支持
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            slideContainer.addEventListener('touchstart', function(event) {
+                touchStartX = event.changedTouches[0].screenX;
+            });
+            
+            slideContainer.addEventListener('touchend', function(event) {
+                touchEndX = event.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                const swipeThreshold = 30;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        // 向左滑动，下一页
+                        goToSlide(currentSlide + 1);
+                    } else {
+                        // 向右滑动，上一页
+                        goToSlide(currentSlide - 1);
+                    }
+                }
+            }
+            
+            // 初始更新
+            updateSlide();
+            
+            // 自动隐藏导航按钮和页脚
+            let hideTimer;
+            function resetHideTimer() {
+                clearTimeout(hideTimer);
+                prevBtn.style.opacity = '1';
+                nextBtn.style.opacity = '1';
+                document.querySelector('.footer').style.opacity = '1';
+                
+                hideTimer = setTimeout(() => {
+                    prevBtn.style.opacity = '0.3';
+                    nextBtn.style.opacity = '0.3';
+                    document.querySelector('.footer').style.opacity = '0.3';
+                }, 3000);
+            }
+            
+            // 监听用户交互
+            document.addEventListener('mousemove', resetHideTimer);
+            document.addEventListener('touchstart', resetHideTimer);
+            document.addEventListener('keydown', resetHideTimer);
+            
+            // 初始隐藏计时器
+            resetHideTimer();
+        });
+    </script>
+</body>
+</html>
