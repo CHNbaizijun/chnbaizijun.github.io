@@ -24,6 +24,7 @@
             --shadow: 0 4px 12px rgba(0,0,0,0.1);
             --correct-bg: #22c55e;
             --wrong-bg: #ef4444;
+            --forgot-bg: #eab308;
             --active-outline: #2563eb;
             --feedback-correct-bg: #dcfce7;
             --feedback-wrong-bg: #fee2e2;
@@ -53,6 +54,7 @@
                 --shadow: 0 4px 12px rgba(0,0,0,0.6);
                 --correct-bg: #22c55e;
                 --wrong-bg: #ef4444;
+                --forgot-bg: #ca8a04;
                 --active-outline: #60a5fa;
                 --feedback-correct-bg: #1a3a2a;
                 --feedback-wrong-bg: #3a1a1a;
@@ -142,6 +144,11 @@
             color: white;
             border-color: #dc2626;
         }
+        .grid-cell.forgot {
+            background: var(--forgot-bg);
+            color: white;
+            border-color: #a16207;
+        }
         .grid-cell.active {
             outline: 3px solid var(--active-outline);
             outline-offset: -1px;
@@ -161,6 +168,7 @@
             border-top: 1px solid var(--border-color);
             padding-top: 12px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         .legend-item {
             display: flex;
@@ -174,6 +182,7 @@
         }
         .legend-swatch.green { background: var(--correct-bg); }
         .legend-swatch.red { background: var(--wrong-bg); }
+        .legend-swatch.yellow { background: var(--forgot-bg); }
         .legend-swatch.gray { background: var(--bg-cell); }
         .progress-stats {
             margin-top: 10px;
@@ -314,6 +323,31 @@
         .option-item.disabled .option-label {
             cursor: not-allowed;
         }
+        /* 我忘了选项特殊样式 */
+        .option-item.forgot-option {
+            background: #fef9e7;
+            border-color: #fcd34d;
+        }
+        .option-item.forgot-option:hover:not(.disabled) {
+            background: #fef3c7;
+        }
+        .option-item.forgot-option.selected {
+            background: #fbbf24;
+            border-color: #d97706;
+        }
+        @media (prefers-color-scheme: dark) {
+            .option-item.forgot-option {
+                background: #3a2a0a;
+                border-color: #a16207;
+            }
+            .option-item.forgot-option:hover:not(.disabled) {
+                background: #4a3a0a;
+            }
+            .option-item.forgot-option.selected {
+                background: #a16207;
+                border-color: #ca8a04;
+            }
+        }
         .feedback-area {
             margin-top: auto;
             padding: 12px 16px;
@@ -337,6 +371,18 @@
             color: var(--feedback-wrong-text);
             background: var(--feedback-wrong-bg);
             border-color: #fca5a5;
+        }
+        .feedback-forgot {
+            color: #92400e;
+            background: #fef3c7;
+            border-color: #fcd34d;
+        }
+        @media (prefers-color-scheme: dark) {
+            .feedback-forgot {
+                color: #fbbf24;
+                background: #3a2a0a;
+                border-color: #a16207;
+            }
         }
         .feedback-empty {
             color: var(--text-secondary);
@@ -404,12 +450,14 @@
             gap: 30px;
             font-size: 17px;
             color: var(--text-primary);
+            flex-wrap: wrap;
         }
         .result-stats span {
             font-weight: 600;
         }
         .result-stats .correct-count { color: var(--correct-bg); }
         .result-stats .wrong-count { color: var(--wrong-bg); }
+        .result-stats .forgot-count { color: var(--forgot-bg); }
 
         .result-errors {
             flex: 1;
@@ -449,6 +497,10 @@
         }
         .error-item .answer-detail .your-ans {
             color: var(--wrong-bg);
+        }
+        .error-item .answer-detail .forgot-tag {
+            color: var(--forgot-bg);
+            font-weight: 600;
         }
 
         .export-btn {
@@ -554,6 +606,7 @@
         <div class="legend">
             <span class="legend-item"><span class="legend-swatch green"></span> 正确</span>
             <span class="legend-item"><span class="legend-swatch red"></span> 错误</span>
+            <span class="legend-item"><span class="legend-swatch yellow"></span> 忘了</span>
             <span class="legend-item"><span class="legend-swatch gray"></span> 未答</span>
         </div>
         <div class="progress-stats" id="progressStats">0 / 100 已作答</div>
@@ -582,9 +635,10 @@
                 <div>总题数：<span id="totalCount">100</span></div>
                 <div>正确：<span class="correct-count" id="correctCount">0</span></div>
                 <div>错误：<span class="wrong-count" id="wrongCount">0</span></div>
+                <div>忘了：<span class="forgot-count" id="forgotCount">0</span></div>
             </div>
             <div class="result-errors" id="resultErrors">
-                <h3>错题列表</h3>
+                <h3>错题 & 忘记的题目</h3>
                 <div id="errorList"></div>
             </div>
             <button class="export-btn" id="exportBtn">导出错题</button>
@@ -702,7 +756,7 @@
         let currentIndex = 0;
         const total = QUESTIONS.length;
         const selected = new Array(total).fill(null);
-        const judgeResult = new Array(total).fill(null);
+        const judgeResult = new Array(total).fill(null); // 'correct', 'wrong', 'forgot'
         let isResultShown = false;
 
         // DOM 引用
@@ -760,6 +814,7 @@
                 const result = judgeResult[i];
                 if (result === 'correct') cell.classList.add('correct');
                 else if (result === 'wrong') cell.classList.add('wrong');
+                else if (result === 'forgot') cell.classList.add('forgot');
                 else cell.classList.add('empty');
                 if (i === currentIndex) cell.classList.add('active');
                 cell.addEventListener('click', () => goToQuestion(i));
@@ -781,6 +836,7 @@
             const result = judgeResult[index];
             if (result === 'correct') cell.classList.add('correct');
             else if (result === 'wrong') cell.classList.add('wrong');
+            else if (result === 'forgot') cell.classList.add('forgot');
             else cell.classList.add('empty');
             if (index === currentIndex) cell.classList.add('active');
         }
@@ -793,9 +849,16 @@
 
             optionsContainer.innerHTML = '';
             const isAnswered = (selected[index] !== null);
-            q.options.forEach((opt, optIndex) => {
+            // 构建选项：正常选项 + 一个“我忘了”选项
+            const allOptions = [...q.options];
+            const forgotLabel = '我忘了';
+            const forgotIndex = allOptions.length; // 特殊标记
+
+            allOptions.forEach((opt, optIndex) => {
+                const isForgot = (optIndex === forgotIndex);
                 const div = document.createElement('div');
                 div.className = 'option-item';
+                if (isForgot) div.classList.add('forgot-option');
                 if (selected[index] === optIndex) div.classList.add('selected');
                 if (isAnswered) div.classList.add('disabled');
 
@@ -819,7 +882,12 @@
 
                 radio.addEventListener('change', (e) => {
                     if (e.target.checked && !isAnswered) {
-                        handleOptionSelect(index, optIndex);
+                        // 判断是否点击了“我忘了”
+                        if (isForgot) {
+                            handleForgot(index);
+                        } else {
+                            handleOptionSelect(index, optIndex);
+                        }
                     }
                 });
 
@@ -831,6 +899,44 @@
                 optionsContainer.appendChild(div);
             });
 
+            // 添加“我忘了”选项
+            const forgotDiv = document.createElement('div');
+            forgotDiv.className = 'option-item forgot-option';
+            if (selected[index] === forgotIndex) forgotDiv.classList.add('selected');
+            if (isAnswered) forgotDiv.classList.add('disabled');
+
+            const forgotRadio = document.createElement('input');
+            forgotRadio.type = 'radio';
+            forgotRadio.name = 'question';
+            forgotRadio.value = forgotIndex;
+            forgotRadio.checked = (selected[index] === forgotIndex);
+            forgotRadio.disabled = isAnswered;
+
+            forgotDiv.addEventListener('click', function(e) {
+                if (e.target.tagName === 'INPUT') return;
+                if (isAnswered) return;
+                const radioInput = this.querySelector('input[type="radio"]');
+                if (radioInput) {
+                    radioInput.checked = true;
+                    const changeEvent = new Event('change', { bubbles: true });
+                    radioInput.dispatchEvent(changeEvent);
+                }
+            });
+
+            forgotRadio.addEventListener('change', (e) => {
+                if (e.target.checked && !isAnswered) {
+                    handleForgot(index);
+                }
+            });
+
+            const forgotLabelSpan = document.createElement('span');
+            forgotLabelSpan.className = 'option-label';
+            forgotLabelSpan.textContent = '我忘了';
+            forgotDiv.appendChild(forgotRadio);
+            forgotDiv.appendChild(forgotLabelSpan);
+            optionsContainer.appendChild(forgotDiv);
+
+            // 反馈区域
             const result = judgeResult[index];
             if (result === 'correct') {
                 feedbackArea.className = 'feedback-area feedback-correct';
@@ -839,6 +945,10 @@
                 const correctAns = q.options[q.answer];
                 feedbackArea.className = 'feedback-area feedback-wrong';
                 feedbackArea.innerHTML = `回答错误，正确答案是：<span class="feedback-correct-answer">${correctAns}</span>`;
+            } else if (result === 'forgot') {
+                const correctAns = q.options[q.answer];
+                feedbackArea.className = 'feedback-area feedback-forgot';
+                feedbackArea.innerHTML = `你忘了，正确答案是：<span class="feedback-correct-answer">${correctAns}</span>`;
             } else {
                 feedbackArea.className = 'feedback-area feedback-empty';
                 feedbackArea.textContent = '选择选项后自动判断';
@@ -859,6 +969,19 @@
             const q = QUESTIONS[index];
             const isCorrect = (optionIndex === q.answer);
             judgeResult[index] = isCorrect ? 'correct' : 'wrong';
+
+            renderQuestion(index);
+            updateGridCell(index);
+            updateProgressStats();
+            checkAllDone();
+        }
+
+        function handleForgot(index) {
+            if (selected[index] !== null) return;
+            const q = QUESTIONS[index];
+            // 用特殊标记表示“我忘了”
+            selected[index] = 'forgot';
+            judgeResult[index] = 'forgot';
 
             renderQuestion(index);
             updateGridCell(index);
@@ -902,14 +1025,16 @@
 
             const correct = judgeResult.filter(r => r === 'correct').length;
             const wrong = judgeResult.filter(r => r === 'wrong').length;
+            const forgot = judgeResult.filter(r => r === 'forgot').length;
             document.getElementById('totalCount').textContent = total;
             document.getElementById('correctCount').textContent = correct;
             document.getElementById('wrongCount').textContent = wrong;
+            document.getElementById('forgotCount').textContent = forgot;
 
             errorList.innerHTML = '';
             const errors = [];
             for (let i = 0; i < total; i++) {
-                if (judgeResult[i] === 'wrong') {
+                if (judgeResult[i] === 'wrong' || judgeResult[i] === 'forgot') {
                     const q = QUESTIONS[i];
                     const userAns = selected[i];
                     const correctAns = q.answer;
@@ -917,7 +1042,8 @@
                         index: i,
                         question: q,
                         userChoice: userAns,
-                        correctChoice: correctAns
+                        correctChoice: correctAns,
+                        isForgot: (judgeResult[i] === 'forgot')
                     });
                 }
             }
@@ -935,10 +1061,11 @@
                     qtext.textContent = err.question.text;
                     const detail = document.createElement('div');
                     detail.className = 'answer-detail';
+                    const userDisplay = err.isForgot ? '<span class="forgot-tag">我忘了</span>' : err.question.options[err.userChoice];
                     detail.innerHTML = `
                         <span class="correct-ans">正确答案：${err.question.options[err.correctChoice]}</span>
                         <span style="margin:0 8px;">|</span>
-                        <span class="your-ans">你的答案：${err.question.options[err.userChoice]}</span>
+                        <span class="your-ans">你的答案：${userDisplay}</span>
                     `;
                     div.appendChild(qid);
                     div.appendChild(qtext);
@@ -958,13 +1085,14 @@
         function exportErrors() {
             const errors = [];
             for (let i = 0; i < total; i++) {
-                if (judgeResult[i] === 'wrong') {
+                if (judgeResult[i] === 'wrong' || judgeResult[i] === 'forgot') {
                     const q = QUESTIONS[i];
                     errors.push({
                         index: i,
                         question: q,
                         userChoice: selected[i],
-                        correctChoice: q.answer
+                        correctChoice: q.answer,
+                        isForgot: (judgeResult[i] === 'forgot')
                     });
                 }
             }
@@ -978,7 +1106,8 @@
                 content += `第 ${err.index+1} 题\n`;
                 content += `题目：${err.question.text}\n`;
                 content += `正确答案：${err.question.options[err.correctChoice]}\n`;
-                content += `你的答案：${err.question.options[err.userChoice]}\n`;
+                const userDisplay = err.isForgot ? '我忘了' : err.question.options[err.userChoice];
+                content += `你的答案：${userDisplay}\n`;
                 content += '--------------------------------\n\n';
             });
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
