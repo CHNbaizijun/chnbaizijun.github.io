@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>在线考试 · 逐题判断</title>
+    <style>
+        /* ===== 基础变量（亮色） ===== */
+        :root {
+            --bg-body: #f0f2f5;
+            --bg-container: white;
+            --bg-nav: #f7f8fa;
+            --border-color: #d0d4dd;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --bg-cell: white;
+            --cell-border: #cbd5e1;
+            --bg-option: #f8fafc;
+            --option-border: #e2e8f0;
+            --bg-feedback: #f1f5f9;
+            --feedback-border: #e2e8f0;
+            --btn-bg: #f8fafc;
+            --btn-border: #cbd5e1;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --correct-bg: #22c55e;
+            --wrong-bg: #ef4444;
+            --active-outline: #2563eb;
+            --feedback-correct-bg: #dcfce7;
+            --feedback-wrong-bg: #fee2e2;
+            --feedback-correct-text: #15803d;
+            --feedback-wrong-text: #b91c1c;
+            --result-stats-bg: #f1f5f9;
+            --result-border: #d0d4dd;
+        }
+
+        /* ===== 暗黑模式变量 ===== */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #0f0f1a;
+                --bg-container: #1a1a2e;
+                --bg-nav: #16162a;
+                --border-color: #3a3a4a;
+                --text-primary: #e0e0e0;
+                --text-secondary: #a0a0b0;
+                --bg-cell: #252540;
+                --cell-border: #44445a;
+                --bg-option: #22223a;
+                --option-border: #3a3a52;
+                --bg-feedback: #2a2a42;
+                --feedback-border: #44445a;
+                --btn-bg: #2a2a42;
+                --btn-border: #44445a;
+                --shadow: 0 4px 12px rgba(0,0,0,0.6);
+                --correct-bg: #22c55e;
+                --wrong-bg: #ef4444;
+                --active-outline: #60a5fa;
+                --feedback-correct-bg: #1a3a2a;
+                --feedback-wrong-bg: #3a1a1a;
+                --feedback-correct-text: #86efac;
+                --feedback-wrong-text: #fca5a5;
+                --result-stats-bg: #1a1a30;
+                --result-border: #3a3a4a;
+            }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: var(--bg-body);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            transition: background 0.2s;
+        }
+        .exam-container {
+            max-width: 1400px;
+            width: 100%;
+            background: var(--bg-container);
+            box-shadow: var(--shadow);
+            display: flex;
+            height: 90vh;
+            min-height: 600px;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        /* 左侧网格导航 */
+        .grid-nav {
+            width: 200px;
+            min-width: 200px;
+            background: var(--bg-nav);
+            padding: 16px 12px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, background 0.2s;
+        }
+        .grid-nav h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .grid-10x10 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            background: transparent;
+        }
+        .grid-cell {
+            aspect-ratio: 1 / 1;
+            background: var(--bg-cell);
+            border: 1px solid var(--cell-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: background 0.1s;
+            cursor: pointer;
+        }
+        .grid-cell:hover {
+            background: #e9edf4;
+        }
+        @media (prefers-color-scheme: dark) {
+            .grid-cell:hover {
+                background: #3a3a5a;
+            }
+        }
+        .grid-cell.correct {
+            background: var(--correct-bg);
+            color: white;
+            border-color: #16a34a;
+        }
+        .grid-cell.wrong {
+            background: var(--wrong-bg);
+            color: white;
+            border-color: #dc2626;
+        }
+        .grid-cell.active {
+            outline: 3px solid var(--active-outline);
+            outline-offset: -1px;
+            z-index: 2;
+            position: relative;
+        }
+        .grid-cell.empty {
+            background: var(--bg-cell);
+            color: var(--text-secondary);
+        }
+        .legend {
+            display: flex;
+            gap: 12px;
+            margin-top: 14px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+            justify-content: center;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .legend-swatch {
+            width: 14px;
+            height: 14px;
+            border: 1px solid var(--cell-border);
+        }
+        .legend-swatch.green { background: var(--correct-bg); }
+        .legend-swatch.red { background: var(--wrong-bg); }
+        .legend-swatch.gray { background: var(--bg-cell); }
+        .progress-stats {
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: var(--bg-feedback);
+            padding: 4px 8px;
+            text-align: center;
+        }
+
+        /* 移动端折叠按钮 */
+        .toggle-nav-btn {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 10px;
+            z-index: 10;
+            background: var(--active-outline);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .toggle-nav-btn:hover {
+            filter: brightness(0.9);
+        }
+
+        /* 右侧答题区 */
+        .question-panel {
+            flex: 1;
+            padding: 28px 32px;
+            overflow-y: auto;
+            background: var(--bg-container);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: background 0.2s;
+        }
+        .question-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .question-number {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .question-number span {
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-size: 15px;
+        }
+        .question-type {
+            background: var(--bg-feedback);
+            padding: 4px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .question-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            font-weight: 500;
+            background: var(--bg-feedback);
+            padding: 14px 16px;
+            border-left: 4px solid var(--active-outline);
+            margin-bottom: 24px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: var(--bg-option);
+            border: 1px solid var(--option-border);
+            transition: 0.1s;
+            cursor: pointer;
+        }
+        .option-item:hover:not(.disabled) {
+            background: #f1f5f9;
+        }
+        @media (prefers-color-scheme: dark) {
+            .option-item:hover:not(.disabled) {
+                background: #2a2a4a;
+            }
+        }
+        .option-item.selected {
+            background: #dbeafe;
+            border-color: var(--active-outline);
+        }
+        @media (prefers-color-scheme: dark) {
+            .option-item.selected {
+                background: #1a3a5a;
+                border-color: var(--active-outline);
+            }
+        }
+        .option-item.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .option-item.disabled:hover {
+            background: var(--bg-option);
+        }
+        .option-item input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--active-outline);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .option-item.disabled input[type="radio"] {
+            cursor: not-allowed;
+        }
+        .option-label {
+            font-size: 16px;
+            color: var(--text-primary);
+            font-weight: 450;
+            cursor: pointer;
+        }
+        .option-item.disabled .option-label {
+            cursor: not-allowed;
+        }
+        .feedback-area {
+            margin-top: auto;
+            padding: 12px 16px;
+            background: var(--bg-feedback);
+            border: 1px solid var(--feedback-border);
+            font-size: 16px;
+            font-weight: 500;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+        .feedback-correct {
+            color: var(--feedback-correct-text);
+            background: var(--feedback-correct-bg);
+            border-color: #86efac;
+        }
+        .feedback-wrong {
+            color: var(--feedback-wrong-text);
+            background: var(--feedback-wrong-bg);
+            border-color: #fca5a5;
+        }
+        .feedback-empty {
+            color: var(--text-secondary);
+            background: var(--bg-feedback);
+        }
+        .feedback-correct-answer {
+            font-weight: 400;
+            color: var(--feedback-correct-text);
+            background: var(--feedback-correct-bg);
+            padding: 2px 10px;
+            border: 1px solid #86efac;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 18px;
+            gap: 12px;
+        }
+        .btn {
+            background: var(--btn-bg);
+            border: 1px solid var(--btn-border);
+            padding: 8px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .btn-primary {
+            background: var(--active-outline);
+            border-color: var(--active-outline);
+            color: white;
+        }
+        .btn-primary:hover {
+            filter: brightness(0.9);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .btn-outline:hover {
+            background: var(--bg-feedback);
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* 结果页面 */
+        .result-content {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+        .result-content.visible {
+            display: flex;
+        }
+        .result-stats {
+            background: var(--result-stats-bg);
+            padding: 16px 20px;
+            border: 1px solid var(--result-border);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 30px;
+            font-size: 17px;
+            color: var(--text-primary);
+        }
+        .result-stats span {
+            font-weight: 600;
+        }
+        .result-stats .correct-count { color: var(--correct-bg); }
+        .result-stats .wrong-count { color: var(--wrong-bg); }
+
+        .result-errors {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid var(--result-border);
+            padding: 14px 18px;
+            background: var(--bg-container);
+            color: var(--text-primary);
+        }
+        .result-errors h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: var(--text-primary);
+        }
+        .error-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+        }
+        .error-item:last-child {
+            border-bottom: none;
+        }
+        .error-item .qid {
+            font-weight: 600;
+            color: var(--active-outline);
+        }
+        .error-item .qtext {
+            margin: 4px 0 6px 0;
+            font-weight: 500;
+        }
+        .error-item .answer-detail {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .error-item .answer-detail .correct-ans {
+            color: var(--correct-bg);
+        }
+        .error-item .answer-detail .your-ans {
+            color: var(--wrong-bg);
+        }
+
+        .export-btn {
+            margin-top: 18px;
+            align-self: flex-end;
+            padding: 8px 24px;
+            background: var(--active-outline);
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .export-btn:hover {
+            filter: brightness(0.9);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 直角统一 */
+        .grid-cell, .option-item, .feedback-area, .btn, .result-stats, .result-errors, .export-btn {
+            border-radius: 0 !important;
+        }
+        .exam-container, .grid-nav, .question-panel {
+            border-radius: 0 !important;
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-feedback); }
+        ::-webkit-scrollbar-thumb { background: var(--cell-border); }
+
+        /* ===== 移动端适配 ===== */
+        @media (max-width: 768px) {
+            .exam-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 90vh;
+                position: relative;
+            }
+            .grid-nav {
+                width: 100%;
+                min-width: unset;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                max-height: 400px;
+                transform: scaleY(0);
+                transform-origin: top center;
+                padding: 0 12px;
+                height: 0;
+                overflow: hidden;
+                transition: transform 0.3s ease, height 0.3s ease, padding 0.3s ease;
+                padding: 0 12px;
+            }
+            .grid-nav.open {
+                transform: scaleY(1);
+                height: auto;
+                max-height: 400px;
+                padding: 16px 12px;
+                overflow-y: auto;
+            }
+            .toggle-nav-btn {
+                display: block;
+                left: 12px;
+                top: 12px;
+                font-size: 22px;
+                padding: 4px 14px;
+            }
+            .question-panel {
+                padding: 18px 16px;
+                padding-top: 50px;
+            }
+            .grid-10x10 {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 3px;
+            }
+            .grid-cell {
+                font-size: 12px;
+            }
+            .legend {
+                font-size: 11px;
+                gap: 8px;
+            }
+            .result-stats {
+                flex-wrap: wrap;
+                gap: 12px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="exam-container" id="app">
+    <!-- 折叠按钮（手机端显示） -->
+    <button class="toggle-nav-btn" id="toggleNavBtn">☰</button>
+
+    <!-- 左侧网格 -->
+    <div class="grid-nav" id="gridNav">
+        <h2>题号</h2>
+        <div class="grid-10x10" id="gridContainer"></div>
+        <div class="legend">
+            <span class="legend-item"><span class="legend-swatch green"></span> 正确</span>
+            <span class="legend-item"><span class="legend-swatch red"></span> 错误</span>
+            <span class="legend-item"><span class="legend-swatch gray"></span> 未答</span>
+        </div>
+        <div class="progress-stats" id="progressStats">0 / 100 已作答</div>
+    </div>
+
+    <!-- 右侧面板 -->
+    <div class="question-panel" id="questionPanel">
+        <!-- 正常答题内容 -->
+        <div class="question-content" id="questionContent">
+            <div class="question-header">
+                <div class="question-number" id="qNumber">第 1 题 <span>/ 100</span></div>
+                <div class="question-type">单选题</div>
+            </div>
+            <div class="question-text" id="qText">加载题目中...</div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="feedback-area feedback-empty" id="feedbackArea">选择选项后自动判断</div>
+            <div class="nav-buttons">
+                <button class="btn btn-outline" id="prevBtn" disabled>上一题</button>
+                <button class="btn btn-primary" id="nextBtn">下一题</button>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="result-content" id="resultContent">
+            <div class="result-stats" id="resultStats">
+                <div>总题数：<span id="totalCount">100</span></div>
+                <div>正确：<span class="correct-count" id="correctCount">0</span></div>
+                <div>错误：<span class="wrong-count" id="wrongCount">0</span></div>
+            </div>
+            <div class="result-errors" id="resultErrors">
+                <h3>错题列表</h3>
+                <div id="errorList"></div>
+            </div>
+            <button class="export-btn" id="exportBtn">导出错题</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ---------- 题库 (100题) ----------
+        const QUESTIONS = [
+            { id: 1, text: '刘文金的二胡曲《三门峡畅想曲》创作于（ ）。', options: ['A.20 世纪 30 年代', 'B.20 世纪 60 年代', 'C.20 世纪 80 年代'], answer: 1 },
+            { id: 2, text: '下列属于光绪年间京剧“新三鼎甲”人物的是 （ ）。', options: ['A.梅兰芳', 'B.尚小云', 'C.谭鑫培'], answer: 2 },
+            { id: 3, text: '儿童歌舞剧《小小画家》的编创者是（ ）。', options: ['A.刘质平', 'B.黎锦晖', 'C.邱望湘'], answer: 1 },
+            { id: 4, text: '上世纪 60 年代作曲家 （ ） 以西南少数民族音乐为题材创作了琵琶曲 《彝族舞曲》。', options: ['A.刘文金', 'B.王惠然', 'C.刘德海'], answer: 1 },
+            { id: 5, text: '无伴奏合唱《牧歌》的作曲者是（ ）。', options: ['A.麦丁', 'B.郑律成', 'C.瞿希贤'], answer: 2 },
+            { id: 6, text: '琵琶曲《天鹅》的作曲者是（ ）。', options: ['A.徐昌俊', 'B.刘德海', 'C.郭文景'], answer: 1 },
+            { id: 7, text: '（ ）被誉为我国近代专业音乐教育的奠基人和开拓者。', options: ['A.赵梅伯', 'B.应尚能', 'C.萧友梅'], answer: 2 },
+            { id: 8, text: '马思聪 40 年代曾创作著名的三部大合唱作品，即《民主大合唱》 、 《春天大合唱》和（ ）等。', options: ['A.《生产大合唱》', 'B.《九一八大合唱》', 'C.《祖国大合唱》'], answer: 2 },
+            { id: 9, text: '著名小提琴协奏曲《梁山伯与祝英台》最初是由（ ）根据越剧音乐创作的弦乐四重奏。', options: ['A.何占豪', 'B.陈钢', 'C.杜鸣心'], answer: 0 },
+            { id: 10, text: '黎锦晖的儿童歌舞音乐宣扬了 “真、 善、 美” 的精神， 如 《麻雀与小孩》 、 《葡萄仙子》 （ ）等作品。', options: ['A.《可怜的秋香》', 'B.《湘累》', 'C.《军民进行曲》'], answer: 0 },
+            { id: 11, text: '管弦乐作品《森吉德玛》是（ ）的代表作。', options: ['A.江文也', 'B.贺绿汀', 'C.冼星海'], answer: 1 },
+            { id: 12, text: '1934 年“征求有中国风味钢琴曲”创作比赛是由美籍俄裔作曲家、钢琴家（ ）举办的。', options: ['A.齐尔品', 'B.贺绿汀', 'C.萧友梅'], answer: 0 },
+            { id: 13, text: '近代最早发表的中国钢琴曲《和平进行曲》的作者是（ ）。', options: ['A.丁善德', 'B.赵元任', 'C.贺绿汀'], answer: 1 },
+            { id: 14, text: '下列不属于民国京剧“四大名旦”的人物是 （ ）。', options: ['A.梅兰芳', 'B.尚小云', 'C.谭鑫培'], answer: 2 },
+            { id: 15, text: '管弦乐《孔庙大晟乐章》的作曲者是（ ）。', options: ['A.马可', 'B.江文也', 'C.贺绿汀'], answer: 1 },
+            { id: 16, text: '管弦乐曲《台湾舞曲》的作曲者是（ ）。', options: ['A.江文也', 'B.马思聪', 'C.黄自'], answer: 0 },
+            { id: 17, text: '歌曲《那就是我》的曲作者是（ ）。', options: ['A.谷建芬', 'B.徐沛东', 'C.臧云飞'], answer: 0 },
+            { id: 18, text: '冼星海的《黄河大合唱》创作于（ ）年。', options: ['A.1937', 'B.1938', 'C.1939'], answer: 2 },
+            { id: 19, text: '（ ）是李叔同编创的学堂乐歌代表作。', options: ['A.《送别》', 'B.《竹马》', 'C.《龟兔》'], answer: 0 },
+            { id: 20, text: '刘文金的二胡曲《三门峡畅想曲》创作于（ ）。', options: ['A.20 世纪 30 年代', 'B.20 世纪 60 年代', 'C.20 世纪 80 年代'], answer: 1 },
+            { id: 21, text: '艺术歌曲《玫瑰三愿》的作曲者是（ ）。', options: ['A.贺绿汀', 'B.黄自', 'C.陈田鹤'], answer: 1 },
+            { id: 22, text: '《新编“九一八”小调》是抗战时期作曲家（ ）为活报剧《放下你的鞭子》创作的插曲。', options: ['A.吕骥', 'B.张曙', 'C.麦新'], answer: 0 },
+            { id: 23, text: '（ ）是越剧发展中的代表人物。', options: ['A.白玉霜', 'B.袁雪芬', 'C.红线女'], answer: 1 },
+            { id: 24, text: '1934 年江文也的管弦乐《台湾舞曲》创作于（ ）。', options: ['A.台湾', 'B.东京', 'C.北平'], answer: 1 },
+            { id: 25, text: '梅兰芳将青衣与花旦等旦角加以融汇创新出了（ ）。', options: ['A.老旦', 'B.花衫', 'C.武旦'], answer: 1 },
+            { id: 26, text: '秧歌剧《兄妹开荒》是以（ ）民间音乐曲调编创的。', options: ['A.陕北', 'B.鲁东', 'C.赣南'], answer: 0 },
+            { id: 27, text: '“七月七日长生殿”是黄自的清唱剧（ ）中的一个乐章。', options: ['A.《怀旧》', 'B.《新霓裳羽衣舞》', 'C.《长恨歌》'], answer: 2 },
+            { id: 28, text: '钢琴儿童组曲《快乐的节日》的作曲者是（ ）。', options: ['A.李中汉', 'B.丁善德', 'C.刘铁山'], answer: 1 },
+            { id: 29, text: '大型艺术性合唱曲《海韵》的作曲者是（ ）。', options: ['A.赵元任', 'B.萧友梅', 'C.冼星海'], answer: 0 },
+            { id: 30, text: '歌曲《草原上升起不落的太阳》的作曲者是（ ）。', options: ['A.美丽其格', 'B.刘炽', 'C.马可'], answer: 0 },
+            { id: 31, text: '唱段“清粼粼的水来蓝莹莹的天”是出自歌剧（ ）的选段之一。', options: ['A.《小二黑结婚》', 'B.《白毛女》', 'C.《刘胡兰》'], answer: 0 },
+            { id: 32, text: '意大利音乐家梅百器（Mario Paci）为（ ）的发展做出了很大贡献。', options: ['A.上海贫儿院管弦乐队', 'B.上海工部局管弦乐队', 'C.北京大学附设音乐传习所管弦乐队'], answer: 1 },
+            { id: 33, text: '陈田鹤、刘雪庵、贺绿汀和（ ）都曾跟随黄自学习作曲，称为黄自的“四大弟子”。', options: ['A.吕骥', 'B.江定仙', 'C.严良堃'], answer: 1 },
+            { id: 34, text: '讽刺歌曲《古怪歌》的词曲作者是（ ）。', options: ['A.杜鸣心', 'B.舒模', 'C.宋扬'], answer: 1 },
+            { id: 35, text: '为两架钢琴与乐队而作的《川崖悬葬》是由（ ）创作的。', options: ['A.郭文景', 'B.瞿小松', 'C.叶小纲'], answer: 0 },
+            { id: 36, text: '中国近代第一部三声部合唱（ ）是李叔同创作的。', options: ['A.《春游》', 'B.《祖国歌》', 'C.《牧歌》'], answer: 0 },
+            { id: 37, text: '歌剧《白毛女》中喜儿的主题吸取了河北民歌（ ）的音调。', options: ['A.《小白菜》', 'B.《茉莉花》', 'C.《捡麦根》'], answer: 0 },
+            { id: 38, text: '瞿小松上世纪 80 年代曾为一部名为（ ）的动画影片配乐，后将这部作品改为室内乐《MONGDONG》。', options: ['A.牧童与悍牛', 'B.悍牛与牧童', 'C.牧童之乐'], answer: 1 },
+            { id: 39, text: '歌曲《我为祖国献石油》的作曲者是（ ）。', options: ['A.吕远', 'B.秦咏诚', 'C.石夫'], answer: 1 },
+            { id: 40, text: '钢琴曲《花鼓》的作曲者是（ ）。', options: ['A.马可', 'B.张鲁', 'C.瞿维'], answer: 2 },
+            { id: 41, text: '歌曲《乘胜追击》出自下列哪部作品（ ）。', options: ['A.《淮海战役组歌》', 'B.《七月里在边区》', 'C.《生产四部曲》'], answer: 0 },
+            { id: 42, text: '20 世纪 70 年代的琵琶协奏曲（ ）为琵琶和西洋管弦乐队的结合探索了一条新路。', options: ['A.《黄河》', 'B.《貔貅舞曲》', 'C.《草原小姐妹》'], answer: 2 },
+            { id: 43, text: '钢琴曲《涛声》 （组曲《东山魁夷画意》终曲）是由（ ）作曲的。', options: ['A.郭文景', 'B.汪立三', 'C.丁善德'], answer: 1 },
+            { id: 44, text: '歌剧《白毛女》中“杨白劳”的基本性格主导主题是以（ ）为基础的。', options: ['A.山西民歌《捡麦根》', 'B.河北民歌《小白菜》', 'C.东北民歌 《小拜年》'], answer: 0 },
+            { id: 45, text: '上世纪 40 年代末国立音专作曲教授（ ）师从欣德米特，回国后教授现代音乐创作技法，影响了罗忠镕、瞿希贤、桑桐等学生。', options: ['A.谭小麟', 'B.李惟宁', 'C.吴伯超'], answer: 0 },
+            { id: 46, text: '管弦乐曲《罗铮画意》是由（ ）创作的。', options: ['A.罗忠镕', 'B.李焕之', 'C.马思聪'], answer: 0 },
+            { id: 47, text: '艺术歌曲《彭浪矶》的作曲者是（ ）。', options: ['A.江文也', 'B.马思聪', 'C.谭小麟'], answer: 0 },
+            { id: 48, text: '小提琴曲《山歌》和《跳龙灯》的作曲者是（ ）。', options: ['A.李中汉', 'B.马思聪', 'C.刘铁山'], answer: 1 },
+            { id: 49, text: '《虚籟》是国乐大师刘天华创作的一首（ ）曲。', options: ['A.琵琶', 'B.二胡', 'C.古筝'], answer: 0 },
+            { id: 50, text: '意大利音乐家梅百器（Mario Paci）为（ ）的发展做出了很大贡献，这支乐队曾演出了许多优秀的中外音乐作品。', options: ['A.上海贫儿院管弦乐队', 'B.上海工部局管弦乐队', 'C.北京大学附设音乐传习所管弦乐队'], answer: 1 },
+            { id: 51, text: '清末海关税务司罗伯特.赫德，曾在任职期间创办了（ ）。', options: ['A.袁世凯军乐队', 'B.赫德乐队', 'C.上海工部局管弦乐队'], answer: 1 },
+            { id: 52, text: '清唱剧《长恨歌》的作曲者是（ ）。', options: ['A.赵元任', 'B.黄自', 'C.青主'], answer: 1 },
+            { id: 53, text: '上海“大同乐会”成立于（ ） ，由郑觐文发起创立。', options: ['A.1928 年', 'B.1934 年', 'C.1920 年'], answer: 2 },
+            { id: 54, text: '芭蕾舞剧《红色娘子军》是由吴祖强和（ ）等共同创作的。', options: ['A.瞿希贤', 'B.杜鸣心', 'C.张肖虎'], answer: 1 },
+            { id: 55, text: '近代最早发表的中国钢琴曲《和平进行曲》的作者是（ ）。', options: ['A.丁善德', 'B.赵元任', 'C.贺绿汀'], answer: 1 },
+            { id: 56, text: '（ ）根据同名琵琶曲改编创作了钢琴曲《夕阳箫鼓》。', options: ['A.王建中', 'B.刘庄', 'C.黎英海'], answer: 0 },
+            { id: 57, text: '《虚籟》是国乐大师刘天华创作的一首（ ）曲。', options: ['A.琵琶', 'B.二胡', 'C.古筝'], answer: 0 },
+            { id: 58, text: '交响套曲《云南音诗》的作曲者是（ ）。', options: ['A.黄安伦', 'B.张千一', 'C.王西麟'], answer: 2 },
+            { id: 59, text: '歌曲《年轻的朋友来相会》的作曲者是（ ）。', options: ['A.谷建芬', 'B.孟卫东', 'C.王立平'], answer: 0 },
+            { id: 60, text: '在刘天华短暂的一生中，在音乐创作、教学、社会音乐活动、为民族音乐记谱等方面做出了突出的贡献，它的这些实践体现了其（ ）的思想。', options: ['A.“平民音乐”', 'B.“少年中国”', 'C.“国乐改进”'], answer: 2 },
+            { id: 61, text: '钢琴组曲《东山魁夷画意》的作曲者是（ ）。', options: ['A.王建中', 'B.刘庄', 'C.汪立三'], answer: 2 },
+            { id: 62, text: '上世纪 60 年代作曲家 （ ） 以西南少数民族音乐为题材创作了琵琶曲 《彝族舞曲》。', options: ['A.刘文金', 'B.王惠然', 'C.刘德海'], answer: 1 },
+            { id: 63, text: '被誉为“学堂乐歌之父”的沈心工曾留学（ ）学习音乐。', options: ['A.德国', 'B.日本', 'C.美国'], answer: 1 },
+            { id: 64, text: '《新编“九一八”小调》是抗战时期作曲家（ ）为活报剧《放下你的鞭子》创作的插曲。', options: ['A.吕骥', 'B.张曙', 'C.麦新'], answer: 0 },
+            { id: 65, text: '20 世纪 50 年代末就读于中央音乐学院的女作曲家（ ）根据一首蒙族民歌创作了著名的交响诗《嘎达梅林》。', options: ['A.陈怡', 'B.瞿希贤', 'C.辛沪光'], answer: 2 },
+            { id: 66, text: '《可怜的秋香》是（ ）的儿童歌舞表演曲。', options: ['A.黎锦晖', 'B.邱望湘', 'C.贺绿汀'], answer: 0 },
+            { id: 67, text: '1934 年江文也的管弦乐《台湾舞曲》创作于（ ）。', options: ['A.台湾', 'B.东京', 'C.北平'], answer: 1 },
+            { id: 68, text: '弦乐四重奏《风·雅·颂》的作曲者是（ ）。', options: ['A.瞿小松', 'B.谭盾', 'C.陈其钢'], answer: 1 },
+            { id: 69, text: '20 世纪 50 年代末就读于中央音乐学院的女作曲家（ ）根据一首蒙族民歌创作了著名的交响诗《嘎达梅林》。', options: ['A.陈怡', 'B.瞿希贤', 'C.辛沪光'], answer: 2 },
+            { id: 70, text: '歌剧唱段“一道道水来一道道山”出自歌剧《 》 。', options: ['A.《小二黑结婚》', 'B.《白毛女》', 'C.《刘胡兰》'], answer: 2 },
+            { id: 71, text: '“鲁迅艺术学院”1938 年创建于（ ）。', options: ['A.绍兴', 'B.延安', 'C.重庆'], answer: 1 },
+            { id: 72, text: '影片《渔光曲》的同名主题歌是由安娥作词， （ ）谱曲的。', options: ['A.任光', 'B.吕骥', 'C.聂耳'], answer: 0 },
+            { id: 73, text: '《乐话》和《音乐通论》是（ ）代表性的音乐美学论著。', options: ['A.廖辅叔', 'B.廖尚果（青主）', 'C.王光祈'], answer: 1 },
+            { id: 74, text: '学堂乐歌《竹马》的编创者是（ ）。', options: ['A.曾志忞', 'B.沈心工', 'C.李叔同'], answer: 1 },
+            { id: 75, text: '瞿维的钢琴曲《花鼓》用到了（ ）和《茉莉花》的音调素材。', options: ['A.《浏阳河》', 'B.《二月里来打过春》', 'C.《凤阳花鼓》'], answer: 2 },
+            { id: 76, text: '电影《上甘岭》插曲《我的祖国》的曲作者是（ ）。', options: ['A.刘炽', 'B.张鲁', 'C.马可'], answer: 0 },
+            { id: 77, text: '朱践耳在文革之后的主要创作领域集中在（ ）领域。', options: ['A.室内乐', 'B.交响乐', 'C.艺术歌曲'], answer: 1 },
+            { id: 78, text: '1927 年在刘天华倡议下创建的音乐社团是（ ）。', options: ['A.大同乐会', 'B.春阳社', 'C.国乐改进社'], answer: 2 },
+            { id: 79, text: '弦乐四重奏《风、雅、颂》的作曲者是（ ）。', options: ['A.瞿小松', 'B.谭盾', 'C.陈其钢'], answer: 1 },
+            { id: 80, text: '无伴奏合唱《牧歌》的作曲者是（ ）。', options: ['A.麦丁', 'B.郑律成', 'C.瞿希贤'], answer: 2 },
+            { id: 81, text: '歌剧《江姐》是上世纪 60 年代根据小说（ ）改编创作的。', options: ['A.林海雪原', 'B.红岩', 'C.烈火中永生'], answer: 1 },
+            { id: 82, text: '二胡曲《二泉映月》是民间音乐家（ ）的代表作之一。', options: ['A.华彦钧', 'B.刘天华', 'C.周少梅'], answer: 0 },
+            { id: 83, text: '革命文艺先驱瞿秋白创作的歌曲是（ ）。', options: ['A.《赤潮曲》', 'B.《五一劳动节》', 'C.《国民革命歌》'], answer: 0 },
+            { id: 84, text: '瞿维的钢琴曲《花鼓》用到了（ ）和《茉莉花》的音调素材。', options: ['A.《浏阳河》', 'B.《二月里来打过春》', 'C.《凤阳花鼓》'], answer: 2 },
+            { id: 85, text: '舞剧《鱼美人》是由吴祖强和（ ）共同创作的。', options: ['A.铁源', 'B.张肖虎', 'C.杜鸣心'], answer: 2 },
+            { id: 86, text: '歌剧《白毛女》中“喜儿”的基本性格主导主题是以（ ）为音调基础的。', options: ['A.山西民歌《捡麦根》', 'B.河北民歌《小白菜》', 'C.东北民歌 《小拜年》'], answer: 1 },
+            { id: 87, text: '京剧演员（ ）所开创的“谭派”成为诸老生流派中影响最大的一支。', options: ['A.谭鑫培', 'B.余叔岩', 'C.周信芳'], answer: 0 },
+            { id: 88, text: '交响套曲《云南音诗》的作曲者是（ ）。', options: ['A.黄安伦', 'B.张千一', 'C.王西麟'], answer: 2 },
+            { id: 89, text: '1934 年“征求有中国风味钢琴曲”创作比赛是由美籍俄裔作曲家、钢琴家（ ）举办的。', options: ['A.齐尔品', 'B.贺绿汀', 'C.萧友梅'], answer: 0 },
+            { id: 90, text: '（ ） 是 20 世纪 40 年代重庆国立音乐院的作曲系师生成立的一个业余组织，主要是为了推广和研究中国民歌，曾正式出版《中国民歌选》。', options: ['A.“山歌社”', 'B.“中国民间音乐研究会”', 'C.“大同乐会”'], answer: 0 },
+            { id: 91, text: '《乐话》和《音乐通论》是（ ）代表性的音乐美学论著。', options: ['A.廖辅叔', 'B.廖尚果（青主）', 'C.王光祈'], answer: 1 },
+            { id: 92, text: '琵琶协奏曲《草原小姐妹》是由吴祖强和（ ）等人合作完成的。', options: ['A.黎英海', 'B.刘德海', 'C.朱践耳'], answer: 1 },
+            { id: 93, text: '儿童歌舞曲《可怜的秋香》是（ ）代表作。', options: ['A.黎锦晖', 'B.沈秉廉', 'C.邱望湘'], answer: 0 },
+            { id: 94, text: '上世纪 40 年代初诞生于重庆的歌剧《秋子》的作曲者是（ ）。', options: ['A.黄源洛', 'B.范天祥', 'C.阿甫夏洛穆夫'], answer: 0 },
+            { id: 95, text: '唱段“清粼粼的水来蓝莹莹的天”是出自歌剧《 》的选段之一。', options: ['A.《小二黑结婚》', 'B.《白毛女》', 'C.《刘胡兰》'], answer: 0 },
+            { id: 96, text: '革命文艺先驱瞿秋白创作的歌曲是（ ）。', options: ['A.《赤潮曲》', 'B.《五一劳动节》', 'C.《国民革命歌》'], answer: 0 },
+            { id: 97, text: '古筝曲《战台风》的作曲者是（ ）。', options: ['A.罗忠镕', 'B.王西麟', 'C.王昌元'], answer: 2 },
+            { id: 98, text: '歌剧《原野》的作曲者是（ ）。', options: ['A.施光南', 'B.金湘', 'C.张卓娅'], answer: 1 },
+            { id: 99, text: '小提琴曲《绥远组曲》 （后名《内蒙组曲》 ）的作曲者是（ ）。', options: ['A.任光', 'B.马思聪', 'C.黄贻钧'], answer: 1 },
+            { id: 100, text: '（ ）是北京国乐改进社的发起人之一。', options: ['A.郑觐文', 'B.刘天华', 'C.刘质平'], answer: 1 }
+        ];
+
+        // ---------- 状态 ----------
+        let currentIndex = 0;
+        const total = QUESTIONS.length;
+        const selected = new Array(total).fill(null);
+        const judgeResult = new Array(total).fill(null);
+        let isResultShown = false;
+
+        // DOM 引用
+        const gridContainer = document.getElementById('gridContainer');
+        const qNumber = document.getElementById('qNumber');
+        const qText = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackArea = document.getElementById('feedbackArea');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressStats = document.getElementById('progressStats');
+        const questionContent = document.getElementById('questionContent');
+        const resultContent = document.getElementById('resultContent');
+        const errorList = document.getElementById('errorList');
+        const exportBtn = document.getElementById('exportBtn');
+        const gridNav = document.getElementById('gridNav');
+        const toggleBtn = document.getElementById('toggleNavBtn');
+
+        // ---------- 折叠功能 ----------
+        let navOpen = false;
+        toggleBtn.addEventListener('click', function() {
+            navOpen = !navOpen;
+            gridNav.classList.toggle('open', navOpen);
+            toggleBtn.textContent = navOpen ? '✕' : '☰';
+        });
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                gridNav.classList.add('open');
+                navOpen = true;
+                toggleBtn.textContent = '✕';
+            } else {
+                if (!navOpen) {
+                    gridNav.classList.remove('open');
+                    toggleBtn.textContent = '☰';
+                }
+            }
+        });
+        if (window.innerWidth > 768) {
+            gridNav.classList.add('open');
+            navOpen = true;
+            toggleBtn.textContent = '✕';
+        } else {
+            gridNav.classList.remove('open');
+            navOpen = false;
+            toggleBtn.textContent = '☰';
+        }
+
+        // ---------- 网格 ----------
+        function renderGrid() {
+            gridContainer.innerHTML = '';
+            for (let i = 0; i < total; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                cell.textContent = i + 1;
+                const result = judgeResult[i];
+                if (result === 'correct') cell.classList.add('correct');
+                else if (result === 'wrong') cell.classList.add('wrong');
+                else cell.classList.add('empty');
+                if (i === currentIndex) cell.classList.add('active');
+                cell.addEventListener('click', () => goToQuestion(i));
+                gridContainer.appendChild(cell);
+            }
+            updateProgressStats();
+        }
+
+        function updateProgressStats() {
+            const answered = judgeResult.filter(r => r !== null).length;
+            progressStats.textContent = `${answered} / ${total} 已作答`;
+        }
+
+        function updateGridCell(index) {
+            const cells = document.querySelectorAll('.grid-cell');
+            const cell = cells[index];
+            if (!cell) return;
+            cell.className = 'grid-cell';
+            const result = judgeResult[index];
+            if (result === 'correct') cell.classList.add('correct');
+            else if (result === 'wrong') cell.classList.add('wrong');
+            else cell.classList.add('empty');
+            if (index === currentIndex) cell.classList.add('active');
+        }
+
+        // ---------- 渲染题目 ----------
+        function renderQuestion(index) {
+            const q = QUESTIONS[index];
+            qNumber.innerHTML = `第 ${index+1} 题 <span>/ ${total}</span>`;
+            qText.textContent = q.text;
+
+            optionsContainer.innerHTML = '';
+            const isAnswered = (selected[index] !== null);
+            q.options.forEach((opt, optIndex) => {
+                const div = document.createElement('div');
+                div.className = 'option-item';
+                if (selected[index] === optIndex) div.classList.add('selected');
+                if (isAnswered) div.classList.add('disabled');
+
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'question';
+                radio.value = optIndex;
+                radio.checked = (selected[index] === optIndex);
+                radio.disabled = isAnswered;
+
+                div.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'INPUT') return;
+                    if (isAnswered) return;
+                    const radioInput = this.querySelector('input[type="radio"]');
+                    if (radioInput) {
+                        radioInput.checked = true;
+                        const changeEvent = new Event('change', { bubbles: true });
+                        radioInput.dispatchEvent(changeEvent);
+                    }
+                });
+
+                radio.addEventListener('change', (e) => {
+                    if (e.target.checked && !isAnswered) {
+                        handleOptionSelect(index, optIndex);
+                    }
+                });
+
+                const label = document.createElement('span');
+                label.className = 'option-label';
+                label.textContent = opt;
+                div.appendChild(radio);
+                div.appendChild(label);
+                optionsContainer.appendChild(div);
+            });
+
+            const result = judgeResult[index];
+            if (result === 'correct') {
+                feedbackArea.className = 'feedback-area feedback-correct';
+                feedbackArea.innerHTML = '回答正确';
+            } else if (result === 'wrong') {
+                const correctAns = q.options[q.answer];
+                feedbackArea.className = 'feedback-area feedback-wrong';
+                feedbackArea.innerHTML = `回答错误，正确答案是：<span class="feedback-correct-answer">${correctAns}</span>`;
+            } else {
+                feedbackArea.className = 'feedback-area feedback-empty';
+                feedbackArea.textContent = '选择选项后自动判断';
+            }
+
+            prevBtn.disabled = (index === 0);
+            nextBtn.textContent = (index === total - 1) ? '完成' : '下一题';
+
+            document.querySelectorAll('.grid-cell').forEach((cell, i) => {
+                cell.classList.toggle('active', i === index);
+            });
+        }
+
+        // ---------- 选择处理 ----------
+        function handleOptionSelect(index, optionIndex) {
+            if (selected[index] !== null) return;
+            selected[index] = optionIndex;
+            const q = QUESTIONS[index];
+            const isCorrect = (optionIndex === q.answer);
+            judgeResult[index] = isCorrect ? 'correct' : 'wrong';
+
+            renderQuestion(index);
+            updateGridCell(index);
+            updateProgressStats();
+            checkAllDone();
+        }
+
+        // ---------- 跳转 ----------
+        function goToQuestion(index) {
+            if (index < 0 || index >= total) return;
+            currentIndex = index;
+            if (isResultShown) {
+                hideResult();
+            }
+            renderQuestion(index);
+            document.querySelectorAll('.grid-cell').forEach((cell, i) => {
+                cell.classList.toggle('active', i === index);
+            });
+            if (window.innerWidth <= 768) {
+                gridNav.classList.remove('open');
+                navOpen = false;
+                toggleBtn.textContent = '☰';
+            }
+        }
+
+        // ---------- 完成检测 ----------
+        function checkAllDone() {
+            const allDone = judgeResult.every(r => r !== null);
+            if (allDone && !isResultShown) {
+                showResult();
+            } else if (!allDone && isResultShown) {
+                hideResult();
+            }
+        }
+
+        // ---------- 显示结果 ----------
+        function showResult() {
+            isResultShown = true;
+            questionContent.classList.add('hidden');
+            resultContent.classList.add('visible');
+
+            const correct = judgeResult.filter(r => r === 'correct').length;
+            const wrong = judgeResult.filter(r => r === 'wrong').length;
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('wrongCount').textContent = wrong;
+
+            errorList.innerHTML = '';
+            const errors = [];
+            for (let i = 0; i < total; i++) {
+                if (judgeResult[i] === 'wrong') {
+                    const q = QUESTIONS[i];
+                    const userAns = selected[i];
+                    const correctAns = q.answer;
+                    errors.push({
+                        index: i,
+                        question: q,
+                        userChoice: userAns,
+                        correctChoice: correctAns
+                    });
+                }
+            }
+            if (errors.length === 0) {
+                errorList.innerHTML = '<p style="color:var(--correct-bg); font-weight:500;">恭喜你，全部回答正确！</p>';
+            } else {
+                errors.forEach(err => {
+                    const div = document.createElement('div');
+                    div.className = 'error-item';
+                    const qid = document.createElement('div');
+                    qid.className = 'qid';
+                    qid.textContent = `第 ${err.index+1} 题`;
+                    const qtext = document.createElement('div');
+                    qtext.className = 'qtext';
+                    qtext.textContent = err.question.text;
+                    const detail = document.createElement('div');
+                    detail.className = 'answer-detail';
+                    detail.innerHTML = `
+                        <span class="correct-ans">正确答案：${err.question.options[err.correctChoice]}</span>
+                        <span style="margin:0 8px;">|</span>
+                        <span class="your-ans">你的答案：${err.question.options[err.userChoice]}</span>
+                    `;
+                    div.appendChild(qid);
+                    div.appendChild(qtext);
+                    div.appendChild(detail);
+                    errorList.appendChild(div);
+                });
+            }
+        }
+
+        function hideResult() {
+            isResultShown = false;
+            questionContent.classList.remove('hidden');
+            resultContent.classList.remove('visible');
+        }
+
+        // ---------- 导出错题 ----------
+        function exportErrors() {
+            const errors = [];
+            for (let i = 0; i < total; i++) {
+                if (judgeResult[i] === 'wrong') {
+                    const q = QUESTIONS[i];
+                    errors.push({
+                        index: i,
+                        question: q,
+                        userChoice: selected[i],
+                        correctChoice: q.answer
+                    });
+                }
+            }
+            if (errors.length === 0) {
+                alert('没有错题，无需导出。');
+                return;
+            }
+            let content = '错题集\n';
+            content += '================================\n\n';
+            errors.forEach(err => {
+                content += `第 ${err.index+1} 题\n`;
+                content += `题目：${err.question.text}\n`;
+                content += `正确答案：${err.question.options[err.correctChoice]}\n`;
+                content += `你的答案：${err.question.options[err.userChoice]}\n`;
+                content += '--------------------------------\n\n';
+            });
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '错题集.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        }
+
+        // ---------- 事件绑定 ----------
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) goToQuestion(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < total - 1) {
+                goToQuestion(currentIndex + 1);
+            } else {
+                if (judgeResult.every(r => r !== null)) {
+                    if (!isResultShown) showResult();
+                } else {
+                    alert('还有题目未作答，请完成所有题目。');
+                }
+            }
+        });
+
+        exportBtn.addEventListener('click', exportErrors);
+
+        // ---------- 初始化 ----------
+        function init() {
+            renderGrid();
+            goToQuestion(0);
+            checkAllDone();
+        }
+
+        init();
+    })();
+</script>
+</body>
+</html>
