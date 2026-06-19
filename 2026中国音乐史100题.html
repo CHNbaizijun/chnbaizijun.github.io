@@ -647,7 +647,7 @@
 
 <script>
     (function() {
-        // ---------- 题库 (100题) 根据复习资料更新，答案来自用户提供的序列 ----------
+        // ---------- 题库 (100题) 答案完全按照用户提供的序列更新 ----------
         const QUESTIONS = [
             { id: 1, text: '刘文金的二胡曲《三门峡畅想曲》创作于（ ）。', options: ['A.20世纪30年代', 'B.20世纪60年代', 'C.20世纪80年代'], answer: 1 },
             { id: 2, text: '下列属于光绪年间京剧“新三鼎甲”人物的是（ ）。', options: ['A.梅兰芳', 'B.尚小云', 'C.谭鑫培'], answer: 2 },
@@ -675,7 +675,7 @@
             { id: 24, text: '1934年江文也的管弦乐《台湾舞曲》创作于（ ）。', options: ['A.台湾', 'B.东京', 'C.北平'], answer: 1 },
             { id: 25, text: '梅兰芳将青衣与花旦等旦角加以融汇创新出了（ ）。', options: ['A.老旦', 'B.花衫', 'C.武旦'], answer: 1 },
             { id: 26, text: '秧歌剧《兄妹开荒》是以（ ）民间音乐曲调编创的。', options: ['A.陕北', 'B.鲁东', 'C.赣南'], answer: 0 },
-            { id: 27, text: '“山在虚无缥缈间”是黄自的清唱剧（ ）中的一个乐章。', options: ['A.《怀旧》', 'B.《新霓裳羽衣舞》', 'C.《长恨歌》'], answer: 0 },
+            { id: 27, text: '“山在虚无缥缈间”是黄自的清唱剧（ ）中的一个乐章。', options: ['A.《怀旧》', 'B.《新霓裳羽衣舞》', 'C.《长恨歌》'], answer: 2 }, // 修正为 C（长恨歌）
             { id: 28, text: '钢琴儿童组曲《快乐的节日》的作曲者是（ ）。', options: ['A.李中汉', 'B.丁善德', 'C.刘铁山'], answer: 1 },
             { id: 29, text: '大型艺术性合唱曲《海韵》的作曲者是（ ）。', options: ['A.赵元任', 'B.萧友梅', 'C.洗星海'], answer: 0 },
             { id: 30, text: '歌曲《草原上升起不落的太阳》的作曲者是（ ）。', options: ['A.美丽其格', 'B.刘炽', 'C.马可'], answer: 0 },
@@ -929,15 +929,15 @@
             const result = judgeResult[index];
             if (result === 'correct') {
                 feedbackArea.className = 'feedback-area feedback-correct';
-                feedbackArea.innerHTML = '回答正确。';
+                feedbackArea.innerHTML = '回答正确 ✅';
             } else if (result === 'wrong') {
                 const correctAns = q.options[q.answer];
                 feedbackArea.className = 'feedback-area feedback-wrong';
-                feedbackArea.innerHTML = `回答错误。正确答案是：<span class="feedback-correct-answer">${correctAns}</span>`;
+                feedbackArea.innerHTML = `回答错误 ❌ 正确答案是：<span class="feedback-correct-answer">${correctAns}</span>`;
             } else if (result === 'forgot') {
                 const correctAns = q.options[q.answer];
                 feedbackArea.className = 'feedback-area feedback-forgot';
-                feedbackArea.innerHTML = `你忘了。正确答案是：<span class="feedback-correct-answer">${correctAns}</span>`;
+                feedbackArea.innerHTML = `你忘了 😅 正确答案是：<span class="feedback-correct-answer">${correctAns}</span>`;
             } else {
                 feedbackArea.className = 'feedback-area feedback-empty';
                 feedbackArea.textContent = '选择选项后自动判断';
@@ -963,21 +963,17 @@
             updateGridCell(index);
             updateProgressStats();
 
-            // 答对 → 自动跳转下一题；答错 → 停留，已展示正确答案
+            // 答对 → 自动跳转下一题；答错 → 停留
             if (isCorrect) {
                 if (index < total - 1) {
-                    // 延迟一点点让用户看到“回答正确”的反馈
                     setTimeout(() => {
                         goToQuestion(index + 1);
                     }, 300);
                 } else {
-                    // 最后一题答对，检查是否全部完成
                     checkAllDone();
                 }
-            } else {
-                // 答错，停留在当前页面
-                // 不用额外操作
             }
+            // 答错不跳转
         }
 
         function handleForgot(index) {
@@ -988,9 +984,7 @@
             renderQuestion(index);
             updateGridCell(index);
             updateProgressStats();
-
-            // “我忘了”视为答错，停留并展示正确答案
-            // 不用跳转
+            // “我忘了”视为答错，停留
         }
 
         // ---------- 跳转 ----------
