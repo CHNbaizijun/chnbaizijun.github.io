@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西方早期键盘弦鸣乐器 · 复习问答</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f5f3f0;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            padding: 2rem 1rem;
+            color: #1e1e1e;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: #3a2c1b;
+            border-bottom: 2px solid #c7b7a3;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #6b5a48;
+            background: #e8dfd5;
+            padding: 0.2rem 1rem;
+            border-radius: 20px;
+        }
+        .qa-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.2rem;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+            border: 1px solid #e6ddd2;
+        }
+        .qa-card:hover {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+        .question {
+            padding: 1.2rem 1.8rem;
+            background: #fcfaf7;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            transition: background 0.15s;
+            border-bottom: 1px solid transparent;
+        }
+        .question:hover {
+            background: #f6f0e9;
+        }
+        .question .q-num {
+            font-weight: 600;
+            color: #8b6f50;
+            margin-right: 1rem;
+            font-size: 1.1rem;
+            min-width: 3rem;
+        }
+        .question .q-text {
+            flex: 1;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #2d241a;
+        }
+        .question .toggle-icon {
+            font-size: 1.4rem;
+            color: #a48d77;
+            transition: transform 0.25s ease;
+            margin-left: 1rem;
+        }
+        .question.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+        .answer {
+            padding: 0 1.8rem 1.8rem 1.8rem;
+            background: #fefcf9;
+            line-height: 1.7;
+            color: #2c241c;
+            display: none;
+            border-top: 1px solid #ece3d8;
+        }
+        .answer.open {
+            display: block;
+        }
+        .answer p {
+            margin: 0.8rem 0;
+        }
+        .answer ul, .answer ol {
+            margin: 0.6rem 0 0.6rem 1.8rem;
+            padding-left: 0.2rem;
+        }
+        .answer li {
+            margin: 0.4rem 0;
+        }
+        .answer strong {
+            color: #5a3f2b;
+            font-weight: 600;
+        }
+        .answer .source {
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            color: #7b6b5b;
+            background: #f0ebe4;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .answer .highlight {
+            background: #f5ede4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem 0.5rem; }
+            .question { padding: 1rem; flex-wrap: wrap; }
+            .question .q-text { font-size: 0.98rem; }
+            .answer { padding: 0 1rem 1.2rem 1rem; }
+            h1 { font-size: 1.6rem; }
+        }
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #8f7e6c;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd2c4;
+            padding-top: 1.5rem;
+        }
+        /* 小徽章 */
+        .badge {
+            background: #d9cdbe;
+            color: #3d3228;
+            padding: 0.1rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        <span>🎹 键盘弦鸣乐器 · 复习问答</span>
+        <small>基于PDF课件 · 可展开</small>
+    </h1>
+
+    <div id="qaContainer"></div>
+
+    <div class="footer">
+        答案均严格依据课程PDF（L01–L14）整理 · 点击问题展开/折叠
+    </div>
+</div>
+
+<script>
+    // ----- 数据：所有问答（编号、问题、答案）  -----
+    // 答案内容直接取自前面回复的“严格依据PDF展开”版本，保留完整细节。
+    const qaData = [{
+        id: 1,
+        question: "早期音乐的时间界限的问题。",
+        answer: `<p>早期音乐是一个“相对的概念”。它的时代界限取决于两个方向的因素：</p>
+        <ol>
+            <li><strong>面向更古远的方向</strong>：界限取决于<strong>记谱法、历史文献、实物与图像资料的传世状况</strong>。因为西方音乐的记谱法是在中世纪后期才逐渐形成的，因此对中世纪早期及更早时期的音乐面貌，难以进行详实的考证（无法上溯更早）。</li>
+            <li><strong>面向当今的方向</strong>：界限取决于其<strong>与现行风格、乐器和演奏方法之间的差异程度</strong>。</li>
+        </ol>
+        <p>随着考证与研究的不断深入，早期音乐的“上限”逐步追溯至中世纪后期，而“下限”则前移到古典主义时期。无论时间范围如何划定，早期音乐运动中的学者们都致力于重新再现那些在当代看来已过时的风格、乐器和演奏手法，以恢复其原有的可演奏性与艺术生命力。</p>
+        <span class="source">📄 CenCOM_25-26-2_KeyboChord_L01_20260306.pdf 第6页</span>`
+    }, {
+        id: 2,
+        question: "演奏早期音乐可以使用什么类型的“古乐器”。",
+        answer: `<p>可以使用以下三种类型的古乐器（PDF中将古乐器明确分为三类）：</p>
+        <ol>
+            <li><strong>时代乐器（Period Instruments）</strong></li>
+            <li><strong>原真时代乐器（Original Period Instruments）</strong></li>
+            <li><strong>复制的时代乐器（Replica Instruments）</strong></li>
+        </ol>
+        <p>（PDF中以克里斯特福里1726年羽管键琴的复制品为例，说明了依据乐器学家研究而制作的完美复制品属于第三类。）</p>
+        <span class="source">📄 CenCOM_25-26-2_KeyboChord_L01_20260306.pdf 第3页、第16页</span>`
+    }, {
+        id: 5,
+        question: "声音的物理性质是什么？声波最重要两个物理特征是什么？声波的两个主要物理特征与人类的声音感知上的哪些特征有关？",
+        answer: `<p>声音的物理性质是<strong>声波</strong>，它是一种<strong>纵波（疏密波）</strong>，通过空气中空气密度的周期性变化来传播（PDF中给出了15℃时声速为340m/s）。</p>
+        <p>声波最重要的两个物理特征是<strong>频率（Frequency）</strong>和<strong>振幅（Amplitude）</strong>。</p>
+        <ul>
+            <li><strong>频率</strong>以<strong>赫兹（Hz）</strong>为单位，它对应人类感知的<strong>音高（Pitch）</strong>。</li>
+            <li><strong>振幅</strong>以<strong>分贝（dB）</strong>为单位，它对应人类感知的<strong>响度（Loudness）</strong>。</li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyboChord_L03_20260319.pdf 第27页；CenCOM_25-26-2_KeyCho_L04.pdf 第2页</span>`
+    }, {
+        id: 6,
+        question: "乐器是否能够奏出纯音？我们可以用什么来产生纯音？大自然中一般是否可以听到纯音？",
+        answer: `<p>乐器<strong>不能够</strong>奏出纯音，乐器奏出的都是复合音。纯音的波形为<strong>纯正弦波</strong>，它只有高低（频率）和强弱（振幅）特征，<strong>没有音色特征</strong>。</p>
+        <p>关于用什么产生纯音，PDF未指定具体设备（仅从声学原理上描述纯正弦波）。关于大自然，PDF明确指出：<strong>大自然发生的声音不存在纯音</strong>，大自然发生的声音都是复合音或噪音。</p>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L04.pdf 第12页；CenCOM_25-26-2_KeyCho_L05.pdf 第2页</span>`
+    }, {
+        id: 7,
+        question: "组成某个复合音的分音中哪些也是该复合音的泛音？什么叫基音或基频？",
+        answer: `<p>多种不同的纯音组成复合音，组成复合音的各个纯音称为<strong>分音（Partials）</strong>。其中，频率之间有<strong>整倍数关系</strong>的分音称为<strong>谐波分音（Harmonic Partials）</strong>，这些谐波分音（特别是除基音之外的高于基音的频率成分）也称为<strong>泛音（Harmonics）</strong>或<strong>谐波倍音（Harmonic Overtones）</strong>。</p>
+        <p>频率最低的那个谐波分音称为<strong>基音（Fundamental）</strong>或基频。</p>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L05.pdf 第9页</span>`
+    }, {
+        id: 8,
+        question: "请描述一下声音的“波形图”与“频谱图”所表示的物理变量以及两种图表在使用方面有哪些不同。",
+        answer: `<ul>
+            <li><strong>波形图（Wave Form）</strong>：表示声波<strong>波形（振幅）随时间变化</strong>的图像，反映声音在时域上的物理变量。</li>
+            <li><strong>频谱图（Frequency Spectrum）</strong>：表示复合音中<strong>各个分音的频率及其对应振幅（能量）分布</strong>的图像，反映声音在频域上的物理变量。</li>
+        </ul>
+        <p><strong>使用上的不同</strong>：PDF通过并列展示同一声音的波形图和频谱图来说明，波形图用于观察声音的周期性、振幅起伏（时间过程），而频谱图用于观察声音包含哪些频率成分以及各频率的强弱比例。PDF中亦提到，频谱图可以通过傅里叶变换从波形图中推导出来。</p>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L05.pdf 第6-7页；CenCOM_25-26-2_KeyCho_L06.pdf 第6-7页</span>`
+    }, {
+        id: 9,
+        question: "乐器能奏出的乐音，其音高感知是如何产生的？",
+        answer: `<p>人对音高的感知，由声波的<strong>频率</strong>决定。在复合音中，最低频率的谐波分音（即<strong>基音</strong>）为人耳提供了音高判断的主要依据。</p>
+        <p>PDF中通过对比不同频率的纯音（130.81Hz C3、261.63Hz C4中央C、523.25Hz C5）来说明频率变化导致音高变化，并指出人耳对音高的感知遵循频率比率（八度对应频率比值为2/1，十二平均律半音比值为2^(1/12)）。</p>
+        <span class="source">📄 CenCOM_25-26-2_KeyboChord_L03_20260319.pdf 第27页；CenCOM_25-26-2_KeyCho_L04.pdf 第11页；CenCOM_25-26-2_KeyCho_L05.pdf 第9页</span>`
+    }, {
+        id: 10,
+        question: "乐音和噪音的感知声学的定义。",
+        answer: `<p>PDF从分音的数学关系上界定了二者的物理基础：</p>
+        <ul>
+            <li><strong>复合音（构成乐音的基础）</strong>：由多种纯音组成，其波形具有周期性曲线，由频率呈整倍数关系的谐波分音（泛音列）构成。</li>
+            <li><strong>噪音</strong>：PDF未直接定义“噪音”的数学公式，但明确指出“大自然发生的声音都是复合音或噪音”，并严格区分了<strong>谐波分音</strong>（整倍数关系）与<strong>非谐波分音（Inharmonic Partials，无整倍数关系）</strong>。由此可推出，若复合音中存在大量非谐波分音且无法形成清晰周期性，则被感知为噪音；若具有清晰整倍数关系的泛音列，则被感知为乐音。</li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L04.pdf 第12页；CenCOM_25-26-2_KeyCho_L05.pdf 第9页</span>`
+    }, {
+        id: 11,
+        question: "人类听觉频率范围一般是从多少赫兹（Hz）到多少赫兹（Hz）？钢琴的音域大约从多少赫兹（Hz）到多少（Hz）？乐器发出的声音，包括其全部谐波分音和非谐波分音一般能达到多高的频率？",
+        answer: `<ul>
+            <li>人类听觉声音频率范围：<strong>约20Hz至20,000Hz</strong>。</li>
+            <li>三角钢琴（基频）的音域（依据PDF中完整音高频率表）从<strong>27.5 Hz（A0，记作+39处）到4,186.0 Hz（C8，记作+48处）</strong>。</li>
+            <li>乐器发出的声音，包括其全部谐波分音与非谐波分音，一般能达到或超过<strong>10,000 Hz</strong>。PDF在表格下方明确说明：“大部分乐器的信音全音域达到或超过10,000Hz（即包括基音以及全部谐波分音与非谐波分音总音域）”。</li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L06.pdf 第15页、第17页</span>`
+    }, {
+        id: 12,
+        question: "什么类型的声音不具备人类能感知出的确定音高？什么类型的声音我们能够感知为具有确定音高的？",
+        answer: `<p>基于PDF对声波周期性和分音结构的阐述：</p>
+        <ul>
+            <li><strong>不具备确定音高</strong>：不具备周期性波形、频谱中缺乏清晰基频或泛音列呈非整倍数关系的<strong>噪音</strong>（以及大自然中无法形成稳定周期性的声音）。</li>
+            <li><strong>能够感知为具有确定音高</strong>：具有周期性波形、频谱中存在清晰<strong>基音</strong>和与其呈整倍数关系的<strong>谐波分音（泛音列）</strong>的<strong>乐音</strong>（如乐器发出的复合音）。</li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L04.pdf 第12页；CenCOM_25-26-2_KeyCho_L05.pdf 第9页</span>`
+    }, {
+        id: 13,
+        question: "请简要阐述音色主要声学要素“泛音列”，“共振峰”，与“动态包络线”的概念？",
+        answer: `<ul>
+            <li><strong>泛音列（Harmonic Series）</strong>：一个复合音中，频率呈严格整数倍关系的一组分音（由基音f开始，依次为2f、3f、4f...）所构成的序列。它是<strong>振动体</strong>产生的原声基础。</li>
+            <li><strong>共振峰（Formants）</strong>：乐器的<strong>共鸣系统（共振体）</strong>对振动体产生的泛音列进行<strong>分频过滤（选择性放大或衰减）</strong>的作用。PDF用图示表明：振动体的泛音列原声，经过共振体的过滤后，形成乐器实际发声的频谱，并在某些频率区域形成能量峰值（即共振峰特征），从而决定乐器特有的音色。</li>
+            <li><strong>动态包络线（Sound Envelope）</strong>：声音振幅（响度）随时间变化的轮廓。PDF给出了两种主要模式：<strong>ADR</strong>（上升-衰减-释放，用于冲量式激励乐器，如钢琴、打击乐）和<strong>ADSR</strong>（上升-衰减-保持-释放，用于持续式激励乐器，如管风琴、弓弦乐器）。包络模式首先由乐器的<strong>激励机制</strong>（激励装置）的类型决定。</li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L05.pdf 第9页；CenCOM_25-26-2_KeyCho_L06.pdf 第10页；CenCOM_25-26-2_KeyCho_L07.pdf 第10-14页</span>`
+    }, {
+        id: 14,
+        question: "乐器工作原理都有哪些机制组成？请简要描述各个机制的作用。",
+        answer: `<p>乐器由以下五个机制组成（按信号流顺序）：</p>
+        <ol>
+            <li><strong>操控机制（Control Actuation）</strong>：辅助演奏者的操控装置，产生机械噪音；将演奏者的动作传导至激励机制。</li>
+            <li><strong>激励机制（Excitation）</strong>：激励振动体，将演奏者的能量输入到振动体；产生声音包络的主要因素；导向振动体的泛音列；产生激励体与振动体的接触噪音及机械噪音。</li>
+            <li><strong>振动机制（Vibration）</strong>：产生原声泛音列（是发声的源头，如琴弦振动）。</li>
+            <li><strong>共鸣机制（Resonance）</strong>：引起振动体原声泛音列频谱的调整，产生乐器的共振峰特征。</li>
+            <li><strong>辐射机制（Irradiation）</strong>：声阻抗适配、无源放大和定向声辐射，将声音辐射到空气中（其中共鸣成分也贡献于共振峰特征）。</li>
+        </ol>
+        <p>此外，PDF还提到了“内部传导机制 / 内部声阻抗适配机构”作为中间环节。</p>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L08.pdf 第4页</span>`
+    }, {
+        id: 15,
+        question: "乐器音色的主要声学要素各由乐器哪些机制产生的？",
+        answer: `<p>根据PDF中的对应表格，声学要素与来源机制的对应关系如下：</p>
+        <ul>
+            <li><strong>泛音列（Harmonic Series）</strong> —— 主要来源为<strong>振动体（Vibrating Body）</strong>。</li>
+            <li><strong>共振峰作用（Formants Effect）</strong> —— 主要来源为<strong>共鸣系统（Resonating System）</strong>。</li>
+            <li><strong>声音包络（Sound Envelope）</strong> —— 主要来源为<strong>激振装置（Excitation Apparatus）</strong>。</li>
+            <li><strong>噪音成分（Noise Component）</strong> —— 主要来源为<strong>操动装置（Actuating Apparatus）</strong>。</li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L08.pdf 第2页</span>`
+    }, {
+        id: 16,
+        question: "西方历史上最古老的管风琴大约是在什么时代出现的？管风琴的键盘从最早到中世纪晚期相比近代以来的键盘形式有哪些区别？大约什么时候管风琴的键盘基本上形成了近代以来的形式？",
+        answer: `<ul>
+            <li><strong>最古老管风琴出现时代</strong>：可追溯到<strong>古希腊罗马时期</strong>。PDF展示了公元前3世纪的亚历山大里亚的克特西比乌斯（Ktesibius）的水压管风琴（Hydraulis）设计图，以及公元前1世纪维特鲁威、公元1世纪希罗的复原图，并提供了公元1-2世纪（兹利滕马赛克、内尼格马赛克）和公元4世纪（圣马克西曼石棺）的管风琴图像资料。</li>
+            <li><strong>键盘形式的区别</strong>：早期（罗马及中世纪早期）管风琴的琴键宽大、间隔较远，演奏者需要用拳头或整个手掌击打琴键（如早期水压管风琴和早期便携管风琴的图像所示）。中世纪晚期（约13-15世纪），键盘琴键变得更窄、排列更紧凑，开始接近近代形式。</li>
+            <li><strong>基本形成近代形式的时间</strong>：从PDF展示的15世纪（如扬·凡·艾克的根特祭坛画中的固定式管风琴、汉斯·梅姆林画作中的便携式管风琴）来看，琴键的排列和尺寸已经与现代管风琴键盘<strong>基本一致</strong>。</li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L11.pdf 第3-25页</span>`
+    }, {
+        id: 17,
+        question: "大约什么时候在欧洲出现了最早的键盘弦鸣乐器？主要分为哪几种？",
+        answer: `<ul>
+            <li><strong>出现时间</strong>：以现存最早的详细文献——<strong>亨利·阿尔诺·德·兹沃勒（Henri Arnaut de Zwolle）的手抄本</strong>（约<strong>1440年</strong>）为标志。PDF指出，该手稿记载了当时存在的键盘弦鸣乐器。</li>
+            <li><strong>主要种类</strong>：手稿中描述了<strong>三种</strong>主要乐器：
+                <ol>
+                    <li><strong>克拉维斯巴仑（Clavisimbalum）</strong>（原始羽管键琴和原始槌子键琴的原型）。</li>
+                    <li><strong>楔槌键琴（Clavicordium）</strong>（楔槌键琴）。</li>
+                    <li><strong>迪尔塞梅洛琴（Dulce Melos）</strong>。</li>
+                </ol>
+            </li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L12.pdf 第2-5页；CenCOM_25-26-2_KeyCho_L13.pdf 第3页</span>`
+    }, {
+        id: 18,
+        question: "键盘弦鸣乐器按照其激励机制分类的话，都能分为哪些类别？",
+        answer: `<p>根据PDF中的分类树和机制图，按激励机制可分为以下类别：</p>
+        <ol>
+            <li><strong>拨弦（Plucking）</strong>：使用拨子（Plectrum）拨动琴弦。如：拨弦克拉维斯巴仑（有枢轴拨片）、羽管键琴（Harpsichord）、克拉维斯特里姆（Clavicytherium）等。</li>
+            <li><strong>击弦（Striking / Hammering）</strong>：使用槌子（Hammer）敲击琴弦。如：击弦克拉维斯巴仑（有枢轴小槌或顶杆式）、迪尔塞梅洛琴（Dulce Melos）、槌子键琴（Fortepiano）。</li>
+            <li><strong>击与按弦/触弦（Striking and Pressing / Touching）</strong>：使用切线槌（Tangent）从下方击打并按压琴弦。如：楔槌键琴（Clavichord，使用顶杆楔槌或有轴锲槌）。</li>
+            <li><strong>擦弦（Bowing）</strong>：使用弓子或轮子摩擦琴弦。如：手摇琴（Hurdy-gurdy / Ghironda）、尼古赫帕（Nyckelharpa / Viola a chiavi）、提琴式键琴（Viola Organista / Geigenwerk）。</li>
+        </ol>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L12.pdf 第7页；CenCOM_25-26-2_KeyCho_L13.pdf 第3页</span>`
+    }, {
+        id: 19,
+        question: "最早详细描述键盘弦鸣乐器的古文献是 Henri Arnaut de Zwolle 手抄本。根据专家们的考证，该极为珍贵的手抄本大约是什么时候编写的？Arnaut 手抄本里所描述的键盘弦鸣乐器都有哪几种？请简要描述各有哪些特点。",
+        answer: `<ul>
+            <li><strong>编写时间</strong>：约 <strong>1440年</strong>（PDF标题中明确标注“~1440”）。</li>
+            <li><strong>描述的乐器及特点</strong>：
+                <ol>
+                    <li><strong>克拉维斯巴仑（Clavisimbalum）</strong>：该手稿描述了它的<strong>四种</strong>不同激励机制。其中<strong>三种为拨弦机制</strong>（第1、2、3种，使用有枢轴的拨片），<strong>一种为击弦机制</strong>（第4种，使用顶杆式或有枢轴的小槌）。它是羽管键琴和槌子键琴的原始雏形。</li>
+                    <li><strong>楔槌键琴（Clavicordium）</strong>：使用<strong>切线槌（Tangent）</strong>从下方击弦并保持接触（击与按弦方式），实现柔和的声音。</li>
+                    <li><strong>迪尔塞梅洛琴（Dulce Melos）</strong>：一种<strong>击弦</strong>乐器（使用槌子），其发声原理与击弦萨泰里琴（扬琴类）相似。</li>
+                </ol>
+            </li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L12.pdf 第4-7页；CenCOM_25-26-2_KeyCho_L13.pdf 第2页</span>`
+    }, {
+        id: 20,
+        question: "请简要描述羽管键琴（harpsichord）、楔槌键琴（clavichord）与锤子键琴（fortepiano）三种最重要的早期键盘弦鸣乐器的主要特征。",
+        answer: `<ul>
+            <li><strong>羽管键琴（Harpsichord）</strong>：属于<strong>拨弦</strong>乐器。其核心机械装置为<strong>顶杆（Jack）</strong>，顶杆上装有拨子（Plectrum），按键时拨子拨动琴弦。其音色明亮，但<strong>无法通过触键改变音量</strong>（无强弱动态变化）。PDF展示了从16世纪到18世纪多种风格的羽管键琴（意大利、佛兰芒、法、德、英式）。</li>
+            <li><strong>楔槌键琴（Clavichord）</strong>：属于<strong>击与按弦（触弦）</strong>乐器。其核心机械装置为<strong>切线槌（Tangent）</strong>，按键时切线槌从下方击打并<strong>保持接触</strong>琴弦（实现“击与按”），使琴弦有效振动部分发声。音色柔和、细腻，<strong>可通过触键压力做出微弱的音量变化</strong>。</li>
+            <li><strong>槌子键琴（Fortepiano）</strong>：属于<strong>击弦</strong>乐器。其核心机械装置为<strong>琴槌（Hammer）</strong>，按键时通过复杂的联动装置驱动琴槌敲击琴弦。其最核心的特征是<strong>可以通过改变按键力度实现从弱（piano）到强（forte）的动态变化</strong>，这也是“pianoforte”名称的由来。PDF指出它由克里斯托福里约1700年发明。</li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L13.pdf 第9-19页；CenCOM_25-26-2_KeyCho_L14.pdf 第6-11页</span>`
+    }, {
+        id: 24,
+        question: "羽管键琴大家族都由哪些乐器组成？",
+        answer: `<p>羽管键琴大家族（按PDF列举的实物和图示）包括：</p>
+        <ol>
+            <li><strong>意大利式羽管键琴（Italian Harpsichord）</strong>（如Zenti 1666年制）。</li>
+            <li><strong>佛兰芒式羽管键琴（Flemish Harpsichord）</strong>（如Couchet 1650年制，Ruckers家族）。</li>
+            <li><strong>法式羽管键琴（French Harpsichord）</strong>（如Bellot 1742年制）。</li>
+            <li><strong>德式羽管键琴（German Harpsichord）</strong>（如Grabner 1739年制）。</li>
+            <li><strong>英式羽管键琴（English Harpsichord）</strong>（如Kirckman 1798年制）。</li>
+            <li><strong>斯皮内特琴（Spinetta）</strong>（如Ross 1577年制，及克里斯托福里设计的椭圆形大型斯皮内特琴Spinettone Ovale）。</li>
+            <li><strong>维吉内琴（Virginale）</strong>（如Ruckers 1583年制）及其变体<strong>缪塞拉尔琴（Virginale Muselar）</strong>（如Ruckers 1622年制，键盘位于琴体右侧）。</li>
+            <li><strong>克拉维斯特里姆（Clavicytherium）</strong>（立式羽管键琴，如现存于伦敦皇家音乐学院的15世纪复制品）。</li>
+            <li><strong>鲁特羽管键琴（Lautenwerk / Lute-harpsichord）</strong>（使用肠弦模仿鲁特琴音色）。</li>
+        </ol>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L10.pdf 第26-30页；CenCOM_25-26-2_KeyCho_L13.pdf 第23页、第31页</span>`
+    }, {
+        id: 25,
+        question: "楔槌键琴主要可以分为两种，请介绍一下两种的特征。",
+        answer: `<p>PDF展示并标注了两种类型：</p>
+        <ol>
+            <li><strong>有品楔槌键琴（Fretted Clavichord，PDF中称为“多音弦樱桃键琴”）</strong>：多根琴弦由一个切线槌（Tangent）共用或控制（同一根弦可能对应多个琴键）。其结构相对简单，但演奏复调音乐时，某些音程的音可能会互相干扰（无法同时奏响需要共用琴弦的音）。</li>
+            <li><strong>无品楔槌键琴（Unfretted Clavichord，PDF中称为“单音弦樱桃键琴”）</strong>：每根琴弦（或每对琴弦）由独立的切线槌控制，每个琴键对应一组专用的琴弦。其音准更好，复调演奏更自由，但琴弦数量多，结构复杂，制作成本更高。PDF展示了现存实物（attr. Kintzing, 1763）作为无品楔槌键琴的代表。</li>
+        </ol>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L13.pdf 第11-12页</span>`
+    }, {
+        id: 26,
+        question: "现在叫做锤子键琴（fortepiano），是什么时候出现的？谁是它的发明者？最早的锤子键琴与现代钢琴主要有哪些异同之处？",
+        answer: `<ul>
+            <li><strong>出现时间</strong>：<strong>约1700年</strong>。PDF引用了1700年美第奇家族的财产清单，首次提到“Un Arpicimbalo di Bartolomeo Cristofori di nuova inventione, che fa' il piano, e il forte”。</li>
+            <li><strong>发明者</strong>：<strong>巴尔托洛梅奥·克里斯托福里（Bartolomeo Cristofori）</strong>（1655-1731）。</li>
+            <li><strong>与异同之处</strong>：PDF虽未直接列出“异同对照表”，但从描述中可归纳：
+                <ul>
+                    <li><strong>相同</strong>：基本原理相同，都通过键盘驱动小槌（Hammer）敲击琴弦发声，且都能通过触键力度实现强弱（piano e forte）变化。</li>
+                    <li><strong>不同（早期钢琴特征）</strong>：早期钢琴（Cristofori fortepiano）音域相对较小（最早约4个八度加1个音），琴身结构为木质框架，琴槌包裹皮革（而非现代钢琴的硬毡），音色更清澈、余音更短。PDF中展示了Cristofori 1720、1722、1726三架现存早期钢琴的图片，以及1711年Scipione Maffei文章中描述的声音可“逐渐减弱和变化，类似大提琴”。</li>
+                </ul>
+            </li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L14.pdf 第7页、第10页、第15页</span>`
+    }, {
+        id: 27,
+        question: "为什么我们说bartolomeo Cristofori开发制造的锤子键琴（早期钢琴）是一种“重新发明”？尽管如此，Cristofori的锤子键琴对后来继续发展的钢琴有何贡献？",
+        answer: `<ul>
+            <li><strong>为何称“重新发明”</strong>：因为在克里斯托福里之前约250年，<strong>亨利·阿尔诺·德·兹沃勒（约1440年）</strong>的手稿中已经记载了<strong>击弦式克拉维斯巴仑（Clavisimbalum的第4种机制）</strong>，即使用“击弦 striking mechanism (顶杆式 tangent-jack?)”的键盘乐器。因此，击弦原理并非克里斯托福里首创，他是在前人的实验基础上，<strong>重新发明并成功实现了</strong>具有实用性和音乐表现力的击弦键盘乐器。</li>
+            <li><strong>对后世发展的贡献</strong>：PDF通过展示Cristofori的击弦机结构图（来自1711年Maffei文章及1726年机制图）指出，他确立了现代钢琴击弦机的核心设计，特别是引入了<strong>“逃逸/擒纵（escapement）”机制</strong>，使得琴槌在敲击琴弦后能立即脱离，让琴弦自由振动。这一设计框架为后来所有钢琴制造商（如Silbermann、Stein、Walter、Broadwood等）提供了根本性的技术模型，并最终发展成现代钢琴。</li>
+        </ul>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L12.pdf 第4-5页；CenCOM_25-26-2_KeyCho_L14.pdf 第8-11页</span>`
+    }, {
+        id: 29,
+        question: "Viennese击弦机是什么类型？有哪些特征？",
+        answer: `<ul>
+            <li><strong>类型</strong>：称为 <strong>“Prellermechanik”（维也纳式 / Viennese action）</strong>，PDF中标注为“跳上式机械”。</li>
+            <li><strong>特征</strong>：
+                <ol>
+                    <li><strong>结构简单</strong>，零件数量相对较少，反应灵敏。</li>
+                    <li>琴槌固定在键盘后端的摇杆上，琴槌较轻。</li>
+                    <li>触键感<strong>非常轻盈</strong>，键深较浅。</li>
+                    <li>音色<strong>明亮、清澈、透明</strong>，颗粒感强，泛音相对较少，各声部线条清晰。</li>
+                    <li>动态范围比现代钢琴窄，但响应极快，适合演绎维也纳古典乐派作品。</li>
+                </ol>
+            </li>
+        </ul>
+        <p>PDF以约翰·安德烈亚斯·施泰因（J. A. Stein，约1780年）和安东·瓦尔特（Anton Walter，约1790年）制造的维也纳式早期钢琴为代表，并附有音频示例说明。</p>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L14.pdf 第20页、第33-34页</span>`
+    }, {
+        id: 30,
+        question: "第十八世纪音乐家、演奏家可选择使用键盘弦鸣乐器的品范围可以说是历史上最广。请列举一下第十八世纪的键盘弦鸣乐器都有哪些？",
+        answer: `<p>根据PDF中18世纪相关内容的汇总，可列出的乐器包括：</p>
+        <ol>
+            <li><strong>各种羽管键琴（Harpsichord）</strong>：包括意大利、佛兰芒、法国、德国、英国等不同制式，以及斯皮内特（Spinet）、维吉那尔（Virginal）、缪塞拉尔（Muselar）、克拉维斯特里姆（Clavicytherium）等变体。</li>
+            <li><strong>鲁特羽管键琴（Lautenwerk / Lute-harpsichord）</strong>。</li>
+            <li><strong>有品与无品楔槌键琴（Clavichord）</strong>。</li>
+            <li><strong>克里斯托福里及其学徒（如乔瓦尼·费里尼Giovanni Ferrini）制造的槌子键琴/早期钢琴（Fortepiano）</strong>，以及费里尼发明的“拨子与槌子”两用混合键琴（Clavicembalo “a penne e martelletti”）。</li>
+            <li><strong>戈特弗里德·西尔伯曼（Gottfried Silbermann）、施泰因（Stein）、瓦尔特（Walter）等工匠制造的德国式与维也纳式早期钢琴</strong>。</li>
+            <li><strong>顶杆式槌子键琴（Tangent Piano / Tangentenflügel）</strong>（如Späth & Schmahl制造）。</li>
+            <li><strong>键盘擦弦乐器</strong>：如手摇琴（Hurdy-gurdy / Ghironda）、尼古赫帕（Nyckelharpa / Viola a chiavi）、提琴式键琴（Viola Organista / Geigenwerk）。</li>
+            <li><strong>键盘齐特类乐器</strong>：如击弦萨泰里琴（Hammered Psaltery / Salterio a percussione）在18世纪的变体，以及为法国玛丽·安托瓦内特王后制作的“Tympanon”（顶吧弄琴，1784年）。</li>
+        </ol>
+        <span class="source">📄 CenCOM_25-26-2_KeyCho_L10.pdf 第26-40页；CenCOM_25-26-2_KeyCho_L13.pdf 第23-31页；CenCOM_25-26-2_KeyCho_L14.pdf 第16-30页</span>`
+    }];
+
+    // 构建DOM
+    const container = document.getElementById('qaContainer');
+
+    qaData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'qa-card';
+
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+        questionDiv.innerHTML = `
+            <span class="q-num">${item.id}.</span>
+            <span class="q-text">${item.question}</span>
+            <span class="toggle-icon">▾</span>
+        `;
+
+        const answerDiv = document.createElement('div');
+        answerDiv.className = 'answer';
+        answerDiv.innerHTML = item.answer;
+
+        // 点击切换
+        questionDiv.addEventListener('click', function(e) {
+            const isOpen = answerDiv.classList.contains('open');
+            // 关闭其他（可选：如果希望同时只展开一个，可取消注释下面循环）
+            // document.querySelectorAll('.answer.open').forEach(el => {
+            //     if (el !== answerDiv) {
+            //         el.classList.remove('open');
+            //         el.previousElementSibling.classList.remove('active');
+            //     }
+            // });
+            answerDiv.classList.toggle('open');
+            questionDiv.classList.toggle('active');
+        });
+
+        card.appendChild(questionDiv);
+        card.appendChild(answerDiv);
+        container.appendChild(card);
+    });
+
+    // 默认展开第一个（便于预览）
+    // 如果想默认全部折叠，可注释掉下面两行
+    // const firstAnswer = document.querySelector('.answer');
+    // const firstQuestion = document.querySelector('.question');
+    // if (firstAnswer && firstQuestion) {
+    //     firstAnswer.classList.add('open');
+    //     firstQuestion.classList.add('active');
+    // }
+</script>
+</body>
+</html>
